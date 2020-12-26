@@ -13,6 +13,7 @@ import styled, {
 import { Text, TextProps } from 'rebass'
 import { useAppColourTheme } from 'state/user/hooks'
 import { Theme, Colors } from './styled'
+import { LIGHT_COLOURS, DARK_COLOURS, DEFAULT_COLOURS, GULF_COLOURS } from './styles'
 
 export * from './components'
 
@@ -42,60 +43,23 @@ const mediaWidthTemplates = Object.keys(MEDIA_WIDTHS).reduce<MediaWidth>((accumu
   return accumulator
 }, {} as MediaWidth)
 
-const white = '#FFFFFF'
-const black = '#000000'
-
 export function colors(colourTheme: Theme): Colors {
-  const darkMode = colourTheme === Theme.DARK
+  let THEME_COLOURS = LIGHT_COLOURS
+
+  switch (colourTheme) {
+    case Theme.LIGHT:
+      THEME_COLOURS = LIGHT_COLOURS
+      break
+    case Theme.DARK:
+      THEME_COLOURS = DARK_COLOURS
+      break
+    case Theme.GULF:
+      THEME_COLOURS = GULF_COLOURS
+      break
+  }
   return {
-    // base
-    white,
-    black,
-
-    // text
-    text1: darkMode ? '#FFFFFF' : '#000000',
-    text2: darkMode ? '#C3C5CB' : '#565A69',
-    text3: darkMode ? '#6C7284' : '#888D9B',
-    text4: darkMode ? '#565A69' : '#C3C5CB',
-    text5: darkMode ? '#2C2F36' : '#EDEEF2',
-
-    // backgrounds / greys
-    bg1: darkMode ? '#212429' : '#FFFFFF',
-    bg2: darkMode ? '#2C2F36' : '#F7F8FA',
-    bg3: darkMode ? '#40444F' : '#EDEEF2',
-    bg4: darkMode ? '#565A69' : '#CED0D9',
-    bg5: darkMode ? '#6C7284' : '#888D9B',
-
-    //specialty colors
-    modalBG: darkMode ? 'rgba(0,0,0,.425)' : 'rgba(0,0,0,0.3)',
-    advancedBG: darkMode ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.6)',
-
-    //primary colors
-    primary1: darkMode ? '#2172E5' : '#ff007a',
-    primary2: darkMode ? '#3680E7' : '#FF8CC3',
-    primary3: darkMode ? '#4D8FEA' : '#FF99C9',
-    primary4: darkMode ? '#376bad70' : '#F6DDE8',
-    primary5: darkMode ? '#153d6f70' : '#FDEAF1',
-
-    // color text
-    primaryText1: darkMode ? '#6da8ff' : '#ff007a',
-
-    // secondary colors
-    secondary1: darkMode ? '#2172E5' : '#ff007a',
-    secondary2: darkMode ? '#17000b26' : '#F6DDE8',
-    secondary3: darkMode ? '#17000b26' : '#FDEAF1',
-
-    // other
-    red1: '#FF6871',
-    red2: '#F82D3A',
-    green1: '#27AE60',
-    yellow1: '#FFE270',
-    yellow2: '#F3841E',
-    blue1: '#2172E5'
-
-    // dont wanna forget these blue yet
-    // blue4: darkMode ? '#153d6f70' : '#C4D9F8',
-    // blue5: darkMode ? '#153d6f70' : '#EBF4FF',
+    ...DEFAULT_COLOURS,
+    ...THEME_COLOURS
   }
 }
 
@@ -103,7 +67,7 @@ export function computeAppTheme(colourTheme: Theme): DefaultTheme {
   return {
     ...colors(colourTheme),
 
-    theme: colourTheme,
+    mode: colourTheme,
     components: undefined,
 
     //shadows
@@ -179,7 +143,13 @@ const ThemeProvider: React.FC = ({ children }) => {
 
   const themeObject = React.useMemo(() => computeAppTheme(colourTheme), [colourTheme])
 
-  return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
+  return (
+    <StyledComponentsThemeProvider theme={themeObject}>
+      {React.Children.map(children, child =>
+        React.cloneElement(child as React.ReactElement<any, any>, { theme: themeObject })
+      )}
+    </StyledComponentsThemeProvider>
+  )
 }
 
 export const FixedGlobalStyle = createGlobalStyle`
@@ -200,6 +170,7 @@ export const FixedGlobalStyle = createGlobalStyle`
   }
   html,
   body {
+    font-size: 10px;
     margin: 0;
     padding: 0;
   }
@@ -213,7 +184,6 @@ export const FixedGlobalStyle = createGlobalStyle`
     user-select: none;
   }
   html {
-    font-size: 16px;
     font-variant: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

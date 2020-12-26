@@ -3,17 +3,19 @@ import { Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { X } from 'react-feather'
-import Home from 'components/Home'
+import ThemeViewer from '@src/components/ThemeViewer'
 import Popups from 'components/Popups'
 import Web3ReactManager from 'components/Web3ReactManager'
 
 import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
+import Header from '@src/components/Header'
 
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
   align-items: flex-start;
+
   overflow-x: hidden;
 `
 
@@ -25,11 +27,14 @@ const HeaderWrapper = styled.div`
 
 const BodyWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding-top: 100px;
-  align-items: center;
   flex: 1;
+  flex-direction: column;
+  align-items: center;
+
+  width: 90%;
+  margin: auto;
+  padding-top: 100px;
+
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 10;
@@ -65,14 +70,14 @@ export default function App() {
     <Suspense fallback={null}>
       <AppWrapper>
         <HeaderWrapper>
-          <div>HEADER</div>
+          <Header />
         </HeaderWrapper>
         <BodyWrapper>
           <Popups />
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={ThemeViewer} />
             </Switch>
           </Web3ReactManager>
           <Marginer />

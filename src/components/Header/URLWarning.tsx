@@ -9,7 +9,7 @@ const PhishAlert = styled.div<{ isActive: boolean }>`
   padding: 6px 6px;
   background-color: ${({ theme }): string => theme.blue1};
   color: white;
-  font-size: 11px;
+  font-size: 1.1rem;
   justify-content: space-between;
   align-items: center;
   display: ${({ isActive }): string => (isActive ? 'flex' : 'none')};

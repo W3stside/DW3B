@@ -16,6 +16,7 @@ import { Row, RowFixed, YellowCard } from 'components/Layout'
 import { ChainId } from 'types'
 import { useAppColourTheme } from 'state/user/hooks'
 import { Theme } from 'theme/styled'
+import { BASE_STYLES } from '@src/theme/styles'
 
 const HeaderFrame = styled.div`
   display: grid;
@@ -166,13 +167,13 @@ const StyledNavLink = styled(NavLink).attrs({
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.text2};
-  font-size: 1rem;
+  font-size: ${BASE_STYLES.fontSize};
   width: fit-content;
   margin: 0 12px;
   font-weight: 500;
 
   &.${activeClassName} {
-    border-radius: 12px;
+    border-radius: ${BASE_STYLES.borderRadius};
     font-weight: 600;
     color: ${({ theme }) => theme.text1};
   }
