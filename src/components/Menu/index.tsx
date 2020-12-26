@@ -8,7 +8,7 @@ import { ApplicationModal } from '../../state/application/actions'
 import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ExternalLink } from 'theme'
-import { ButtonPrimary } from '../Button'
+import { ButtonBase as ButtonPrimary } from 'components/Button'
 
 const StyledMenuIcon = styled(MenuIcon)`
   path {
@@ -126,7 +126,7 @@ export default function Menu() {
             Analytics
           </MenuItem>
           {account && (
-            <ButtonPrimary onClick={openClaimModal} padding="8px 16px" width="100%" borderRadius="12px" mt="0.5rem">
+            <ButtonPrimary onClick={openClaimModal}>
               Claim UNI
             </ButtonPrimary>
           )}

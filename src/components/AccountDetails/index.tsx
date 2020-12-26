@@ -1,24 +1,24 @@
 import React, { useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import styled, { ThemeContext } from 'styled-components'
-import { useActiveWeb3React } from '../../hooks'
-import { AppDispatch } from '../../state'
-import { clearAllTransactions } from '../../state/transactions/actions'
+import { useActiveWeb3React } from 'hooks'
+import { AppDispatch } from 'state'
+import { clearAllTransactions } from 'state/transactions/actions'
 import { shortenAddress } from 'utils'
-import { AutoRow } from '../Row'
+import { AutoRow } from 'components/Layout'
 import Copy from './Copy'
 import Transaction from 'components/AccountDetails/Transaction'
 
-import { SUPPORTED_WALLETS } from '../../constants'
-import { ReactComponent as Close } from '../../assets/images/x.svg'
+import { SUPPORTED_WALLETS } from 'constants/index'
+import { ReactComponent as Close } from 'assets/images/x.svg'
 import { getEtherscanLink } from 'utils'
-import { injected, walletconnect, walletlink, fortmatic, portis } from '../../connectors'
-import CoinbaseWalletIcon from '../../assets/images/coinbaseWalletIcon.svg'
-import WalletConnectIcon from '../../assets/images/walletConnectIcon.svg'
-import FortmaticIcon from '../../assets/images/fortmaticIcon.png'
-import PortisIcon from '../../assets/images/portisIcon.png'
-import Identicon from '../Identicon'
-import { ButtonSecondary } from '../Button'
+import { injected, walletconnect, walletlink, fortmatic, portis } from 'connectors'
+import CoinbaseWalletIcon from 'assets/images/coinbaseWalletIcon.svg'
+import WalletConnectIcon from 'assets/images/walletConnectIcon.svg'
+import FortmaticIcon from 'assets/images/fortmaticIcon.png'
+import PortisIcon from 'assets/images/portisIcon.png'
+import Identicon from 'components/Identicon'
+import { ButtonBase } from 'components/Button'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from 'theme'
 
@@ -184,7 +184,7 @@ const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
 `
 
-const WalletAction = styled(ButtonSecondary)`
+const WalletAction = styled(ButtonBase)`
   width: fit-content;
   font-weight: 400;
   margin-left: 8px;

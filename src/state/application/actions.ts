@@ -1,22 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
-import { TokenList } from '@uniswap/token-lists'
 
-export type PopupContent =
-  | {
-      txn: {
-        hash: string
-        success: boolean
-        summary?: string
-      }
-    }
-  | {
-      listUpdate: {
-        listUrl: string
-        oldList: TokenList
-        newList: TokenList
-        auto: boolean
-      }
-    }
+export type PopupContent = React.ReactNode
 
 export enum ApplicationModal {
   WALLET,

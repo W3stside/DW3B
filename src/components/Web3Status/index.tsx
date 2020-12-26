@@ -15,13 +15,13 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from 'state/transactions/hooks'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { shortenAddress } from 'utils'
-import { ButtonSecondary } from '../Button'
+import { ButtonBase } from 'components/Button'
 
-import Identicon from '../Identicon'
-import Loader from '../Loader'
+import Identicon from 'components/Identicon'
+import Loader from 'components/Loader'
 
-import { RowBetween } from '../Row'
-import WalletModal from '../WalletModal'
+import { RowBetween } from 'components/Layout'
+import WalletModal from 'components/WalletModal'
 
 const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.flexColumnNoWrap};
@@ -33,7 +33,7 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `
 
-const Web3StatusGeneric = styled(ButtonSecondary)`
+const Web3StatusGeneric = styled(ButtonBase)`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   align-items: center;

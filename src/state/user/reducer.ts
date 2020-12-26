@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { Theme } from 'theme/styled'
 import { updateVersion } from '../global/actions'
 import { updateTheme } from './actions'
-import { Theme } from 'theme'
 
 const currentTimestamp = () => new Date().getTime()
 

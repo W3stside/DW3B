@@ -1,13 +1,13 @@
-import { Theme } from 'theme'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { Theme } from 'theme/styled'
 import { AppDispatch } from '../index'
 import { updateTheme } from './actions'
-import { useAppTheme } from './hooks'
+import { useAppColourTheme } from './hooks'
 
 export default function Updater(): null {
   const dispatch = useDispatch<AppDispatch>()
-  const theme = useAppTheme()
+  const theme = useAppColourTheme()
 
   // keep dark mode in sync with the system
   useEffect(() => {
@@ -18,9 +18,9 @@ export default function Updater(): null {
     }
 
     const match = window?.matchMedia('(prefers-color-scheme: dark)')
-    
-  // If system prefers dark mode and user theme isnt already explicitly set by user
-    if (match.matches && theme === Theme.AUTO){
+
+    // If system prefers dark mode and user theme isnt already explicitly set by user
+    if (match.matches && theme === Theme.AUTO) {
       dispatch(updateTheme({ theme: Theme.DARK }))
     }
 
@@ -33,7 +33,7 @@ export default function Updater(): null {
         match?.removeEventListener('change', autoDarkHandler)
       }
     }
-  }, [dispatch])
+  }, [dispatch, theme])
 
   return null
 }

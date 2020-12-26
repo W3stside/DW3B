@@ -1,4 +1,5 @@
 {
+  "extends": "./src/custom/tsconfig-paths.json",
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -33,8 +34,7 @@
     "baseUrl": "src"
   },
   "exclude": [
-    "node_modules",
-    "cypress"
+    "node_modules"
   ],
   "include": [
     "src"

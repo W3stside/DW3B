@@ -1,13 +1,12 @@
 import React, { useContext } from 'react'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from 'hooks'
 
-import { AutoColumn, ColumnCenter } from '../Column'
 import styled, { ThemeContext } from 'styled-components'
-import { RowBetween } from '../Row'
+import { AutoColumn, ColumnCenter, RowBetween } from 'components/Layout'
 import { TYPE, CloseIcon, CustomLightSpinner } from 'theme'
 import { ArrowUpCircle } from 'react-feather'
 
-import Circle from '../../assets/images/blue-loader.svg'
+import Circle from 'assets/images/blue-loader.svg'
 import { getEtherscanLink } from 'utils'
 import { ExternalLink } from 'theme'
 
@@ -20,7 +19,7 @@ const ConfirmedIcon = styled(ColumnCenter)`
   padding: 60px 0;
 `
 
-export function LoadingView({ children, onDismiss }: { children: any; onDismiss: () => void }) {
+export const LoadingView: React.FC<{ onDismiss: () => void }> = ({ children, onDismiss }) => {
   return (
     <ConfirmOrLoadingWrapper>
       <RowBetween>
@@ -38,15 +37,10 @@ export function LoadingView({ children, onDismiss }: { children: any; onDismiss:
   )
 }
 
-export function SubmittedView({
-  children,
-  onDismiss,
-  hash
-}: {
-  children: any
+export const SubmittedView: React.FC<{
   onDismiss: () => void
   hash: string | undefined
-}) {
+}> = ({ children, onDismiss, hash }) => {
   const theme = useContext(ThemeContext)
   const { chainId } = useActiveWeb3React()
 

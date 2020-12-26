@@ -1,12 +1,14 @@
 import React, { Suspense } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import Header from 'components/Header'
-import Popups from '../components/Popups'
-import Web3ReactManager from '../components/Web3ReactManager'
-import { ApplicationModal } from '../state/application/actions'
-import { useModalOpen, useToggleModal } from '../state/application/hooks'
+
 import { X } from 'react-feather'
+import Home from 'components/Home'
+import Popups from 'components/Popups'
+import Web3ReactManager from 'components/Web3ReactManager'
+
+import { ApplicationModal } from 'state/application/actions'
+import { useModalOpen, useToggleModal } from 'state/application/hooks'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -63,14 +65,14 @@ export default function App() {
     <Suspense fallback={null}>
       <AppWrapper>
         <HeaderWrapper>
-          <Header />
+          <div>HEADER</div>
         </HeaderWrapper>
         <BodyWrapper>
           <Popups />
           <TopLevelModals />
           <Web3ReactManager>
             <Switch>
-              <Route exact strict path="/" component={() => <div>COMPONENT</div>} />
+              <Route exact path="/" component={Home} />
             </Switch>
           </Web3ReactManager>
           <Marginer />

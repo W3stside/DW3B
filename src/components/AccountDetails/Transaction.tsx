@@ -6,8 +6,8 @@ import { useActiveWeb3React } from 'hooks'
 import { getEtherscanLink } from 'utils'
 import { ExternalLink } from 'theme'
 import { useAllTransactions } from 'state/transactions/hooks'
-import { RowFixed } from '../Row'
-import Loader from '../Loader'
+import { RowFixed } from 'components/Layout'
+import Loader from 'components/Loader'
 
 const TransactionWrapper = styled.div``
 
@@ -29,14 +29,14 @@ const TransactionState = styled(ExternalLink)<{ pending: boolean; success?: bool
   padding: 0.25rem 0rem;
   font-weight: 500;
   font-size: 0.825rem;
-  color: ${({ theme }) => theme.primary1};
+  color: ${({ theme }): string => theme.primary1};
 `
 
 const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
-  color: ${({ pending, success, theme }) => (pending ? theme.primary1 : success ? theme.green1 : theme.red1)};
+  color: ${({ pending, success, theme }): string => (pending ? theme.primary1 : success ? theme.green1 : theme.red1)};
 `
 
-export default function Transaction({ hash }: { hash: string }) {
+const Transaction: React.FC<{ hash: string }> = ({ hash }) => {
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
 
@@ -60,3 +60,5 @@ export default function Transaction({ hash }: { hash: string }) {
     </TransactionWrapper>
   )
 }
+
+export default Transaction

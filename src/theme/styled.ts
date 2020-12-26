@@ -1,5 +1,3 @@
-import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components'
-
 export type Color = string
 export interface Colors {
   // base
@@ -46,16 +44,18 @@ export interface Colors {
   blue1: Color
 }
 
-export interface Grids {
-  sm: number
-  md: number
-  lg: number
+export enum Theme {
+  AUTO = 'auto',
+  DARK = 'dark',
+  LIGHT = 'light',
+  GULF = 'gulf'
 }
 
 declare module 'styled-components' {
   export interface DefaultTheme extends Colors {
-    grids: Grids
-
+    // theming
+    theme: Theme
+    components?: keyof JSX.IntrinsicElements | React.ComponentType<object>
     // shadows
     shadow1: string
 

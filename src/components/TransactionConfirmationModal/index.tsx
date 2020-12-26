@@ -1,17 +1,17 @@
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
-import Modal from '../Modal'
+import Modal from 'components/Modal'
 import { ExternalLink } from 'theme'
 import { Text } from 'rebass'
 import { CloseIcon, CustomLightSpinner } from 'theme'
-import { RowBetween } from '../Row'
 import { AlertTriangle, ArrowUpCircle } from 'react-feather'
-import { ButtonPrimary } from '../Button'
-import { AutoColumn, ColumnCenter } from '../Column'
-import Circle from '../../assets/images/blue-loader.svg'
+import { ButtonBase } from 'components/Button'
+import { RowBetween, AutoColumn, ColumnCenter } from 'components/Layout'
+import Circle from 'assets/images/blue-loader.svg'
 
 import { getEtherscanLink } from 'utils'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from 'hooks'
+import { ChainId } from 'types'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -91,11 +91,11 @@ function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
-          <ButtonPrimary onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+          <ButtonBase onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
             <Text fontWeight={500} fontSize={20}>
               Close
             </Text>
-          </ButtonPrimary>
+          </ButtonBase>
         </AutoColumn>
       </Section>
     </Wrapper>
@@ -148,7 +148,7 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
         </AutoColumn>
       </Section>
       <BottomSection gap="12px">
-        <ButtonPrimary onClick={onDismiss}>Dismiss</ButtonPrimary>
+        <ButtonBase onClick={onDismiss}>Dismiss</ButtonBase>
       </BottomSection>
     </Wrapper>
   )

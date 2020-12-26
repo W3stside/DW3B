@@ -1,25 +1,20 @@
-import { transparentize } from 'polished'
 import React from 'react'
+import { transparentize } from 'polished'
 import styled, {
   ThemeProvider as StyledComponentsThemeProvider,
   createGlobalStyle,
   css,
-  DefaultTheme
-  // DefaultThemeUniswap
+  DefaultTheme,
+  ThemedCssFunction,
+  FlattenSimpleInterpolation,
+  CSSObject
 } from 'styled-components'
-// import { useIsDarkMode } from '../state/user/hooks'
+
 import { Text, TextProps } from 'rebass'
-import { Colors } from './styled'
-import { useAppTheme } from 'state/user/hooks'
+import { useAppColourTheme } from 'state/user/hooks'
+import { Theme, Colors } from './styled'
 
 export * from './components'
-
-export enum Theme {
-  AUTO = 'auto',
-  DARK = 'dark',
-  LIGHT = 'light',
-  GULF = 'gulf'
-}
 
 const MEDIA_WIDTHS = {
   upToExtraSmall: 500,
@@ -28,23 +23,30 @@ const MEDIA_WIDTHS = {
   upToLarge: 1280
 }
 
-const mediaWidthTemplates: { [width in keyof typeof MEDIA_WIDTHS]: typeof css } = Object.keys(MEDIA_WIDTHS).reduce(
-  (accumulator, size) => {
-    ;(accumulator as any)[size] = (a: any, b: any, c: any) => css`
-      @media (max-width: ${(MEDIA_WIDTHS as any)[size]}px) {
-        ${css(a, b, c)}
-      }
-    `
-    return accumulator
-  },
-  {}
-) as any
+type MediaWidthKeys = keyof typeof MEDIA_WIDTHS
+
+type MediaWidth = {
+  [key in MediaWidthKeys]: ThemedCssFunction<DefaultTheme>
+}
+
+const mediaWidthTemplates = Object.keys(MEDIA_WIDTHS).reduce<MediaWidth>((accumulator, size: unknown) => {
+  ;(accumulator[size as MediaWidthKeys] as unknown) = (
+    a: CSSObject,
+    b: CSSObject,
+    c: CSSObject
+  ): ThemedCssFunction<DefaultTheme> | FlattenSimpleInterpolation => css`
+    @media (max-width: ${MEDIA_WIDTHS[size as MediaWidthKeys]}px) {
+      ${css(a, b, c)}
+    }
+  `
+  return accumulator
+}, {} as MediaWidth)
 
 const white = '#FFFFFF'
 const black = '#000000'
 
-export function colors(theme: Theme): Colors {
-  const darkMode = theme === Theme.DARK
+export function colors(colourTheme: Theme): Colors {
+  const darkMode = colourTheme === Theme.DARK
   return {
     // base
     white,
@@ -97,22 +99,17 @@ export function colors(theme: Theme): Colors {
   }
 }
 
-export function theme(theme: Theme): DefaultTheme {
+export function computeAppTheme(colourTheme: Theme): DefaultTheme {
   return {
-    ...colors(theme),
+    ...colors(colourTheme),
 
-    grids: {
-      sm: 8,
-      md: 12,
-      lg: 24
-    },
+    theme: colourTheme,
+    components: undefined,
 
     //shadows
-    shadow1: theme === Theme.DARK ? '#000' : '#2F80ED',
-
+    shadow1: colourTheme === Theme.DARK ? '#000' : '#2F80ED',
     // media queries
     mediaWidth: mediaWidthTemplates,
-
     // css snippets
     flexColumnNoWrap: css`
       display: flex;
@@ -125,70 +122,62 @@ export function theme(theme: Theme): DefaultTheme {
   }
 }
 
-// export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-//   const darkMode = useIsDarkMode()
-
-//   const themeObject = useMemo(() => theme(darkMode), [darkMode])
-
-//   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
-// }
-
 const TextWrapper = styled(Text)<{ color: keyof Colors }>`
-  color: ${({ color, theme }) => (theme as any)[color]};
+  color: ${({ color, theme }): string => (theme as never)[color]};
 `
 
 export const TYPE = {
-  main(props: TextProps) {
+  main(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'text2'} {...props} />
   },
-  link(props: TextProps) {
+  link(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'primary1'} {...props} />
   },
-  black(props: TextProps) {
+  black(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'text1'} {...props} />
   },
-  white(props: TextProps) {
+  white(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'white'} {...props} />
   },
-  body(props: TextProps) {
+  body(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={400} fontSize={16} color={'text1'} {...props} />
   },
-  largeHeader(props: TextProps) {
+  largeHeader(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />
   },
-  mediumHeader(props: TextProps) {
+  mediumHeader(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} fontSize={20} {...props} />
   },
-  subHeader(props: TextProps) {
+  subHeader(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={400} fontSize={14} {...props} />
   },
-  small(props: TextProps) {
+  small(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />
   },
-  blue(props: TextProps) {
+  blue(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'primary1'} {...props} />
   },
-  yellow(props: TextProps) {
+  yellow(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'yellow1'} {...props} />
   },
-  darkGray(props: TextProps) {
+  darkGray(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'text3'} {...props} />
   },
-  gray(props: TextProps) {
+  gray(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={'bg3'} {...props} />
   },
-  italic(props: TextProps) {
+  italic(props: TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color={'text2'} {...props} />
   },
-  error({ error, ...props }: { error: boolean } & TextProps) {
+  error({ error, ...props }: { error: boolean } & TextProps): React.ReactElement {
     return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />
   }
 }
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const appTheme = useAppTheme()
+const ThemeProvider: React.FC = ({ children }) => {
+  const colourTheme = useAppColourTheme()
 
-  const themeObject = React.useMemo(() => theme(appTheme), [appTheme])
+  const themeObject = React.useMemo(() => computeAppTheme(colourTheme), [colourTheme])
 
   return <StyledComponentsThemeProvider theme={themeObject}>{children}</StyledComponentsThemeProvider>
 }
@@ -235,17 +224,19 @@ export const FixedGlobalStyle = createGlobalStyle`
 
 export const ThemedGlobalStyle = createGlobalStyle`
   html {
-    color: ${({ theme }) => theme.text1};
-    background-color: ${({ theme }) => theme.bg2};
+    color: ${({ theme }): string => theme.text1};
+    background-color: ${({ theme }): string => theme.bg2};
   }
   body {
     min-height: 100vh;
     background-position: 0 -30vh;
     background-repeat: no-repeat;
-    background-image: ${({ theme }) =>
+    background-image: ${({ theme }): string =>
       `radial-gradient(50% 50% at 50% 50%, ${transparentize(0.9, theme.primary1)} 0%, ${transparentize(
         1,
         theme.bg1
       )} 100%)`};
   }
 `
+
+export default ThemeProvider

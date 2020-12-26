@@ -2,18 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { AlertTriangle, X } from 'react-feather'
-import { useURLWarningToggle, useURLWarningVisible } from '../../state/user/hooks'
 import { isMobile } from 'react-device-detect'
 
-const PhishAlert = styled.div<{ isActive: any }>`
+const PhishAlert = styled.div<{ isActive: boolean }>`
   width: 100%;
   padding: 6px 6px;
-  background-color: ${({ theme }) => theme.blue1};
+  background-color: ${({ theme }): string => theme.blue1};
   color: white;
   font-size: 11px;
   justify-content: space-between;
   align-items: center;
-  display: ${({ isActive }) => (isActive ? 'flex' : 'none')};
+  display: ${({ isActive }): string => (isActive ? 'flex' : 'none')};
 `
 
 export const StyledClose = styled(X)`
@@ -22,26 +21,25 @@ export const StyledClose = styled(X)`
   }
 `
 
-export default function URLWarning() {
-  const toggleURLWarning = useURLWarningToggle()
-  const showURLWarning = useURLWarningVisible()
+const APP_URL = 'this.app.org'
 
+export default function URLWarning(): JSX.Element | null {
   return isMobile ? (
-    <PhishAlert isActive={showURLWarning}>
+    <PhishAlert isActive>
       <div style={{ display: 'flex' }}>
         <AlertTriangle style={{ marginRight: 6 }} size={12} /> Make sure the URL is
-        <code style={{ padding: '0 4px', display: 'inline', fontWeight: 'bold' }}>app.uniswap.org</code>
+        <code style={{ padding: '0 4px', display: 'inline', fontWeight: 'bold' }}>{APP_URL}</code>
       </div>
-      <StyledClose size={12} onClick={toggleURLWarning} />
+      <StyledClose size={12} onClick={console.log} />
     </PhishAlert>
   ) : window.location.hostname === 'app.uniswap.org' ? (
-    <PhishAlert isActive={showURLWarning}>
+    <PhishAlert isActive>
       <div style={{ display: 'flex' }}>
         <AlertTriangle style={{ marginRight: 6 }} size={12} /> Always make sure the URL is
-        <code style={{ padding: '0 4px', display: 'inline', fontWeight: 'bold' }}>app.uniswap.org</code> - bookmark it
-        to be safe.
+        <code style={{ padding: '0 4px', display: 'inline', fontWeight: 'bold' }}>{APP_URL}</code> - bookmark it to be
+        safe.
       </div>
-      <StyledClose size={12} onClick={toggleURLWarning} />
+      <StyledClose size={12} onClick={console.log} />
     </PhishAlert>
   ) : null
 }

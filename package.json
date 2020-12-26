@@ -17,15 +17,15 @@
     "@types/multicodec": "^1.0.0",
     "@types/node": "^13.13.5",
     "@types/qs": "^6.9.2",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.7",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "@types/react-redux": "^7.1.8",
     "@types/react-router-dom": "^5.0.0",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
     "@types/rebass": "^4.0.5",
     "@types/styled-components": "^5.1.0",
-    "@types/testing-library__cypress": "^5.0.5",
+    "@types/styled-theming": "^2.2.5",
     "@types/wcag-contrast": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.31.0",
@@ -58,10 +58,10 @@
     "polished": "^3.3.2",
     "prettier": "^1.17.0",
     "qs": "^6.9.4",
-    "react": "^16.13.1",
+    "react": "^17.0.1",
     "react-confetti": "^6.0.0",
     "react-device-detect": "^1.6.2",
-    "react-dom": "^16.13.1",
+    "react-dom": "^17.0.1",
     "react-feather": "^2.0.8",
     "react-ga": "^2.5.7",
     "react-i18next": "^10.7.0",
@@ -78,7 +78,8 @@
     "redux-localstorage-simple": "^2.3.1",
     "serve": "^11.3.0",
     "start-server-and-test": "^1.11.0",
-    "styled-components": "^4.2.0",
+    "styled-components": "^5.2.1",
+    "styled-theming": "^2.2.0",
     "typescript": "^3.8.3",
     "use-count-up": "^2.2.5",
     "wcag-contrast": "^3.0.0"
@@ -92,7 +93,6 @@
     "test": "craco test --env=jsdom",
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
-    "integration-test": "start-server-and-test 'serve build -l 3000' http://localhost:3000 'cypress run'",
     "dedup": "npx yarn-deduplicate"
   },
   "eslintConfig": {
@@ -113,7 +113,5 @@
       "last 1 safari version"
     ]
   },
-  "license": "GPL-3.0-or-later",
-  "dependencies": {
-  }
+  "license": "GPL-3.0-or-later"
 }

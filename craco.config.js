@@ -16,7 +16,7 @@ module.exports = function() {
         ...webpackConfig,
         resolve: {
           ...webpackConfig.resolve,
-          modules: [path.resolve(__dirname, 'src/custom'), ...webpackConfig.resolve.modules]
+          modules: webpackConfig.resolve.modules
         }
       })
     }
