@@ -1,12 +1,10 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
-import { useTranslation } from 'react-i18next'
 
 import styled from 'styled-components'
 
-import Logo from 'assets/svg/logo.svg'
-import LogoDark from 'assets/svg/logo_white.svg'
+import Logo from 'assets/png/logo.png'
 import { useActiveWeb3React } from 'hooks'
 import { ExternalLink } from 'theme'
 
@@ -14,33 +12,12 @@ import Menu from 'components/Menu'
 
 import { Row, RowFixed, YellowCard } from 'components/Layout'
 import { ChainId } from 'types'
-import { useAppColourTheme } from 'state/user/hooks'
-import { Theme } from 'theme/styled'
 import { BASE_STYLES } from '@src/theme/styles'
+import { SectionFrame } from '../Layout/Section'
 
-const HeaderFrame = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  align-items: center;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-  width: 100%;
+const HeaderFrame = styled(SectionFrame)`
   top: 0;
-  position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  z-index: 2;
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-    width: calc(100%);
-    position: relative;
-  `};
-
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-        padding: 0.5rem 1rem;
-  `}
 `
 
 const HeaderControls = styled.div`
@@ -148,7 +125,7 @@ const Title = styled.a`
   }
 `
 
-const UniIcon = styled.div`
+const Sabrecon = styled.div`
   transition: transform 0.3s ease;
   :hover {
     transform: rotate(-5deg);
@@ -224,43 +201,24 @@ const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
 
 export default function Header() {
   const { chainId } = useActiveWeb3React()
-  const { t } = useTranslation()
-
-  const theme = useAppColourTheme()
 
   return (
     <HeaderFrame>
       <HeaderRow>
         <Title href=".">
-          <UniIcon>
-            <img width={'24px'} src={theme === Theme.DARK ? LogoDark : Logo} alt="logo" />
-          </UniIcon>
+          <Sabrecon>
+            <img width="40px" src={Logo} alt="logo" />
+          </Sabrecon>
         </Title>
         <HeaderLinks>
-          <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-            {t('swap')}
-          </StyledNavLink>
-          <StyledNavLink
-            id={`pool-nav-link`}
-            to={'/pool'}
-            isActive={(match, { pathname }) =>
-              Boolean(match) ||
-              pathname.startsWith('/add') ||
-              pathname.startsWith('/remove') ||
-              pathname.startsWith('/create') ||
-              pathname.startsWith('/find')
-            }
-          >
-            {t('pool')}
-          </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/uni'}>
-            UNI
+            Sabrebois
           </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Vote
+            Get Bitches
           </StyledNavLink>
           <StyledExternalLink id={`stake-nav-link`} href={'https://uniswap.info'}>
-            Charts <span style={{ fontSize: '11px' }}>↗</span>
+            Get Money <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
         </HeaderLinks>
       </HeaderRow>

@@ -54,12 +54,11 @@ const PRIMARY_BUTTON_STYLES = css`
 `
 
 const SECONDARY_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.text2};
-  background: ${({ theme }): string => theme.bg2};
-  border-color: ${({ theme }): string => theme.text2};
+  color: ${({ theme }): string => theme.text1};
+  background: ${({ theme }): string => theme.bg3};
 
   &:hover {
-    background: ${({ theme }): string => darken(DEFAULT_DARKEN_AMOUNT, theme.bg2)};
+    background: ${({ theme }): string => darken(DEFAULT_DARKEN_AMOUNT, theme.bg3)};
   }
 `
 
@@ -232,32 +231,3 @@ export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
     pointer-events: none;
   }
 `
-
-const ThemeButtonToggleWrapper = styled.div<{ $mode: boolean; $margin?: string }>`
-  display: inline-flex;
-  min-width: 7rem;
-  background-color: gainsboro;
-  border-radius: 2rem;
-  margin: ${({ $margin = '0' }): string => $margin};
-
-  > button {
-    width: 75%;
-    margin-left: ${({ $mode }): string => ($mode ? 'auto' : '0')};
-
-    display: flex;
-    justify-content: center;
-  }
-`
-
-export const ThemeToggle: React.FC<ButtonBaseProps & {
-  mode: boolean
-  margin?: string
-}> = ({ mode, margin, size = ButtonSizeVariations.SMALL, variant = ButtonVariations.THEME, children, ...rest }) => {
-  return (
-    <ThemeButtonToggleWrapper $mode={mode} $margin={margin}>
-      <ButtonBase {...rest} size={size} variant={variant}>
-        {children}
-      </ButtonBase>
-    </ThemeButtonToggleWrapper>
-  )
-}

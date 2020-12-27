@@ -10,6 +10,7 @@ import Web3ReactManager from 'components/Web3ReactManager'
 import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
 import Header from '@src/components/Header'
+import Footer from '@src/components/Footer'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const AppWrapper = styled.div`
   overflow-x: hidden;
 `
 
-const HeaderWrapper = styled.div`
+const SectionWrapper = styled.div`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   justify-content: space-between;
@@ -69,9 +70,9 @@ export default function App() {
   return (
     <Suspense fallback={null}>
       <AppWrapper>
-        <HeaderWrapper>
+        <SectionWrapper>
           <Header />
-        </HeaderWrapper>
+        </SectionWrapper>
         <BodyWrapper>
           <Popups />
           <TopLevelModals />
@@ -82,6 +83,9 @@ export default function App() {
           </Web3ReactManager>
           <Marginer />
         </BodyWrapper>
+        <SectionWrapper>
+          <Footer />
+        </SectionWrapper>
       </AppWrapper>
     </Suspense>
   )

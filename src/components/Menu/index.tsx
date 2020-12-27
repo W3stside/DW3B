@@ -9,6 +9,7 @@ import { useModalOpen, useToggleModal } from '../../state/application/hooks'
 
 import { ExternalLink } from 'theme'
 import { ButtonBase as ButtonPrimary } from 'components/Button'
+import { darken } from 'polished'
 
 const StyledMenuIcon = styled(MenuIcon)`
   path {
@@ -16,7 +17,7 @@ const StyledMenuIcon = styled(MenuIcon)`
   }
 `
 
-const StyledMenuButton = styled.button`
+const StyledMenuButton = styled(ButtonPrimary)`
   width: 100%;
   height: 100%;
   border: none;
@@ -33,7 +34,7 @@ const StyledMenuButton = styled.button`
   :focus {
     cursor: pointer;
     outline: none;
-    background-color: ${({ theme }) => theme.bg4};
+    background-color: ${({ theme }) => darken(0.1, theme.bg3)};
   }
 
   svg {
@@ -125,11 +126,7 @@ export default function Menu() {
             <PieChart size={14} />
             Analytics
           </MenuItem>
-          {account && (
-            <ButtonPrimary onClick={openClaimModal}>
-              Claim UNI
-            </ButtonPrimary>
-          )}
+          {account && <ButtonPrimary onClick={openClaimModal}>Claim UNI</ButtonPrimary>}
         </MenuFlyout>
       )}
     </StyledMenu>

@@ -38,10 +38,10 @@ export const LIGHT_COLOURS = {
   text5: '#EDEEF2',
 
   // backgrounds / greys
-  bg1: '#FFFFFF',
+  bg1: '#ffc1ff',
   bg2: '#F7F8FA',
-  bg3: '#EDEEF2',
-  bg4: '#CED0D9',
+  bg3: '#C1FFC1',
+  bg4: '#00a400',
   bg5: '#888D9B',
 
   //specialty colors
@@ -103,5 +103,5 @@ export const GULF_COLOURS = {
   ...LIGHT_COLOURS,
   bg1: '#b0e0e6',
   bg2: '#7dbbcd',
-  bg3: '#eaa221'
+  bg3: '#d4946f'
 }

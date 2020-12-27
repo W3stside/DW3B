@@ -218,3 +218,9 @@ export const ThemedGlobalStyle = createGlobalStyle`
 `
 
 export default ThemeProvider
+
+/* 
+    // Box-Shadow to consider for containers
+    background: #d4946f;
+    box-shadow: 0px 0px 5px 2px #88421a36;
+*/
