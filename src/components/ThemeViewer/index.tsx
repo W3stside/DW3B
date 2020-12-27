@@ -56,10 +56,11 @@ const ThemeConsumer: TFC = ({ theme }) => {
         const icon = getTogglerIcon(name)
         return (
           <ThemeToggle
+            mode={isActiveMode}
             size={BSV.BIG}
             variant={isActiveMode ? BV.PRIMARY : BV.DISABLED}
+            margin="0.2rem"
             onClick={() => setTheme(name)}
-            mode={isActiveMode}
             key={key + '_' + index}
           >
             {<FontAwesomeIcon icon={icon} size="lg" />}

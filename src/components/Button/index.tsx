@@ -233,11 +233,12 @@ export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
   }
 `
 
-const ThemeButtonToggleWrapper = styled.div<{ $mode: boolean }>`
+const ThemeButtonToggleWrapper = styled.div<{ $mode: boolean; $margin?: string }>`
   display: inline-flex;
   min-width: 7rem;
   background-color: gainsboro;
   border-radius: 2rem;
+  margin: ${({ $margin = '0' }): string => $margin};
 
   > button {
     width: 75%;
@@ -250,9 +251,10 @@ const ThemeButtonToggleWrapper = styled.div<{ $mode: boolean }>`
 
 export const ThemeToggle: React.FC<ButtonBaseProps & {
   mode: boolean
-}> = ({ mode, size = ButtonSizeVariations.SMALL, variant = ButtonVariations.THEME, children, ...rest }) => {
+  margin?: string
+}> = ({ mode, margin, size = ButtonSizeVariations.SMALL, variant = ButtonVariations.THEME, children, ...rest }) => {
   return (
-    <ThemeButtonToggleWrapper $mode={mode}>
+    <ThemeButtonToggleWrapper $mode={mode} $margin={margin}>
       <ButtonBase {...rest} size={size} variant={variant}>
         {children}
       </ButtonBase>
