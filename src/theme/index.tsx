@@ -138,10 +138,18 @@ export const TYPE = {
   }
 }
 
-const ThemeProvider: React.FC = ({ children }) => {
+const ThemeProvider: React.FC<{ themeExtension?: any }> = ({ children, themeExtension }) => {
   const colourTheme = useAppColourTheme()
 
-  const themeObject = React.useMemo(() => computeAppTheme(colourTheme), [colourTheme])
+  const themeObject = React.useMemo(() => {
+    const baseTheme = computeAppTheme(colourTheme)
+    const constructedTheme = {
+      ...baseTheme,
+      ...themeExtension
+    }
+
+    return constructedTheme
+  }, [colourTheme, themeExtension])
 
   return (
     <StyledComponentsThemeProvider theme={themeObject}>

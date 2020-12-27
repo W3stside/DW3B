@@ -176,22 +176,22 @@ export const ButtonTheme = variants('mode', 'variant', ButtonThemeMap)
 
 // Created a 'size' prop on buttons, default | small | big
 const ButtonSizes = variants('component', 'size', {
-  default: {
+  DEFAULT: {
     buttons: css`
       font-size: initial;
       padding: 0.5rem 1rem;
     `
   },
-  small: {
+  SMALL: {
     buttons: css`
       font-size: smaller;
-      padding: 0.3rem 0.5rem;
+      padding: 0.3rem 1rem;
     `
   },
-  big: {
+  BIG: {
     buttons: css`
       font-size: larger;
-      padding: 0.65rem 1rem;
+      padding: 0.65rem 1.2rem;
     `
   }
 })
@@ -210,17 +210,17 @@ const ColouredAndSizedButtonBase = styled(ColouredButtonBase)`
 // Wrap ColouredAndSizedButtonsBase in it's own ThemeProvider which takes the toplevel app theme
 // ThemeProvider and interpolate over it's props
 const ThemeWrappedButtonBase: React.FC<React.ButtonHTMLAttributes<Element>> = ({ children, ...restProps }) => (
-  <ThemeProvider>
+  <ThemeProvider themeExtension={{ component: 'buttons' }}>
     <ColouredAndSizedButtonBase {...restProps}>{children}</ColouredAndSizedButtonBase>
   </ThemeProvider>
 )
 
-export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(({ size = 'default' }) => ({
+export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(({ size = BSV.DEFAULT }) => ({
   size
 }))<ButtonBaseProps>`
   border-radius: ${borderRadius};
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
   outline: 0;
 
   transition-duration: DEFAULT_DARKEN_AMOUNTs;
@@ -235,13 +235,16 @@ export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
 
 const ThemeButtonToggleWrapper = styled.div<{ $mode: boolean }>`
   display: inline-flex;
-  width: 5rem;
+  min-width: 7rem;
   background-color: gainsboro;
   border-radius: 2rem;
 
   > button {
     width: 75%;
     margin-left: ${({ $mode }): string => ($mode ? 'auto' : '0')};
+
+    display: flex;
+    justify-content: center;
   }
 `
 

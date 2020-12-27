@@ -3,7 +3,10 @@ import ThemeProvider from '@src/theme'
 import { ButtonBase, ThemeToggle, BSV, BV } from '../Button'
 import { useThemeManager } from '@src/state/user/hooks'
 import { DefaultTheme } from 'styled-components'
-import { THEME_LIST } from '@src/theme/styled'
+import { THEME_LIST, Theme } from '@src/theme/styled'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSun, faSmileWink, faMoon, faLightbulb } from '@fortawesome/free-regular-svg-icons'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 type PropsWithChildrenAndTheme<P> = P & { children?: React.ReactNode; theme?: DefaultTheme }
 
@@ -16,6 +19,19 @@ interface FunctionComponentWithTheme<P = {}> {
 }
 
 type TFC<P = {}> = FunctionComponentWithTheme<P>
+
+function getTogglerIcon(theme: Theme): IconDefinition {
+  switch (theme) {
+    case Theme.LIGHT:
+      return faSun
+    case Theme.DARK:
+      return faMoon
+    case Theme.GULF:
+      return faLightbulb
+    default:
+      return faSmileWink
+  }
+}
 
 const ThemeConsumer: TFC = ({ theme }) => {
   const [, setTheme] = useThemeManager()
@@ -30,11 +46,14 @@ const ThemeConsumer: TFC = ({ theme }) => {
       </h4>
       <p>{JSON.stringify(theme, null, 2)}</p>
       <br />
-      <ButtonBase variant={BV.PRIMARY}>Base Button Example</ButtonBase>
+      <ButtonBase size={BSV.SMALL} variant={BV.PRIMARY}>
+        Base Button Example
+      </ButtonBase>
       <br />
       <br />
       {THEME_LIST.map(([key, name], index) => {
         const isActiveMode = theme.mode === name
+        const icon = getTogglerIcon(name)
         return (
           <ThemeToggle
             size={BSV.BIG}
@@ -43,7 +62,7 @@ const ThemeConsumer: TFC = ({ theme }) => {
             mode={isActiveMode}
             key={key + '_' + index}
           >
-            {name}
+            {<FontAwesomeIcon icon={icon} size="lg" />}
           </ThemeToggle>
         )
       })}
