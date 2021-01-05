@@ -17,8 +17,10 @@ import ApplicationUpdater from './state/application/updater'
 import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 
-import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from 'theme'
 import getLibrary from 'utils/getLibrary'
+
+import ThemeProvider from 'theme'
+import { TopGlobalStyle, ThemedGlobalStyle } from './theme/styles/global'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -38,12 +40,14 @@ function Updaters() {
 
 ReactDOM.render(
   <StrictMode>
-    <FixedGlobalStyle />
+    {/* Provides all top level CSS NOT dynamically adjustable by the ThemeProvider */}
+    <TopGlobalStyle />
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ProviderNetwork getLibrary={getLibrary}>
         <Provider store={store}>
           <Updaters />
           <ThemeProvider>
+            {/* Provides all top level CSS dynamically adjustable by the ThemeProvider */}
             <ThemedGlobalStyle />
             <HashRouter>
               <App />

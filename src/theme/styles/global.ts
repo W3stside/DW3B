@@ -4,7 +4,7 @@ import { transparentize } from 'polished'
 import { getThemeColours } from '../utils'
 import { Theme } from '../styled'
 
-export const FixedGlobalStyle = createGlobalStyle`
+export const TopGlobalStyle = createGlobalStyle`
   html,
   input,
   textarea,
