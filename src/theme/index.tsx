@@ -79,29 +79,28 @@ const DEFAULT_THEME = {
   `
 }
 
-// Extension of styled-components' ThemeProvider but with our own constructed theme object
+// Extension/override of styled-components' ThemeProvider but with our own constructed theme object
 const ThemeProvider: React.FC<{ themeExtension?: any }> = ({ children, themeExtension }) => {
   const colourTheme = useAppColourTheme()
 
   const themeObject = React.useMemo(() => {
     const themeColours = getThemeColours(colourTheme)
-    const baseTheme = {
+
+    const computedTheme = {
       // Compute the app colour pallette using the passed in colourTheme
       ...themeColours,
       // pass in defaults
       ...DEFAULT_THEME,
       mode: colourTheme,
       //shadows
-      shadow1: colourTheme === Theme.DARK ? '#000' : '#2F80ED'
-    }
-
-    return {
-      ...baseTheme,
+      shadow1: colourTheme === Theme.DARK ? '#000' : '#2F80ED',
       // unfold in any extensions
       // for example to make big/small buttons -> see src/components/Button ThemeWrappedButtonBase
       // to see it in action
       ...themeExtension
     }
+
+    return computedTheme
   }, [colourTheme, themeExtension])
 
   return (
