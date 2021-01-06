@@ -3,14 +3,14 @@ import { Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { X } from 'react-feather'
-import ThemeViewer from '@src/components/ThemeViewer'
+import ThemeViewer from 'components/ThemeViewer'
 import Popups from 'components/Popups'
 import Web3ReactManager from 'components/Web3ReactManager'
 
 import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
-import Header from '@src/components/Header'
-import Footer from '@src/components/Footer'
+import Header from 'components/Header'
+import Footer from 'components/Footer'
 
 const AppWrapper = styled.div`
   display: flex;
