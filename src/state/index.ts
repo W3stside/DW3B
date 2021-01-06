@@ -12,7 +12,7 @@ const store = configureStore({
   reducer: {
     application,
     user,
-    transactions,
+    transactions
   },
   middleware: [
     ...getDefaultMiddleware({

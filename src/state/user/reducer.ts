@@ -14,7 +14,7 @@ export interface UserState {
 
 export const initialState: UserState = {
   theme: Theme.LIGHT,
-  timestamp: currentTimestamp(),
+  timestamp: currentTimestamp()
 }
 
 export default createReducer(initialState, builder =>
