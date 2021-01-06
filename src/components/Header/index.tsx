@@ -212,13 +212,13 @@ export default function Header() {
         </Title>
         <HeaderLinks>
           <StyledNavLink id={`stake-nav-link`} to={'/uni'}>
-            Sabrebois
+            App
           </StyledNavLink>
           <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Get Bitches
+            Header Link
           </StyledNavLink>
           <StyledExternalLink id={`stake-nav-link`} href={'https://uniswap.info'}>
-            Get Money <span style={{ fontSize: '11px' }}>↗</span>
+            External Link <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
         </HeaderLinks>
       </HeaderRow>
