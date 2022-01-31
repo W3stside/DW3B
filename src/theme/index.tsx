@@ -1,9 +1,9 @@
-import React from 'react'
-import styled, { ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components'
+import { ReactElement, FC, useMemo, Children, isValidElement, cloneElement } from 'react'
+import styled, { ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components/macro'
 
 import { Text, TextProps } from 'rebass'
 import { useAppColourTheme } from 'state/user/hooks'
-import { Theme, Colors } from './styled'
+import { ThemeModes, Colors } from './styled'
 import { getThemeColours } from './utils'
 import { mediaWidthTemplates as mediaWidth } from './styles/mediaQueries'
 
@@ -14,49 +14,49 @@ const TextWrapper = styled(Text)<{ color: keyof Colors }>`
 `
 
 export const TYPE = {
-  main(props: TextProps): React.ReactElement {
+  main(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="text2" {...props} />
   },
-  link(props: TextProps): React.ReactElement {
+  link(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="primary1" {...props} />
   },
-  black(props: TextProps): React.ReactElement {
+  black(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="text1" {...props} />
   },
-  white(props: TextProps): React.ReactElement {
+  white(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="white" {...props} />
   },
-  body(props: TextProps): React.ReactElement {
+  body(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={400} fontSize={16} color="text1" {...props} />
   },
-  largeHeader(props: TextProps): React.ReactElement {
+  largeHeader(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={600} fontSize={24} {...props} />
   },
-  mediumHeader(props: TextProps): React.ReactElement {
+  mediumHeader(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} fontSize={20} {...props} />
   },
-  subHeader(props: TextProps): React.ReactElement {
+  subHeader(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={400} fontSize={14} {...props} />
   },
-  small(props: TextProps): React.ReactElement {
+  small(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} fontSize={11} {...props} />
   },
-  blue(props: TextProps): React.ReactElement {
+  blue(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="primary1" {...props} />
   },
-  yellow(props: TextProps): React.ReactElement {
+  yellow(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="yellow1" {...props} />
   },
-  darkGray(props: TextProps): React.ReactElement {
+  darkGray(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="text3" {...props} />
   },
-  gray(props: TextProps): React.ReactElement {
+  gray(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color="bg3" {...props} />
   },
-  italic(props: TextProps): React.ReactElement {
+  italic(props: TextProps): ReactElement {
     return <TextWrapper fontWeight={500} fontSize={12} fontStyle={'italic'} color="text2" {...props} />
   },
-  error({ error, ...props }: { error: boolean } & TextProps): React.ReactElement {
+  error({ error, ...props }: { error: boolean } & TextProps): ReactElement {
     return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />
   }
 }
@@ -80,20 +80,20 @@ const DEFAULT_THEME = {
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
-const ThemeProvider: React.FC<{ themeExtension?: any }> = ({ children, themeExtension }) => {
-  const colourTheme = useAppColourTheme()
+const ThemeProvider: FC<{ themeExtension?: any }> = ({ children, themeExtension }) => {
+  const { mode } = useAppColourTheme()
 
-  const themeObject = React.useMemo(() => {
-    const themeColours = getThemeColours(colourTheme)
+  const themeObject = useMemo(() => {
+    const themeColours = getThemeColours(mode)
 
     const computedTheme = {
       // Compute the app colour pallette using the passed in colourTheme
       ...themeColours,
       // pass in defaults
       ...DEFAULT_THEME,
-      mode: colourTheme,
+      mode,
       //shadows
-      shadow1: colourTheme === Theme.DARK ? '#000' : '#2F80ED',
+      shadow1: mode === ThemeModes.DARK ? '#000' : '#2F80ED',
       // unfold in any extensions
       // for example to make big/small buttons -> see src/components/Button ThemeWrappedButtonBase
       // to see it in action
@@ -101,15 +101,15 @@ const ThemeProvider: React.FC<{ themeExtension?: any }> = ({ children, themeExte
     }
 
     return computedTheme
-  }, [colourTheme, themeExtension])
+  }, [mode, themeExtension])
 
   return (
     <StyledComponentsThemeProvider theme={themeObject}>
-      {React.Children.map(
+      {Children.map(
         children,
         childWithTheme =>
           // make sure child is a valid react element as children by default can be type string|null|number
-          React.isValidElement(childWithTheme) && React.cloneElement(childWithTheme, { theme: themeObject })
+          isValidElement(childWithTheme) && cloneElement(childWithTheme, { theme: themeObject })
       )}
     </StyledComponentsThemeProvider>
   )

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import { X } from 'react-feather'
 import ThemeViewer from 'components/ThemeViewer'

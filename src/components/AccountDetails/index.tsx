@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import styled, { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components/macro'
 import { useActiveWeb3React } from 'hooks'
 import { AppDispatch } from 'state'
 import { clearAllTransactions } from 'state/transactions/actions'
@@ -355,7 +355,7 @@ export default function AccountDetails({
                           <AddressLink
                             hasENS={!!ENSName}
                             isENS={true}
-                            href={chainId && getEtherscanLink(chainId, ENSName, 'address')}
+                            href={getEtherscanLink(chainId, ENSName, 'address')}
                           >
                             <LinkIcon size={16} />
                             <span style={{ marginLeft: '4px' }}>View on Etherscan</span>

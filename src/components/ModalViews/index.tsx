@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { useActiveWeb3React } from 'hooks'
 
-import styled, { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components/macro'
 import { AutoColumn, ColumnCenter, RowBetween } from 'components/Layout'
 import { TYPE, CloseIcon, CustomLightSpinner } from 'theme'
 import { ArrowUpCircle } from 'react-feather'

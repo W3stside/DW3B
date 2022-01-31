@@ -6,7 +6,7 @@ import { PortisConnector } from '@web3-react/portis-connector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
-import { ChainId } from 'types'
+import { SupportedChainId as ChainId } from 'constants/chains'
 
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
 const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
@@ -28,7 +28,7 @@ export function getNetworkLibrary(): Web3Provider {
 }
 
 export const injected = new InjectedConnector({
-  supportedChainIds: [ChainId.MAINNET, ChainId.RINKEBY, ChainId.ROPSTEN, ChainId.GOERLI, ChainId.KOVAN, ChainId.XDAI]
+  supportedChainIds: [ChainId.MAINNET, ChainId.RINKEBY, ChainId.XDAI]
 })
 
 // mainnet only

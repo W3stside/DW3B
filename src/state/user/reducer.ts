@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { Theme } from 'theme/styled'
-import { updateVersion } from '../global/actions'
-import { updateTheme } from './actions'
+import { Theme, ThemeModes } from 'theme/styled'
+import { updateVersion } from 'state/global/actions'
+import { updateThemeMode, updateThemeAutoDetect } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
 
@@ -13,7 +13,10 @@ export interface UserState {
 }
 
 export const initialState: UserState = {
-  theme: Theme.LIGHT,
+  theme: {
+    mode: ThemeModes.LIGHT,
+    autoDetect: false
+  },
   timestamp: currentTimestamp()
 }
 
@@ -22,8 +25,12 @@ export default createReducer(initialState, builder =>
     .addCase(updateVersion, state => {
       state.lastUpdateVersionTimestamp = currentTimestamp()
     })
-    .addCase(updateTheme, (state, action) => {
-      state.theme = action.payload.theme
+    .addCase(updateThemeMode, (state, action) => {
+      state.theme.mode = action.payload
+      state.timestamp = currentTimestamp()
+    })
+    .addCase(updateThemeAutoDetect, (state, action) => {
+      state.theme.autoDetect = action.payload
       state.timestamp = currentTimestamp()
     })
 )

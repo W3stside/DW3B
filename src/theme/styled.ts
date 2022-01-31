@@ -47,19 +47,25 @@ export interface Colors {
   blue1: Color
 }
 
-export enum Theme {
+export enum ThemeModes {
   DARK = 'DARK',
   LIGHT = 'LIGHT',
+  // add whatever themes u want here...
   GULF = 'GULF'
 }
 
-export const THEME_LIST = Object.entries(Theme)
+export type Theme = {
+  mode: ThemeModes
+  autoDetect: boolean
+}
+
+export const THEME_LIST = Object.entries(ThemeModes)
 
 declare module 'styled-components' {
   export interface DefaultTheme extends Colors {
     // theming
-    mode: Theme
-    components?: keyof JSX.IntrinsicElements | React.ComponentType<object>
+    mode: ThemeModes
+    components?: keyof JSX.IntrinsicElements | React.ComponentType<Record<any, any>>
     // shadows
     shadow1: string
 

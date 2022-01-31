@@ -1,11 +1,9 @@
-import React from 'react'
-import styled, { css } from 'styled-components'
-import { animated, useTransition, useSpring } from 'react-spring'
-import { DialogOverlay, DialogContent } from '@reach/dialog'
-import { isMobile } from 'react-device-detect'
-import '@reach/dialog/styles.css'
+import { DialogContent, DialogOverlay } from '@reach/dialog'
 import { transparentize } from 'polished'
+import { animated, useSpring, useTransition } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
+import styled, { css } from 'styled-components/macro'
+import { isMobile } from 'utils'
 
 const AnimatedDialogOverlay = animated(DialogOverlay)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,15 +29,16 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, ...r
 )).attrs({
   'aria-label': 'dialog'
 })`
-  overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+  overflow-y: auto;
 
   &[data-reach-dialog-content] {
     margin: 0 0 2rem 0;
-    background-color: ${({ theme }) => theme.bg1};
+    background-color: ${({ theme }) => theme.bg0};
+    border: 1px solid ${({ theme }) => theme.bg1};
     box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.95, theme.shadow1)};
     padding: 0px;
     width: 50vw;
-    overflow-y: ${({ mobile }) => (mobile ? 'scroll' : 'hidden')};
+    overflow-y: auto;
     overflow-x: hidden;
 
     align-self: ${({ mobile }) => (mobile ? 'flex-end' : 'center')};
@@ -80,6 +79,7 @@ interface ModalProps {
   minHeight?: number | false
   maxHeight?: number
   initialFocusRef?: React.RefObject<any>
+  className?: string
   children?: React.ReactNode
 }
 
@@ -89,6 +89,7 @@ export default function Modal({
   minHeight = false,
   maxHeight = 90,
   initialFocusRef,
+  className,
   children
 }: ModalProps) {
   const fadeTransition = useTransition(isOpen, null, {
@@ -115,12 +116,19 @@ export default function Modal({
       {fadeTransition.map(
         ({ item, key, props }) =>
           item && (
-            <StyledDialogOverlay key={key} style={props} onDismiss={onDismiss} initialFocusRef={initialFocusRef}>
+            <StyledDialogOverlay
+              className={className}
+              key={key}
+              style={props}
+              onDismiss={onDismiss}
+              initialFocusRef={initialFocusRef}
+              unstable_lockFocusAcrossFrames={false}
+            >
               <StyledDialogContent
                 {...(isMobile
                   ? {
                       ...bind(),
-                      style: { transform: y.interpolate(y => `translateY(${y > 0 ? y : 0}px)`) }
+                      style: { transform: y.interpolate(y => `translateY(${(y as number) > 0 ? y : 0}px)`) }
                     }
                   : {})}
                 aria-label="dialog content"

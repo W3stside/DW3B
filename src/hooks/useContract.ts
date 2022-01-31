@@ -1,6 +1,6 @@
 import { Contract } from '@ethersproject/contracts'
 import { useMemo } from 'react'
-import { ChainId } from 'types'
+import { SupportedChainId as ChainId } from 'constants/chains'
 
 import {
   ARGENT_WALLET_DETECTOR_ABI,
@@ -56,8 +56,6 @@ export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contrac
   if (chainId) {
     switch (chainId) {
       case ChainId.MAINNET:
-      case ChainId.GOERLI:
-      case ChainId.ROPSTEN:
       case ChainId.RINKEBY:
         address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
         break

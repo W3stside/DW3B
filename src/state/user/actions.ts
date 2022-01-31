@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
-import { Theme } from 'theme/styled'
+import { ThemeModes } from 'theme/styled'
 
-export const updateTheme = createAction<{ theme: Theme }>('user/updateTheme')
+export const updateThemeMode = createAction<ThemeModes>('user/updateThemeMode')
+export const updateThemeAutoDetect = createAction<boolean>('user/updateThemeAutoDetect')

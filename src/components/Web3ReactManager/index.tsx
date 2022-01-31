@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { Trans } from '@lingui/macro'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
+import { useEffect } from 'react'
+import styled from 'styled-components/macro'
 
-import { network } from '../../connectors'
-import { useEagerConnect, useInactiveListener } from '../../hooks'
-import { NetworkContextName } from '../../constants'
-import Loader from '../Loader'
+import { network } from 'connectors'
+import { useEagerConnect, useInactiveListener } from 'hooks'
+import { NetworkContextName } from 'constants/index'
 
 const MessageWrapper = styled.div`
   display: flex;
@@ -20,7 +19,6 @@ const Message = styled.h2`
 `
 
 export default function Web3ReactManager({ children }: { children: JSX.Element }) {
-  const { t } = useTranslation()
   const { active } = useWeb3React()
   const { active: networkActive, error: networkError, activate: activateNetwork } = useWeb3React(NetworkContextName)
 
@@ -37,39 +35,17 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   // when there's no account connected, react to logins (broadly speaking) on the injected provider, if it exists
   useInactiveListener(!triedEager)
 
-  // handle delayed loader state
-  const [showLoader, setShowLoader] = useState(false)
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowLoader(true)
-    }, 600)
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [])
-
-  // on page load, do nothing until we've tried to connect to the injected connector
-  if (!triedEager) {
-    return null
-  }
-
   // if the account context isn't active, and there's an error on the network context, it's an irrecoverable error
-  if (!active && networkError) {
+  if (triedEager && !active && networkError) {
     return (
       <MessageWrapper>
-        <Message>{t('unknownError')}</Message>
+        <Message>
+          <Trans>
+            Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device.
+          </Trans>
+        </Message>
       </MessageWrapper>
     )
-  }
-
-  // if neither context is active, spin
-  if (!active && !networkActive) {
-    return showLoader ? (
-      <MessageWrapper>
-        <Loader />
-      </MessageWrapper>
-    ) : null
   }
 
   return children

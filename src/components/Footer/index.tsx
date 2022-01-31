@@ -1,6 +1,5 @@
-import React from 'react'
 import ThemeToggleBar from '../ThemeToggler'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { SectionFrame } from '../Layout/Section'
 
 const FooterWrapper = styled(SectionFrame)`

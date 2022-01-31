@@ -1,8 +1,7 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
 
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import Logo from 'assets/png/logo.png'
 import { useActiveWeb3React } from 'hooks'
@@ -11,9 +10,9 @@ import { ExternalLink } from 'theme'
 import Menu from 'components/Menu'
 
 import { Row, RowFixed, YellowCard } from 'components/Layout'
-import { ChainId } from 'types'
-import { BASE_STYLES } from '@src/theme/styles'
+import { BASE_STYLES } from 'theme/styles'
 import { SectionFrame } from '../Layout/Section'
+import { NETWORK_LABELS } from 'constants/index'
 
 const HeaderFrame = styled(SectionFrame)`
   top: 0;
@@ -192,13 +191,6 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 `}
 `
 
-const NETWORK_LABELS: { [chainId in ChainId]?: string } = {
-  [ChainId.RINKEBY]: 'Rinkeby',
-  [ChainId.ROPSTEN]: 'Ropsten',
-  [ChainId.GOERLI]: 'Görli',
-  [ChainId.KOVAN]: 'Kovan'
-}
-
 export default function Header() {
   const { chainId } = useActiveWeb3React()
 
@@ -211,13 +203,9 @@ export default function Header() {
           </Sabrecon>
         </Title>
         <HeaderLinks>
-          <StyledNavLink id={`stake-nav-link`} to={'/uni'}>
-            App
-          </StyledNavLink>
-          <StyledNavLink id={`stake-nav-link`} to={'/vote'}>
-            Header Link
-          </StyledNavLink>
-          <StyledExternalLink id={`stake-nav-link`} href={'https://uniswap.info'}>
+          <StyledNavLink to="#">App</StyledNavLink>
+          <StyledNavLink to="#">Header Link</StyledNavLink>
+          <StyledExternalLink href="#">
             External Link <span style={{ fontSize: '11px' }}>↗</span>
           </StyledExternalLink>
         </HeaderLinks>

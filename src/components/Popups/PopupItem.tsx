@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect } from 'react'
 import { X } from 'react-feather'
 import { useSpring } from 'react-spring/web'
-import styled, { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components/macro'
 import { animated } from 'react-spring'
 import { PopupContent } from '../../state/application/actions'
 import { useRemovePopup } from '../../state/application/hooks'
@@ -46,7 +46,7 @@ const AnimatedFader = animated(Fader)
 
 export default function PopupItem({
   removeAfterMs,
-  content,
+  // content,
   popKey
 }: {
   removeAfterMs: number | null

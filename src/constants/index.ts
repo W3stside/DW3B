@@ -1,14 +1,15 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { ChainId } from 'types'
+import { SupportedChainId as ChainId } from './chains'
 
 import { fortmatic, injected, portis, walletconnect, walletlink } from '../connectors'
 
+export * from './blockchain'
+export * from './tokens'
+export * from './chains'
+
 export const WETH: { [chain in ChainId]: string } = {
   [ChainId.MAINNET]: '1',
-  [ChainId.ROPSTEN]: '3',
   [ChainId.RINKEBY]: '4',
-  [ChainId.GOERLI]: '5',
-  [ChainId.KOVAN]: '42',
   [ChainId.XDAI]: '100'
 }
 

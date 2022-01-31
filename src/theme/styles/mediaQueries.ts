@@ -1,4 +1,4 @@
-import { ThemedCssFunction, DefaultTheme, CSSObject, FlattenSimpleInterpolation, css } from 'styled-components'
+import { ThemedCssFunction, DefaultTheme, CSSObject, FlattenSimpleInterpolation, css } from 'styled-components/macro'
 
 const MEDIA_WIDTHS = {
   upToExtraSmall: 500,

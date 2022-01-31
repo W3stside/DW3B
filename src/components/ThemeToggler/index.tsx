@@ -1,28 +1,30 @@
-import React from 'react'
-import styled from 'styled-components'
-import { THEME_LIST, Theme } from 'theme/styled'
+import styled from 'styled-components/macro'
+import { THEME_LIST, ThemeModes } from 'theme/styled'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ThemeToggle } from './ThemeToggle'
-import { BSV, BV } from '../Button'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { faSun, faMoon, faSmileWink } from '@fortawesome/free-regular-svg-icons'
-import { useThemeManager } from '@src/state/user/hooks'
+
+import { ThemeToggle } from './ThemeToggle'
+import { BSV, BV } from '../Button'
+import { useThemeManager } from 'state/user/hooks'
 
 import gulfLogoBlack from 'assets/png/gulfBlackPng.png'
 import gulfLogoColour from 'assets/png/gulfPng.png'
+import { Row } from '../Layout'
+import { useCallback } from 'react'
 
 const LogoImg = styled.img`
   max-width: 100%;
 `
 
-function getTogglerIcon(theme: Theme): IconDefinition | null {
-  switch (theme) {
-    case Theme.LIGHT:
+function _getTogglerIcon(mode: ThemeModes): IconDefinition | null {
+  switch (mode) {
+    case ThemeModes.LIGHT:
       return faSun
-    case Theme.DARK:
+    case ThemeModes.DARK:
       return faMoon
-    case Theme.GULF:
+    case ThemeModes.GULF:
       return null
     default:
       return faSmileWink
@@ -30,13 +32,34 @@ function getTogglerIcon(theme: Theme): IconDefinition | null {
 }
 
 const ThemeToggleBar: React.FC = () => {
-  const [theme, setTheme] = useThemeManager()
+  const { theme, setMode, setAutoDetect } = useThemeManager()
+
+  const handleModeSelect = useCallback(
+    (mode: ThemeModes) => {
+      if (theme.autoDetect) {
+        setAutoDetect(false)
+      }
+
+      setMode(mode)
+    },
+    [setAutoDetect, setMode, theme.autoDetect]
+  )
 
   return (
-    <div>
+    <Row>
+      <ThemeToggle
+        mode={theme.autoDetect}
+        size={BSV.BIG}
+        variant={theme.autoDetect ? BV.PRIMARY : BV.DISABLED}
+        margin="0.2rem"
+        width="6rem"
+        onClick={() => setAutoDetect(!theme.autoDetect)}
+      >
+        Auto
+      </ThemeToggle>
       {THEME_LIST.map(([key, name], index) => {
-        const isActiveMode = theme === name
-        const icon = getTogglerIcon(name)
+        const isActiveMode = theme.mode === name
+        const icon = _getTogglerIcon(name)
 
         return (
           <ThemeToggle
@@ -45,8 +68,9 @@ const ThemeToggleBar: React.FC = () => {
             variant={isActiveMode ? BV.PRIMARY : BV.DISABLED}
             margin="0.2rem"
             width="6rem"
-            onClick={() => setTheme(name)}
+            onClick={() => handleModeSelect(name)}
             key={key + '_' + index}
+            disabled={isActiveMode}
           >
             {icon ? (
               <FontAwesomeIcon icon={icon} size="lg" />
@@ -56,7 +80,7 @@ const ThemeToggleBar: React.FC = () => {
           </ThemeToggle>
         )
       })}
-    </div>
+    </Row>
   )
 }
 

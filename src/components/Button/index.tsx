@@ -1,11 +1,10 @@
-import React from 'react'
-import styled, { css, FlattenInterpolation, ThemeProps, DefaultTheme } from 'styled-components'
+import styled, { css, FlattenInterpolation, ThemeProps, DefaultTheme } from 'styled-components/macro'
 import { variants } from 'styled-theming'
 import ThemeProvider from 'theme'
 
 import { BASE_STYLES } from 'theme/styles'
 import { darken } from 'polished'
-import { THEME_LIST, Theme } from '@src/theme/styled'
+import { THEME_LIST, ThemeModes } from 'theme/styled'
 
 export type Writable<T> = {
   -readonly [K in keyof T]: T[K]
@@ -126,7 +125,7 @@ type ButtonVariationInterpolationObject = {
   [key in keyof typeof ButtonVariations]: ThemeInterpolationObject
 }
 
-type ThemeInterpolationObject = { [key in keyof typeof Theme]: FlattenInterpolation<ThemeProps<DefaultTheme>> }
+type ThemeInterpolationObject = { [key in keyof typeof ThemeModes]: FlattenInterpolation<ThemeProps<DefaultTheme>> }
 
 const ButtonThemeMap = BUTTON_VARIATION_LIST.reduce((accum, [, buttonVariant]) => {
   // buttonStyle = 'secondary' or 'primary' etc style

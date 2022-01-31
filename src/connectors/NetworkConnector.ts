@@ -68,7 +68,7 @@ class MiniRpcProvider implements AsyncSendable {
     }
 
     if (!response.ok) {
-      batch.forEach(({ reject }) => reject(new RequestError(`${response.status}: ${response.statusText}`, -32000)))
+      // batch.forEach(({ reject }) => reject(new RequestError(`${response.status}: ${response.statusText}`, -32000)))
       return
     }
 
@@ -76,7 +76,7 @@ class MiniRpcProvider implements AsyncSendable {
     try {
       json = await response.json()
     } catch (error) {
-      batch.forEach(({ reject }) => reject(new Error('Failed to parse JSON response')))
+      // batch.forEach(({ reject }) => reject(new Error('Failed to parse JSON response')))
       return
     }
     const byKey = batch.reduce<{ [id: number]: BatchItem }>((memo, current) => {
@@ -89,7 +89,7 @@ class MiniRpcProvider implements AsyncSendable {
         reject,
         request: { method }
       } = byKey[result.id]
-      if (resolve && reject) {
+      if (resolve) {
         if ('error' in result) {
           reject(new RequestError(result?.error?.message, result?.error?.code, result?.error?.data))
         } else if ('result' in result) {
@@ -102,7 +102,7 @@ class MiniRpcProvider implements AsyncSendable {
   }
 
   public readonly sendAsync = (
-    request: { jsonrpc: '2.0'; id: number | string | null; method: string; params?: unknown[] | object },
+    request: { jsonrpc: '2.0'; id: number | string | null; method: string; params?: unknown[] | Record<any, any> },
     callback: (error: any, response: any) => void
   ): void => {
     this.request(request.method, request.params)
@@ -112,7 +112,7 @@ class MiniRpcProvider implements AsyncSendable {
 
   public readonly request = async (
     method: string | { method: string; params: unknown[] },
-    params?: unknown[] | object
+    params?: unknown[] | Record<any, any>
   ): Promise<unknown> => {
     if (typeof method !== 'string') {
       return this.request(method.method, method.params)

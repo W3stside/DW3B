@@ -1,19 +1,19 @@
-import { DefaultTheme, FlattenSimpleInterpolation, css } from 'styled-components'
+import { DefaultTheme, FlattenSimpleInterpolation, css } from 'styled-components/macro'
 
 import { LIGHT_COLOURS, DARK_COLOURS, DEFAULT_COLOURS, GULF_COLOURS } from './styles'
-import { Theme, Colors } from './styled'
+import { ThemeModes, Colors } from './styled'
 
-export function getThemeColours(colourTheme: Theme): Colors {
+export function getThemeColours(colourTheme: ThemeModes): Colors {
   let THEME_COLOURS = LIGHT_COLOURS
 
   switch (colourTheme) {
-    case Theme.LIGHT:
+    case ThemeModes.LIGHT:
       THEME_COLOURS = LIGHT_COLOURS
       break
-    case Theme.DARK:
+    case ThemeModes.DARK:
       THEME_COLOURS = DARK_COLOURS
       break
-    case Theme.GULF:
+    case ThemeModes.GULF:
       THEME_COLOURS = GULF_COLOURS
       break
   }

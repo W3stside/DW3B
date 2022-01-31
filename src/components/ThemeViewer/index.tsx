@@ -1,12 +1,11 @@
-import React from 'react'
-import ThemeProvider from '@src/theme'
+import ThemeProvider from 'theme'
 import { ButtonBase, BSV, BV } from '../Button'
-import { DefaultTheme } from 'styled-components'
+import { DefaultTheme } from 'styled-components/macro'
 import { LightCard } from '../Layout/Card'
 
 type PropsWithChildrenAndTheme<P> = P & { children?: React.ReactNode; theme?: DefaultTheme }
 
-interface FunctionComponentWithTheme<P = {}> {
+interface FunctionComponentWithTheme<P = Record<any, any>> {
   (props: PropsWithChildrenAndTheme<P>, context?: any): React.ReactElement<any, any> | null
   propTypes?: React.WeakValidationMap<P>
   contextTypes?: React.ValidationMap<any>
@@ -14,7 +13,7 @@ interface FunctionComponentWithTheme<P = {}> {
   displayName?: string
 }
 
-type TFC<P = {}> = FunctionComponentWithTheme<P>
+type TFC<P = Record<any, any>> = FunctionComponentWithTheme<P>
 
 const ThemeConsumer: TFC = ({ theme }) => {
   if (!theme) return <div>No active theme detected.</div>

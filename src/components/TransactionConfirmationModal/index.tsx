@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import styled, { ThemeContext } from 'styled-components/macro'
 import Modal from 'components/Modal'
 import { ExternalLink } from 'theme'
 import { Text } from 'rebass'
@@ -11,7 +11,7 @@ import Circle from 'assets/images/blue-loader.svg'
 
 import { getEtherscanLink } from 'utils'
 import { useActiveWeb3React } from 'hooks'
-import { ChainId } from 'types'
+import { SupportedChainId as ChainId } from 'constants/chains'
 
 const Wrapper = styled.div`
   width: 100%;

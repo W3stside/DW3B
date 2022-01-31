@@ -3,7 +3,8 @@ import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId } from 'types'
+import { SupportedChainId as ChainId } from 'constants/chains'
+import { UAParser } from 'ua-parser-js'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -16,11 +17,8 @@ export function isAddress(value: any): string | false {
 
 const ETHERSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   1: '',
-  3: 'ropsten.',
   4: 'rinkeby.',
-  5: 'goerli.',
-  42: 'kovan.',
-  100: 'xdai.'
+  100: 'gnosischain.'
 }
 
 export function getEtherscanLink(
@@ -83,3 +81,10 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
+
+const parser = new UAParser(window.navigator.userAgent)
+const { type } = parser.getDevice()
+
+export const userAgent = parser.getResult()
+
+export const isMobile = type === 'mobile' || type === 'tablet'

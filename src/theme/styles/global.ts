@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components/macro'
 import { transparentize } from 'polished'
 
 import { getThemeColours, setTextColour, setBgColour } from '../utils'
-import { Theme } from '../styled'
+import { ThemeModes } from '../styled'
 
 export const TopGlobalStyle = createGlobalStyle`
   html,
@@ -48,7 +48,7 @@ export const TopGlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: ${getThemeColours(Theme.LIGHT).blue1};
+    color: ${getThemeColours(ThemeModes.LIGHT).blue1};
   }
   
   button {
