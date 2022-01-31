@@ -1,0 +1,12 @@
+import { SupportedChainId } from '.'
+
+export type AddressMap = { [chainId: number]: string }
+
+export const ARGENT_WALLET_DETECTOR_ADDRESS: AddressMap = {
+  [SupportedChainId.MAINNET]: '0xeca4B0bDBf7c55E9b7925919d03CbF8Dc82537E8'
+}
+
+export const ENS_REGISTRAR_ADDRESSES: AddressMap = {
+  [SupportedChainId.MAINNET]: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e',
+  [SupportedChainId.RINKEBY]: '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
+}

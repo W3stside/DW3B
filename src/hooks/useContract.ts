@@ -1,71 +1,61 @@
-import { Contract } from '@ethersproject/contracts'
 import { useMemo } from 'react'
-import { SupportedChainId as ChainId } from 'constants/chains'
+import { Contract } from '@ethersproject/contracts'
 
-import {
-  ARGENT_WALLET_DETECTOR_ABI,
-  ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS
-} from 'constants/abis/argent-wallet-detector'
-import ENS_PUBLIC_RESOLVER_ABI from 'constants/abis/ens-public-resolver.json'
-import ENS_ABI from 'constants/abis/ens-registrar.json'
-import { ERC20_BYTES32_ABI } from 'constants/abis/erc20'
-import ERC20_ABI from 'constants/abis/erc20.json'
-import WETH_ABI from 'constants/abis/weth.json'
+import ARGENT_WALLET_DETECTOR_ABI from 'abis/argent-wallet-detector.json'
+import ENS_PUBLIC_RESOLVER_ABI from 'abis/ens-public-resolver.json'
+import ENS_ABI from 'abis/ens-registrar.json'
+import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
+import ERC20_ABI from 'abis/erc20.json'
+import WETH_ABI from 'abis/weth.json'
 
-import { useActiveWeb3React } from './index'
+import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc20, Weth } from 'abis/types'
 
+import { useActiveWeb3React } from 'hooks'
 import { getContract } from 'utils'
-import { WETH } from 'constants/index'
+import { ARGENT_WALLET_DETECTOR_ADDRESS, ENS_REGISTRAR_ADDRESSES, WETH9_EXTENDED } from 'constants/index'
 
 // returns null on errors
-export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
-  const { library, account } = useActiveWeb3React()
+export function useContract<T extends Contract = Contract>(
+  addressOrAddressMap: string | { [chainId: number]: string } | undefined,
+  ABI: any,
+  withSignerIfPossible = true
+): T | null {
+  const { library, account, chainId } = useActiveWeb3React()
 
   return useMemo(() => {
-    if (!address || !ABI || !library) return null
+    if (!addressOrAddressMap || !ABI || !library || !chainId) return null
+    let address: string | undefined
+    if (typeof addressOrAddressMap === 'string') address = addressOrAddressMap
+    else address = addressOrAddressMap[chainId]
+    if (!address) return null
     try {
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null
     }
-  }, [address, ABI, library, withSignerIfPossible, account])
+  }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T
 }
 
-export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
-  return useContract(tokenAddress, ERC20_ABI, withSignerIfPossible)
+export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean) {
+  return useContract<Erc20>(tokenAddress, ERC20_ABI, withSignerIfPossible)
 }
 
-export function useWETHContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId }: { chainId?: ChainId } = useActiveWeb3React()
-  return useContract(chainId ? WETH[chainId] : undefined, WETH_ABI, withSignerIfPossible)
-}
-
-export function useArgentWalletDetectorContract(): Contract | null {
+export function useWETHContract(withSignerIfPossible?: boolean) {
   const { chainId } = useActiveWeb3React()
-  return useContract(
-    chainId === ChainId.MAINNET ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS : undefined,
-    ARGENT_WALLET_DETECTOR_ABI,
-    false
-  )
+  return useContract<Weth>(chainId ? WETH9_EXTENDED[chainId]?.address : undefined, WETH_ABI, withSignerIfPossible)
 }
 
-export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case ChainId.MAINNET:
-      case ChainId.RINKEBY:
-        address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
-        break
-    }
-  }
-  return useContract(address, ENS_ABI, withSignerIfPossible)
+export function useArgentWalletDetectorContract() {
+  return useContract<ArgentWalletDetector>(ARGENT_WALLET_DETECTOR_ADDRESS, ARGENT_WALLET_DETECTOR_ABI, false)
 }
 
-export function useENSResolverContract(address: string | undefined, withSignerIfPossible?: boolean): Contract | null {
-  return useContract(address, ENS_PUBLIC_RESOLVER_ABI, withSignerIfPossible)
+export function useENSRegistrarContract(withSignerIfPossible?: boolean) {
+  return useContract<EnsRegistrar>(ENS_REGISTRAR_ADDRESSES, ENS_ABI, withSignerIfPossible)
+}
+
+export function useENSResolverContract(address: string | undefined, withSignerIfPossible?: boolean) {
+  return useContract<EnsPublicResolver>(address, ENS_PUBLIC_RESOLVER_ABI, withSignerIfPossible)
 }
 
 export function useBytes32TokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {

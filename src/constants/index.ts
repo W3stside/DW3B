@@ -6,6 +6,7 @@ import { fortmatic, injected, portis, walletconnect, walletlink } from '../conne
 export * from './blockchain'
 export * from './tokens'
 export * from './chains'
+export * from './addresses'
 
 export const WETH: { [chain in ChainId]: string } = {
   [ChainId.MAINNET]: '1',
