@@ -3,7 +3,7 @@ import 'inter-ui'
 
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import React, { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { NetworkContextName } from 'constants/index'

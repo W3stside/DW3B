@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components/macro'
 import { TYPE, ExternalLink } from 'theme'
 

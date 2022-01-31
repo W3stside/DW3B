@@ -1,4 +1,4 @@
-import React, { HTMLProps, useCallback } from 'react'
+import { HTMLProps, useCallback } from 'react'
 import ReactGA from 'react-ga'
 import { Link } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components/macro'

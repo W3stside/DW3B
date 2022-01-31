@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { useActiveWeb3React } from 'hooks'
 
 import styled, { ThemeContext } from 'styled-components/macro'
