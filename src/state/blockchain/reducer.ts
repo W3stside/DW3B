@@ -42,7 +42,6 @@ const blockchainSlice = createSlice({
   }
 })
 
-export type BlockChainActions = typeof blockchainSlice.actions
 export const {
   updateBlockNumber,
   updateChainId,
