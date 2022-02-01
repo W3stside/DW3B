@@ -5,8 +5,8 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 
-import { FortmaticConnector } from './Fortmatic'
-import { NetworkConnector } from './NetworkConnector'
+import { FortmaticConnector } from 'blockchain/connectors/Fortmatic'
+import { NetworkConnector } from 'blockchain/connectors/NetworkConnector'
 
 export const WALLET_CONNECT_BRIDGE = process.env.WALLET_CONNECT_BRIDGE || 'wss://safe-walletconnect.gnosis.io'
 

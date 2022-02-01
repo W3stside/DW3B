@@ -78,3 +78,5 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
 }
 
 export const NetworkContextName = 'NETWORK'
+// Smart contract wallets are filtered out by default, no need to add them to this list
+export const UNSUPPORTED_WC_WALLETS = new Set(['DeFi Wallet', 'WallETH'])

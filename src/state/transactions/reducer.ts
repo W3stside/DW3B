@@ -19,17 +19,14 @@ export type ReplacementType = 'speedup' | 'cancel'
 
 export type AddTransactionParams = WithChainId &
   WithData &
-  Pick<
-    EnhancedTransactionDetails,
-    'hash' | 'hashType' | 'from' | 'approval' | 'presign' | 'claim' | 'summary' | 'safeTransaction'
-  >
+  Pick<TransactionDetails, 'hash' | 'hashType' | 'from' | 'approval' | 'presign' | 'summary' | 'safeTransaction'>
 
 export enum HashType {
   ETHEREUM_TX = 'ETHEREUM_TX',
   GNOSIS_SAFE_TX = 'GNOSIS_SAFE_TX'
 }
 
-export interface EnhancedTransactionDetails {
+export interface TransactionDetails {
   hash: string // The hash of the transaction, normally Ethereum one, but not necessarily
   hashType: HashType // Transaction hash: could be Ethereum tx, or for multisigs could be some kind of hash identifying the order (i.e. Gnosis Safe)
   transactionHash?: string // Transaction hash. For EOA this field is immediately available, however, other wallets go through a process of offchain signing before the transactionHash is available
@@ -48,7 +45,6 @@ export interface EnhancedTransactionDetails {
   // Operations
   approval?: { tokenAddress: string; spender: string }
   presign?: { orderId: string }
-  claim?: { recipient: string; cowAmountRaw?: string; indices: number[] }
 
   // Wallet specific
   safeTransaction?: SafeMultisigTransactionResponse // Gnosis Safe transaction info
@@ -57,7 +53,7 @@ export interface EnhancedTransactionDetails {
 
 export interface EnhancedTransactionState {
   [chainId: number]: {
-    [txHash: string]: EnhancedTransactionDetails
+    [txHash: string]: TransactionDetails
   }
 }
 
@@ -65,7 +61,7 @@ export const initialState: EnhancedTransactionState = {}
 
 const now = () => new Date().getTime()
 
-function updateBlockNumber(tx: EnhancedTransactionDetails, blockNumber: number) {
+function updateBlockNumber(tx: TransactionDetails, blockNumber: number) {
   if (!tx.lastCheckedBlockNumber) {
     tx.lastCheckedBlockNumber = blockNumber
   } else {
@@ -80,7 +76,7 @@ const transactionsSlice = createSlice({
     addTransaction(
       transactions,
       {
-        payload: { chainId, from, hash, hashType, approval, summary, presign, safeTransaction, claim, data }
+        payload: { chainId, from, hash, hashType, approval, summary, presign, safeTransaction, data }
       }: PayloadAction<AddTransactionParams>
     ) {
       if (transactions[chainId]?.[hash]) {
@@ -101,8 +97,7 @@ const transactionsSlice = createSlice({
         // Operations
         approval,
         presign,
-        safeTransaction,
-        claim
+        safeTransaction
       }
       transactions[chainId] = txs
     },

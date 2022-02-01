@@ -1,31 +1,38 @@
-import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
 import 'inter-ui'
+import './i18n'
+
+import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core'
+
+import { StrictMode } from 'react'
+import { Provider } from 'react-redux'
 
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { StrictMode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { NetworkContextName } from 'blockchain/constants'
-import './i18n'
+import getLibrary from 'blockchain/utils/getLibrary'
 
 import App from './pages/App'
 
 import store from 'state'
-
 import BlockchainUpdater from 'state/blockchain/updater'
 import TransactionUpdater from 'state/transactions/updater'
 import UserUpdater from 'state/user/updater'
 
-import getLibrary from 'utils/getLibrary'
-
 import ThemeProvider from 'theme'
 import { TopGlobalStyle, ThemedGlobalStyle } from 'theme/styles/global'
 
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { nodeRemoveChildFix } from 'utils/node'
+
+// Node removeChild hackaround
+// based on: https://github.com/facebook/react/issues/11538#issuecomment-417504600
+nodeRemoveChildFix()
+
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
-if ('ethereum' in window) {
-  ;(window.ethereum as any).autoRefreshOnNetworkChange = false
+if (!!window.ethereum) {
+  window.ethereum.autoRefreshOnNetworkChange = false
 }
 
 function Updaters() {
@@ -42,20 +49,54 @@ ReactDOM.render(
   <StrictMode>
     {/* Provides all top level CSS NOT dynamically adjustable by the ThemeProvider */}
     <TopGlobalStyle />
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <Web3ProviderNetwork getLibrary={getLibrary}>
-        <Provider store={store}>
-          <Updaters />
-          <ThemeProvider>
-            {/* Provides all top level CSS dynamically adjustable by the ThemeProvider */}
-            <ThemedGlobalStyle />
-            <HashRouter>
+    <Provider store={store}>
+      <HashRouter>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ProviderNetwork getLibrary={getLibrary}>
+            <Updaters />
+            <ThemeProvider>
+              {/* Provides all top level CSS dynamically adjustable by the ThemeProvider */}
+              <ThemedGlobalStyle />
               <App />
-            </HashRouter>
-          </ThemeProvider>
-        </Provider>
-      </Web3ProviderNetwork>
-    </Web3ReactProvider>
+            </ThemeProvider>
+          </Web3ProviderNetwork>
+        </Web3ReactProvider>
+      </HashRouter>
+    </Provider>
   </StrictMode>,
   document.getElementById('root')
 )
+
+async function deleteAllCaches() {
+  const cacheNames = (await caches.keys()) || []
+
+  cacheNames.map(cacheName => {
+    console.log('[worker] Delete cache', cacheName)
+    // Delete old caches
+    // https://developers.google.com/web/ilt/pwa/caching-files-with-service-worker#removing_outdated_caches
+    return caches.delete(cacheName)
+  })
+}
+
+async function unregisterAllWorkers() {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (const registration of registrations) {
+      registration.unregister()
+    }
+  })
+}
+
+if ('serviceWorker' in navigator) {
+  console.log('[worker] Unregister worker...')
+  serviceWorkerRegistration.unregister()
+
+  console.log('[worker] Deleting all caches...')
+  deleteAllCaches()
+    .then(() => console.log('[worker] All caches have been deleted'))
+    .catch(console.error)
+
+  console.log('[worker] Unregistering all workers...')
+  unregisterAllWorkers()
+    .then(() => console.log('[worker] All workers have been unregistered'))
+    .catch(console.error)
+}

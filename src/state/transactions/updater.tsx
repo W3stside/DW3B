@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useActiveWeb3React } from '../../blockchain/hooks'
-import { useAddPopup, useBlockNumber } from '../application/hooks'
-import { AppDispatch, AppState } from 'state'
-import { checkedTransaction, finalizeTransaction } from './actions'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { useBlockNumber } from 'state/blockchain/hooks'
+
+import { useAddPopup, useFinalizeTransaction, useCheckedTransaction } from 'state/application/hooks'
+import { useAppSelector } from 'state'
 
 export function shouldCheck(
   lastBlockNumber: number,
@@ -31,11 +31,12 @@ export default function Updater(): null {
 
   const lastBlockNumber = useBlockNumber()
 
-  const dispatch = useDispatch<AppDispatch>()
-  const state = useSelector<AppState, AppState['transactions']>(state => state.transactions)
+  const state = useAppSelector(state => state.transactions)
 
   // show popup on confirm
   const addPopup = useAddPopup()
+  const finalizeTransaction = useFinalizeTransaction()
+  const checkedTransaction = useCheckedTransaction()
 
   useEffect(() => {
     if (!chainId || !library || !lastBlockNumber) return
@@ -49,22 +50,20 @@ export default function Updater(): null {
           .getTransactionReceipt(hash)
           .then(receipt => {
             if (receipt) {
-              dispatch(
-                finalizeTransaction({
-                  chainId,
-                  hash,
-                  receipt: {
-                    blockHash: receipt.blockHash,
-                    blockNumber: receipt.blockNumber,
-                    contractAddress: receipt.contractAddress,
-                    from: receipt.from,
-                    status: receipt.status,
-                    to: receipt.to,
-                    transactionHash: receipt.transactionHash,
-                    transactionIndex: receipt.transactionIndex
-                  }
-                })
-              )
+              finalizeTransaction({
+                chainId,
+                hash,
+                receipt: {
+                  blockHash: receipt.blockHash,
+                  blockNumber: receipt.blockNumber,
+                  contractAddress: receipt.contractAddress,
+                  from: receipt.from,
+                  status: receipt.status,
+                  to: receipt.to,
+                  transactionHash: receipt.transactionHash,
+                  transactionIndex: receipt.transactionIndex
+                }
+              })
 
               addPopup(
                 {
@@ -77,14 +76,14 @@ export default function Updater(): null {
                 hash
               )
             } else {
-              dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }))
+              checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber })
             }
           })
           .catch(error => {
             console.error(`failed to check transaction hash: ${hash}`, error)
           })
       })
-  }, [chainId, library, lastBlockNumber, dispatch, addPopup, state])
+  }, [chainId, library, lastBlockNumber, addPopup, state, finalizeTransaction, checkedTransaction])
 
   return null
 }

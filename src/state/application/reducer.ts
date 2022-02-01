@@ -1,4 +1,4 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
 export type PopupContent = React.ReactNode
 
@@ -29,10 +29,15 @@ const applicationSlice = createSlice({
   name: 'application',
   initialState,
   reducers: {
-    setOpenModal(state, action) {
+    setOpenModal(state, action: PayloadAction<ApplicationModal | null>) {
       state.openModal = action.payload
     },
-    addPopup(state, { payload: { content, key, removeAfterMs = 15000 } }) {
+    addPopup(
+      state,
+      {
+        payload: { content, key, removeAfterMs = 15000 }
+      }: PayloadAction<{ content: PopupContent; key?: string; removeAfterMs?: number }>
+    ) {
       state.popupList = (key ? state.popupList.filter(popup => popup.key !== key) : state.popupList).concat([
         {
           key: key || nanoid(),
@@ -42,7 +47,7 @@ const applicationSlice = createSlice({
         }
       ])
     },
-    removePopup(state, { payload: { key } }) {
+    removePopup(state, { payload: key }: PayloadAction<string>) {
       state.popupList.forEach(p => {
         if (p.key === key) {
           p.show = false

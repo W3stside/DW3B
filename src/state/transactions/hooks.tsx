@@ -1,39 +1,49 @@
-import { TransactionResponse } from '@ethersproject/providers'
 import { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { useActiveWeb3React } from '../../blockchain/hooks'
-import { AppDispatch, AppState } from 'state'
-import { addTransaction } from './actions'
-import { TransactionDetails } from './reducer'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { useAppDispatch, useAppSelector } from 'state'
+import { addTransaction, AddTransactionParams, HashType, TransactionDetails } from './reducer'
+import { useWalletInfo } from 'blockchain/hooks/useWalletInfo'
+
+export type AddTransactionHookParams = Omit<AddTransactionParams, 'chainId' | 'from' | 'hashType'> // The hook requires less params for convenience
+export type TransactionAdder = (params: AddTransactionHookParams) => void
+
+function useAddTransaction() {
+  const dispatch = useAppDispatch()
+
+  return useCallback((payload: Parameters<typeof addTransaction>[0]) => dispatch(addTransaction(payload)), [dispatch])
+}
 
 // helper that can take a ethers library transaction response and add it to the list of transactions
-export function useTransactionAdder(): (
-  response: TransactionResponse,
-  customData?: { summary?: string; approval?: { tokenAddress: string; spender: string }; claim?: { recipient: string } }
-) => void {
-  const { chainId, account } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
+export function useTransactionAdder(): TransactionAdder {
+  const { chainId, account, gnosisSafeInfo } = useWalletInfo()
+  const addTransaction = useAddTransaction()
+
+  const isGnosisSafeWallet = !!gnosisSafeInfo
 
   return useCallback(
-    (
-      response: TransactionResponse,
-      {
-        summary,
-        approval,
-        claim
-      }: { summary?: string; claim?: { recipient: string }; approval?: { tokenAddress: string; spender: string } } = {}
-    ) => {
-      if (!account) return
-      if (!chainId) return
+    (addTransactionParams: AddTransactionHookParams) => {
+      if (!account || !chainId) return
 
-      const { hash } = response
+      const { hash, summary, data, approval, presign, safeTransaction } = addTransactionParams
+      const hashType = isGnosisSafeWallet ? HashType.GNOSIS_SAFE_TX : HashType.ETHEREUM_TX
       if (!hash) {
-        throw Error('No transaction hash found.')
+        throw Error('No transaction hash found')
       }
-      dispatch(addTransaction({ hash, from: account, chainId, approval, summary, claim }))
+
+      addTransaction({
+        hash,
+        hashType,
+        from: account,
+        chainId,
+        approval,
+        summary,
+        data,
+        presign,
+        safeTransaction
+      })
     },
-    [dispatch, chainId, account]
+    [account, chainId, isGnosisSafeWallet, addTransaction]
   )
 }
 
@@ -41,7 +51,7 @@ export function useTransactionAdder(): (
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
   const { chainId } = useActiveWeb3React()
 
-  const state = useSelector<AppState, AppState['transactions']>(state => state.transactions)
+  const state = useAppSelector(state => state.transactions)
 
   return chainId ? state[chainId] ?? {} : {}
 }
@@ -82,23 +92,4 @@ export function useHasPendingApproval(tokenAddress: string | undefined, spender:
       }),
     [allTransactions, spender, tokenAddress]
   )
-}
-
-// watch for submissions to claim
-// return null if not done loading, return undefined if not found
-export function useUserHasSubmittedClaim(
-  account?: string
-): { claimSubmitted: boolean; claimTxn: TransactionDetails | undefined } {
-  const allTransactions = useAllTransactions()
-
-  // get the txn if it has been submitted
-  const claimTxn = useMemo(() => {
-    const txnIndex = Object.keys(allTransactions).find(hash => {
-      const tx = allTransactions[hash]
-      return tx.claim && tx.claim.recipient === account
-    })
-    return txnIndex && allTransactions[txnIndex] ? allTransactions[txnIndex] : undefined
-  }, [account, allTransactions])
-
-  return { claimSubmitted: Boolean(claimTxn), claimTxn }
 }

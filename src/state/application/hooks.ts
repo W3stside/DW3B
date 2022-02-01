@@ -1,26 +1,26 @@
 import { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, AppState } from 'state'
-import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from './actions'
+import { AppState, useAppSelector, useAppDispatch } from 'state'
+import { checkedTransaction, finalizeTransaction } from '../transactions/reducer'
+import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } from './reducer'
 
 export function useModalOpen(modal: ApplicationModal): boolean {
-  const openModal = useSelector((state: AppState) => state.application.openModal)
+  const openModal = useAppSelector(state => state.application.openModal)
   return openModal === modal
 }
 
 export function useToggleModal(modal: ApplicationModal): () => void {
   const open = useModalOpen(modal)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(open ? null : modal)), [dispatch, modal, open])
 }
 
 export function useOpenModal(modal: ApplicationModal): () => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(modal)), [dispatch, modal])
 }
 
 export function useCloseModals(): () => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(() => dispatch(setOpenModal(null)), [dispatch])
 }
 
@@ -54,7 +54,7 @@ export function useToggleVoteModal(): () => void {
 
 // returns a function that allows adding a popup
 export function useAddPopup(): (content: PopupContent, key?: string) => void {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   return useCallback(
     (content: PopupContent, key?: string) => {
@@ -65,11 +65,31 @@ export function useAddPopup(): (content: PopupContent, key?: string) => void {
 }
 
 // returns a function that allows removing a popup via its key
-export function useRemovePopup(): (key: string) => void {
-  const dispatch = useDispatch()
+export function useRemovePopup() {
+  const dispatch = useAppDispatch()
   return useCallback(
-    (key: string) => {
-      dispatch(removePopup({ key }))
+    (payload: Parameters<typeof removePopup>[0]) => {
+      dispatch(removePopup(payload))
+    },
+    [dispatch]
+  )
+}
+
+export function useFinalizeTransaction() {
+  const dispatch = useAppDispatch()
+  return useCallback(
+    (payload: Parameters<typeof finalizeTransaction>[0]) => {
+      dispatch(finalizeTransaction(payload))
+    },
+    [dispatch]
+  )
+}
+
+export function useCheckedTransaction() {
+  const dispatch = useAppDispatch()
+  return useCallback(
+    (payload: Parameters<typeof checkedTransaction>[0]) => {
+      dispatch(checkedTransaction(payload))
     },
     [dispatch]
   )
@@ -77,6 +97,6 @@ export function useRemovePopup(): (key: string) => void {
 
 // get the list of active popups
 export function useActivePopups(): AppState['application']['popupList'] {
-  const list = useSelector((state: AppState) => state.application.popupList)
+  const list = useAppSelector(state => state.application.popupList)
   return useMemo(() => list.filter(item => item.show), [list])
 }

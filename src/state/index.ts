@@ -6,7 +6,7 @@ import user from 'state/user/reducer'
 import { blockchain } from 'state/blockchain/reducer'
 import { application } from 'state/application/reducer'
 import { updateVersion } from 'state/global/actions'
-import transactions from 'state/transactions/reducer'
+import { transactions } from 'state/transactions/reducer'
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector

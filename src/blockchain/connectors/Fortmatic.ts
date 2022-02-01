@@ -1,5 +1,5 @@
 import { FortmaticConnector as FortmaticConnectorCore } from '@web3-react/fortmatic-connector'
-import { SupportedChainId as ChainId } from 'constants/chains'
+import { SupportedChainId as ChainId } from 'blockchain/constants/chains'
 
 export const OVERLAY_READY = 'OVERLAY_READY'
 

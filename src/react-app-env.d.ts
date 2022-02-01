@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-declare module 'jazzicon' {
+declare module '@metamask/jazzicon' {
   export default function(diameter: number, seed: number): HTMLElement
 }
 
@@ -11,8 +11,9 @@ interface Window {
     isMetaMask?: true
     on?: (...args: any[]) => void
     removeListener?: (...args: any[]) => void
+    autoRefreshOnNetworkChange?: boolean
   }
-  web3?: {}
+  web3?: Record<string, unknown>
 }
 
 declare module 'content-hash' {
