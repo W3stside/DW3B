@@ -26,7 +26,7 @@ const store = configureStore({
     defaultMiddleware({
       thunk: true
     }).concat(save({ states: PERSISTED_KEYS })),
-  preloadedState: load({ states: PERSISTED_KEYS })
+  preloadedState: load({ states: PERSISTED_KEYS, disableWarnings: process.env.NODE_ENV === 'test' })
 })
 
 store.dispatch(updateVersion())

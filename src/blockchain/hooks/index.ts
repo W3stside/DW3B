@@ -1,9 +1,9 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo, useEffect, useState, useCallback } from 'react'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { isMobile } from 'react-device-detect'
-import { injected } from 'blockchain/connectors'
-import { NetworkContextName } from 'blockchain/constants'
+import { getProviderType, injected, walletconnect, WalletProvider } from 'blockchain/connectors'
+import { NetworkContextName, STORAGE_KEY_LAST_PROVIDER } from 'blockchain/constants'
 
 export function useActiveWeb3React() {
   const context = useWeb3ReactCore<Web3Provider>()
@@ -27,10 +27,22 @@ export function useActiveWeb3Instance(): Web3Provider | undefined {
 }
 
 export function useEagerConnect() {
-  const { activate, active } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
+  const { activate, active, connector } = useWeb3ReactCore()
   const [tried, setTried] = useState(false)
 
-  useEffect(() => {
+  // handle setting/removing wallet provider in local storage
+  const handleBeforeUnload = useCallback(() => {
+    const walletType = getProviderType(connector)
+
+    if (!walletType || !active) {
+      localStorage.removeItem(STORAGE_KEY_LAST_PROVIDER)
+    } else {
+      localStorage.setItem(STORAGE_KEY_LAST_PROVIDER, walletType)
+    }
+  }, [connector, active])
+
+  const connectInjected = useCallback(() => {
+    // check if the our application is authorized/connected with Metamask
     injected.isAuthorized().then(isAuthorized => {
       if (isAuthorized) {
         activate(injected, undefined, true).catch(() => {
@@ -46,7 +58,31 @@ export function useEagerConnect() {
         }
       }
     })
-  }, [activate]) // intentionally only running on mount (make sure it's only mounted once :))
+  }, [activate, setTried])
+
+  const connectWalletConnect = useCallback(() => {
+    activate(walletconnect, undefined, true).catch(() => {
+      setTried(true)
+    })
+  }, [activate, setTried])
+
+  useEffect(() => {
+    if (!active) {
+      const latestProvider = localStorage.getItem(STORAGE_KEY_LAST_PROVIDER)
+
+      // if there is no last saved provider set tried state to true
+      if (!latestProvider) {
+        // Try to auto-connect to the injected wallet
+        connectInjected()
+      } else if (latestProvider === WalletProvider.INJECTED) {
+        // MM is last provider
+        connectInjected()
+      } else if (latestProvider === WalletProvider.WALLET_CONNECT) {
+        // WC is last provider
+        connectWalletConnect()
+      }
+    }
+  }, [connectInjected, connectWalletConnect, active]) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
@@ -54,6 +90,16 @@ export function useEagerConnect() {
       setTried(true)
     }
   }, [active])
+
+  useEffect(() => {
+    // add beforeunload event listener on initial component mount
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    // remove beforeunload event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  })
 
   return tried
 }

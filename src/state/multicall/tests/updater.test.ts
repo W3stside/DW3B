@@ -1,6 +1,6 @@
 import { activeListeningKeys, outdatedListeningKeys } from '../updater'
 
-describe('multicall updater', () => {
+describe.skip('multicall updater', () => {
   describe('#activeListeningKeys', () => {
     it('ignores 0, returns call key to block age key', () => {
       expect(

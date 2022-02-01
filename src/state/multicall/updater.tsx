@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from 'state'
 import { UniswapInterfaceMulticall } from 'blockchain/abis/types/UniswapInterfaceMulticall'
 
 import { useMulticall2Contract } from 'blockchain/hooks/useContract'
-import useDebounce from '../../hooks/useDebounce'
+import useDebounce from 'hooks/useDebounce'
 import { useActiveWeb3React } from 'blockchain/hooks'
 import chunkArray from 'utils/chunkArray'
 import { retry, RetryableError } from 'utils/retry'

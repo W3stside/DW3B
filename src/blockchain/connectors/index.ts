@@ -8,6 +8,12 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
 
+const INFURA_KEY = process.env.REACT_APP_INFURA_KEY
+
+if (typeof INFURA_KEY === 'undefined') {
+  throw new Error(`REACT_APP_INFURA_KEY must be a defined environment variable`)
+}
+
 export const WALLET_CONNECT_BRIDGE = process.env.WALLET_CONNECT_BRIDGE || 'wss://safe-walletconnect.gnosis.io'
 
 type RpcNetworks = { [chainId: number]: string }

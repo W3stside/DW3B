@@ -13,6 +13,9 @@ export interface WalletInfo {
   mobileOnly?: true
 }
 
+// last wallet provider key used in local storage
+export const STORAGE_KEY_LAST_PROVIDER = 'lastProvider'
+
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   INJECTED: {
     connector: injected,

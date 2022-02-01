@@ -1,0 +1,17 @@
+# generated stuff
+build
+.git
+.github
+src/**/*.d.ts
+src/abis
+
+# public
+public/index.html
+
+# Every commit this is changed. NO MORE!
+tsconfig.json
+.eslint.json
+
+# local stuff
+.yalc
+.vscode
