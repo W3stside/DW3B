@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '@src/blockchain/hooks'
 
 import styled, { ThemeContext } from 'styled-components/macro'
 import { AutoColumn, ColumnCenter, RowBetween } from 'components/Layout'

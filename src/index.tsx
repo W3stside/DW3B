@@ -6,21 +6,21 @@ import { Provider } from 'react-redux'
 import { StrictMode } from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { NetworkContextName } from 'constants/index'
+import { NetworkContextName } from 'blockchain/constants'
 import './i18n'
 
 import App from './pages/App'
 
 import store from 'state'
 
-import ApplicationUpdater from './state/application/updater'
-import TransactionUpdater from './state/transactions/updater'
-import UserUpdater from './state/user/updater'
+import BlockchainUpdater from 'state/blockchain/updater'
+import TransactionUpdater from 'state/transactions/updater'
+import UserUpdater from 'state/user/updater'
 
 import getLibrary from 'utils/getLibrary'
 
 import ThemeProvider from 'theme'
-import { TopGlobalStyle, ThemedGlobalStyle } from './theme/styles/global'
+import { TopGlobalStyle, ThemedGlobalStyle } from 'theme/styles/global'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -32,7 +32,7 @@ function Updaters() {
   return (
     <>
       <UserUpdater />
-      <ApplicationUpdater />
+      <BlockchainUpdater />
       <TransactionUpdater />
     </>
   )

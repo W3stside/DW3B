@@ -1,4 +1,4 @@
-import { useActiveWeb3React } from '.'
+import { useActiveWeb3React } from '../blockchain/hooks'
 import { useState, useEffect } from 'react'
 
 export function useTimestampFromBlock(block: number | undefined): number | undefined {

@@ -1,16 +1,16 @@
 import { useMemo } from 'react'
 import { Contract } from '@ethersproject/contracts'
 
-import ARGENT_WALLET_DETECTOR_ABI from 'abis/argent-wallet-detector.json'
-import ENS_PUBLIC_RESOLVER_ABI from 'abis/ens-public-resolver.json'
-import ENS_ABI from 'abis/ens-registrar.json'
-import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
-import ERC20_ABI from 'abis/erc20.json'
-import WETH_ABI from 'abis/weth.json'
+import ARGENT_WALLET_DETECTOR_ABI from '@src/blockchain/abis/argent-wallet-detector.json'
+import ENS_PUBLIC_RESOLVER_ABI from '@src/blockchain/abis/ens-public-resolver.json'
+import ENS_ABI from '@src/blockchain/abis/ens-registrar.json'
+import ERC20_BYTES32_ABI from '@src/blockchain/abis/erc20_bytes32.json'
+import ERC20_ABI from '@src/blockchain/abis/erc20.json'
+import WETH_ABI from '@src/blockchain/abis/weth.json'
 
-import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc20, Weth } from 'abis/types'
+import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc20, Weth } from '@src/blockchain/abis/types'
 
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '@src/blockchain/hooks'
 import { getContract } from 'utils'
 import { ARGENT_WALLET_DETECTOR_ADDRESS, ENS_REGISTRAR_ADDRESSES, WETH9_EXTENDED } from 'constants/index'
 

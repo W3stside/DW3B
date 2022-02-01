@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import styled from 'styled-components/macro'
 
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../blockchain/hooks'
 import Jazzicon from 'jazzicon'
 
 const StyledIdenticonContainer = styled.div`

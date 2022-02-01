@@ -10,7 +10,7 @@ import { RowBetween, AutoColumn, ColumnCenter } from 'components/Layout'
 import Circle from 'assets/images/blue-loader.svg'
 
 import { getEtherscanLink } from 'utils'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '@src/blockchain/hooks'
 import { SupportedChainId as ChainId } from 'constants/chains'
 
 const Wrapper = styled.div`

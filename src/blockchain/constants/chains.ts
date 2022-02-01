@@ -6,7 +6,6 @@
 import EthereumLogo from 'assets/chains/network-mainnet-logo.svg' // mod
 import RinkebyLogo from 'assets/chains/network-rinkeby-logo.svg' // mod
 import GnosisChainLogo from 'assets/chains/network-gnosis-chain-logo.svg' // mod
-export * from 'constants/chains'
 
 export enum SupportedChainId {
   MAINNET = 1,

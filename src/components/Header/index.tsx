@@ -4,7 +4,7 @@ import { darken } from 'polished'
 import styled from 'styled-components/macro'
 
 import Logo from 'assets/png/logo.png'
-import { useActiveWeb3React } from 'hooks'
+import { useActiveWeb3React } from '@src/blockchain/hooks'
 import { ExternalLink } from 'theme'
 
 import Menu from 'components/Menu'

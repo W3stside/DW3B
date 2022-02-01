@@ -1,26 +1,29 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { save, load } from 'redux-localstorage-simple'
 
-import application from './application/reducer'
-import { updateVersion } from './global/actions'
-import user from './user/reducer'
-import transactions from './transactions/reducer'
+import user from 'state/user/reducer'
+import { blockchain } from 'state/blockchain/reducer'
+import { application } from 'state/application/reducer'
+import { updateVersion } from 'state/global/actions'
+import transactions from 'state/transactions/reducer'
+
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
 const store = configureStore({
   reducer: {
     application,
-    user,
-    transactions
+    blockchain,
+    transactions,
+    user
   },
-  middleware: [
-    ...getDefaultMiddleware({
-      thunk: false,
-      immutableCheck: false
-    }),
-    save({ states: PERSISTED_KEYS })
-  ],
+  middleware: defaultMiddleware =>
+    defaultMiddleware({
+      thunk: true
+    }).concat(save({ states: PERSISTED_KEYS })),
   preloadedState: load({ states: PERSISTED_KEYS })
 })
 
