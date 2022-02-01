@@ -30,6 +30,10 @@ notes.txt
 
 package-lock.json
 
+# deployment stuff
+gh-pages
+gh-pages.pub
+
 # cypress testing specifics
 cypress/videos
 cypress/screenshots

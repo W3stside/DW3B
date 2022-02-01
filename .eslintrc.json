@@ -8,9 +8,7 @@
       "jsx": true
     }
   },
-  "ignorePatterns": [
-    "node_modules/**/*"
-  ],
+  "ignorePatterns": ["node_modules/**/*", ".github/*"],
   "settings": {
     "react": {
       "version": "detect"
@@ -31,7 +29,7 @@
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": [1, { "skipUndeclared": true }],
+    "react/prop-types": "off",
     "object-shorthand": ["error", "always"],
     "no-restricted-imports": [
       "error",

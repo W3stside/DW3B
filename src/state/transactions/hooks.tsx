@@ -2,16 +2,24 @@ import { useCallback, useMemo } from 'react'
 
 import { useActiveWeb3React } from 'blockchain/hooks'
 import { useAppDispatch, useAppSelector } from 'state'
-import { addTransaction, AddTransactionParams, HashType, TransactionDetails } from './reducer'
+import { addTransaction, AddTransactionParams, clearAllTransactions, HashType, TransactionDetails } from './reducer'
 import { useWalletInfo } from 'blockchain/hooks/useWalletInfo'
 
 export type AddTransactionHookParams = Omit<AddTransactionParams, 'chainId' | 'from' | 'hashType'> // The hook requires less params for convenience
 export type TransactionAdder = (params: AddTransactionHookParams) => void
 
-function useAddTransaction() {
+export function useAddTransaction() {
   const dispatch = useAppDispatch()
 
   return useCallback((payload: Parameters<typeof addTransaction>[0]) => dispatch(addTransaction(payload)), [dispatch])
+}
+
+export function useClearAllTransactions() {
+  const dispatch = useAppDispatch()
+
+  return useCallback((payload: Parameters<typeof clearAllTransactions>[0]) => dispatch(clearAllTransactions(payload)), [
+    dispatch
+  ])
 }
 
 // helper that can take a ethers library transaction response and add it to the list of transactions

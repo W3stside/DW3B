@@ -3,9 +3,9 @@ import { useWeb3React } from '@web3-react/core'
 import { useEffect } from 'react'
 import styled from 'styled-components/macro'
 
-import { network } from '@src/blockchain/connectors'
-import { useEagerConnect, useInactiveListener } from '@src/blockchain/hooks'
-import { NetworkContextName } from 'constants/index'
+import { network } from 'blockchain/connectors'
+import { useEagerConnect, useInactiveListener } from 'blockchain/hooks'
+import { NetworkContextName } from 'blockchain/constants'
 
 const MessageWrapper = styled.div`
   display: flex;

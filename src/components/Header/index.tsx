@@ -4,7 +4,7 @@ import { darken } from 'polished'
 import styled from 'styled-components/macro'
 
 import Logo from 'assets/png/logo.png'
-import { useActiveWeb3React } from '@src/blockchain/hooks'
+import { useActiveWeb3React } from 'blockchain/hooks'
 import { ExternalLink } from 'theme'
 
 import Menu from 'components/Menu'
@@ -12,7 +12,7 @@ import Menu from 'components/Menu'
 import { Row, RowFixed, YellowCard } from 'components/Layout'
 import { BASE_STYLES } from 'theme/styles'
 import { SectionFrame } from '../Layout/Section'
-import { NETWORK_LABELS } from 'constants/index'
+import { NETWORK_LABELS } from 'blockchain/constants'
 
 const HeaderFrame = styled(SectionFrame)`
   top: 0;

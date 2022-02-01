@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useActiveWeb3React } from '@src/blockchain/hooks'
+import { useActiveWeb3React } from 'blockchain/hooks'
 
 import styled, { ThemeContext } from 'styled-components/macro'
 import { AutoColumn, ColumnCenter, RowBetween } from 'components/Layout'
@@ -7,7 +7,7 @@ import { TYPE, CloseIcon, CustomLightSpinner } from 'theme'
 import { ArrowUpCircle } from 'react-feather'
 
 import Circle from 'assets/images/blue-loader.svg'
-import { getEtherscanLink } from 'utils'
+import { getEtherscanLink } from 'blockchain/utils'
 import { ExternalLink } from 'theme'
 
 const ConfirmOrLoadingWrapper = styled.div`

@@ -3,10 +3,11 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { save, load } from 'redux-localstorage-simple'
 
 import user from 'state/user/reducer'
-import { blockchain } from 'state/blockchain/reducer'
 import { application } from 'state/application/reducer'
-import { updateVersion } from 'state/global/actions'
+import { blockchain } from 'state/blockchain/reducer'
+import { multicall } from 'state/multicall/reducer'
 import { transactions } from 'state/transactions/reducer'
+import { updateVersion } from 'state/global/actions'
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector
@@ -17,6 +18,7 @@ const store = configureStore({
   reducer: {
     application,
     blockchain,
+    multicall,
     transactions,
     user
   },

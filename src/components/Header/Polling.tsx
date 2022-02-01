@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components/macro'
 import { TYPE, ExternalLink } from 'theme'
 
-import { useBlockNumber } from 'state/application/hooks'
-import { getEtherscanLink } from 'utils'
-import { useActiveWeb3React } from '@src/blockchain/hooks'
+import { useBlockNumber } from 'state/blockchain/hooks'
+import { getEtherscanLink } from 'blockchain/utils'
+import { useActiveWeb3React } from 'blockchain/hooks'
 
 const StyledPolling = styled.div`
   position: fixed;

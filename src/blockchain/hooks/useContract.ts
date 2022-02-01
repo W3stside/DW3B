@@ -1,18 +1,32 @@
 import { useMemo } from 'react'
 import { Contract } from '@ethersproject/contracts'
 
-import ARGENT_WALLET_DETECTOR_ABI from '@src/blockchain/abis/argent-wallet-detector.json'
-import ENS_PUBLIC_RESOLVER_ABI from '@src/blockchain/abis/ens-public-resolver.json'
-import ENS_ABI from '@src/blockchain/abis/ens-registrar.json'
-import ERC20_BYTES32_ABI from '@src/blockchain/abis/erc20_bytes32.json'
-import ERC20_ABI from '@src/blockchain/abis/erc20.json'
-import WETH_ABI from '@src/blockchain/abis/weth.json'
+import ARGENT_WALLET_DETECTOR_ABI from 'blockchain/abis/argent-wallet-detector.json'
+import ENS_PUBLIC_RESOLVER_ABI from 'blockchain/abis/ens-public-resolver.json'
+import ENS_ABI from 'blockchain/abis/ens-registrar.json'
+import ERC20_BYTES32_ABI from 'blockchain/abis/erc20_bytes32.json'
+import ERC20_ABI from 'blockchain/abis/erc20.json'
+import WETH_ABI from 'blockchain/abis/weth.json'
+// TODO: update from uni (no package right now)
+import { abi as MulticallABI } from 'blockchain/abis/UniswapInterfaceMulticall.json'
 
-import { ArgentWalletDetector, EnsPublicResolver, EnsRegistrar, Erc20, Weth } from '@src/blockchain/abis/types'
+import {
+  ArgentWalletDetector,
+  EnsPublicResolver,
+  EnsRegistrar,
+  Erc20,
+  UniswapInterfaceMulticall,
+  Weth
+} from 'blockchain/abis/types'
 
-import { useActiveWeb3React } from '@src/blockchain/hooks'
-import { getContract } from 'utils'
-import { ARGENT_WALLET_DETECTOR_ADDRESS, ENS_REGISTRAR_ADDRESSES, WETH9_EXTENDED } from 'constants/index'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { getContract } from 'blockchain/utils'
+import {
+  ARGENT_WALLET_DETECTOR_ADDRESS,
+  ENS_REGISTRAR_ADDRESSES,
+  MULTICALL_ADDRESS,
+  WETH9_EXTENDED
+} from 'blockchain/constants'
 
 // returns null on errors
 export function useContract<T extends Contract = Contract>(
@@ -60,4 +74,8 @@ export function useENSResolverContract(address: string | undefined, withSignerIf
 
 export function useBytes32TokenContract(tokenAddress?: string, withSignerIfPossible?: boolean): Contract | null {
   return useContract(tokenAddress, ERC20_BYTES32_ABI, withSignerIfPossible)
+}
+
+export function useMulticall2Contract() {
+  return useContract<UniswapInterfaceMulticall>(MULTICALL_ADDRESS, MulticallABI, false) as UniswapInterfaceMulticall
 }

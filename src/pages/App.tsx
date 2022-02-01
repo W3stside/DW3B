@@ -7,7 +7,7 @@ import ThemeViewer from 'components/ThemeViewer'
 import Popups from 'components/Popups'
 import Web3ReactManager from 'components/Web3ReactManager'
 
-import { ApplicationModal } from 'state/application/actions'
+import { ApplicationModal } from 'state/application/reducer'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
 import Header from 'components/Header'
 import Footer from 'components/Footer'

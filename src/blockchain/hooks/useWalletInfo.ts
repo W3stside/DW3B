@@ -9,7 +9,7 @@ import { useENSName } from 'blockchain/hooks/useENSName'
 
 import { useActiveWeb3Instance } from 'blockchain/hooks'
 import { NetworkContextName } from 'blockchain/constants'
-import { getProviderType, WalletProvider } from '@src/blockchain/connectors'
+import { getProviderType, WalletProvider } from 'blockchain/connectors'
 
 import { UNSUPPORTED_WC_WALLETS } from 'blockchain/constants/wallets'
 import { getSafeInfo } from 'blockchain/api/safe'

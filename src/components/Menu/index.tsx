@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 import { ReactComponent as MenuIcon } from 'assets/images/menu.svg'
 // import { useActiveWeb3React } from 'hooks'
 import { useOnClickOutside } from 'hooks/useOnClickOutside'
-import { ApplicationModal } from 'state/application/actions'
+import { ApplicationModal } from 'state/application/reducer'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
 
 import { ExternalLink } from 'theme'

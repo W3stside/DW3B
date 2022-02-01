@@ -1,8 +1,8 @@
 import styled from 'styled-components/macro'
 import { CheckCircle, Triangle } from 'react-feather'
 
-import { useActiveWeb3React } from '@src/blockchain/hooks'
-import { getEtherscanLink } from 'utils'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { getEtherscanLink } from 'blockchain/utils'
 import { ExternalLink } from 'theme'
 import { useAllTransactions } from 'state/transactions/hooks'
 import { RowFixed } from 'components/Layout'

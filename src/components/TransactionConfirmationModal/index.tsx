@@ -9,9 +9,9 @@ import { ButtonBase } from 'components/Button'
 import { RowBetween, AutoColumn, ColumnCenter } from 'components/Layout'
 import Circle from 'assets/images/blue-loader.svg'
 
-import { getEtherscanLink } from 'utils'
-import { useActiveWeb3React } from '@src/blockchain/hooks'
-import { SupportedChainId as ChainId } from 'constants/chains'
+import { getEtherscanLink } from 'blockchain/utils'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { SupportedChainId as ChainId } from 'blockchain/constants/chains'
 
 const Wrapper = styled.div`
   width: 100%;

@@ -1,18 +1,15 @@
 import { useCallback, useContext } from 'react'
-import { useDispatch } from 'react-redux'
 import styled, { ThemeContext } from 'styled-components/macro'
-import { useActiveWeb3React } from '@src/blockchain/hooks'
-import { AppDispatch } from 'state'
-import { clearAllTransactions } from 'state/transactions/actions'
-import { shortenAddress } from 'utils'
+import { useActiveWeb3React } from 'blockchain/hooks'
+import { shortenAddress } from 'blockchain/utils'
 import { AutoRow } from 'components/Layout'
 import Copy from './Copy'
 import Transaction from 'components/AccountDetails/Transaction'
 
-import { SUPPORTED_WALLETS } from 'constants/index'
+import { SUPPORTED_WALLETS } from 'blockchain/constants/wallets'
 import { ReactComponent as Close } from 'assets/images/x.svg'
-import { getEtherscanLink } from 'utils'
-import { injected, walletconnect, walletlink, fortmatic, portis } from '@src/blockchain/connectors'
+import { getEtherscanLink } from 'blockchain/utils'
+import { injected, walletconnect, walletlink, fortmatic, portis } from 'blockchain/connectors'
 import CoinbaseWalletIcon from 'assets/images/coinbaseWalletIcon.svg'
 import WalletConnectIcon from 'assets/images/walletConnectIcon.svg'
 import FortmaticIcon from 'assets/images/fortmaticIcon.png'
@@ -21,6 +18,7 @@ import Identicon from 'components/Identicon'
 import { ButtonBase } from 'components/Button'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from 'theme'
+import { useClearAllTransactions } from 'state/transactions/hooks'
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -227,7 +225,7 @@ export default function AccountDetails({
 }: AccountDetailsProps) {
   const { chainId, account, connector } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
-  const dispatch = useDispatch<AppDispatch>()
+  const clearAllTransactions = useClearAllTransactions()
 
   function formatConnectorName() {
     const { ethereum } = window
@@ -286,8 +284,8 @@ export default function AccountDetails({
   }
 
   const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }))
-  }, [dispatch, chainId])
+    if (chainId) clearAllTransactions(chainId)
+  }, [chainId, clearAllTransactions])
 
   return (
     <>

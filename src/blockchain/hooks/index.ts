@@ -2,7 +2,7 @@ import { useMemo, useEffect, useState } from 'react'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { isMobile } from 'react-device-detect'
-import { injected } from '@src/blockchain/connectors'
+import { injected } from 'blockchain/connectors'
 import { NetworkContextName } from 'blockchain/constants'
 
 export function useActiveWeb3React() {
