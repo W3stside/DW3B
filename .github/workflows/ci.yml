@@ -132,16 +132,16 @@ jobs:
         with:
           eslint: true
           prettier: true
-          eslint_dir: src/
-          prettier_dir: src/
           github_token: ${{ secrets.github_token }}
           auto_fix: ${{ github.event_name == 'pull_request' }}
 
-  build:
-    name: Build apps
+  deploy:
+    name: Deploy to GH Pages
     needs: setup
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -172,29 +172,9 @@ jobs:
       - name: Build Web Apps
         run: yarn build
 
-      - name: Upload websites artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: website
-          path: build
-
-  deploy:
-    name: Deploy to GH Pages
-    needs: build
-    runs-on: ubuntu-20.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Download website
-        uses: actions/download-artifact@v2
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/master' }}
+        # if: ${{ github.ref == 'refs/heads/master' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: build
