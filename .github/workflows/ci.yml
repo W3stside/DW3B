@@ -132,8 +132,6 @@ jobs:
         with:
           eslint: true
           prettier: true
-          eslint_dir: src/
-          prettier_dir: src/
           github_token: ${{ secrets.github_token }}
           auto_fix: ${{ github.event_name == 'pull_request' }}
 
@@ -191,10 +189,12 @@ jobs:
       
       - name: Download website
         uses: actions/download-artifact@v2
+        with:
+          name: website
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/master' }}
+        # if: ${{ github.ref == 'refs/heads/master' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build
+          publish_dir: ./build
