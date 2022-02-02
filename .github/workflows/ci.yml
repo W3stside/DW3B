@@ -137,7 +137,7 @@ jobs:
 
   deploy:
     name: Deploy to GH Pages
-    needs: build
+    needs: setup
     runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
