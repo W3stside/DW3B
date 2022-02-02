@@ -9,8 +9,11 @@ src/abis
 public/index.html
 
 # Every commit this is changed. NO MORE!
+.prettier.rc
+.yarn.rc
 tsconfig.json
-.eslint.json
+tsconfig.*.json
+.eslintrc.json
 
 # local stuff
 .yalc
