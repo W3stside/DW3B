@@ -130,8 +130,8 @@
   "scripts": {
     "start": "REACT_APP_DISABLE_TOKEN_WARNING=true craco start",
     "build": "craco build",
-    "test": "NODE_PATH=src INFURA_KEY=test craco test --env=jsdom",
-    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "test": "REACT_APP_INFURA_KEY=test craco test --env=jsdom",
+    "test:debug": "REACT_APP_INFURA_KEY=test craco --inspect-brk test --runInBand --no-cache",
     "contracts:compile:abi": "typechain --target ethers-v5 --out-dir src/blockchain/abis/types './src/blockchain/abis/**/*.json'",
     "contracts:compile": "yarn contracts:compile:abi",
     "postinstall": "yarn contracts:compile && yarn i18n:compile",
