@@ -1,5 +1,5 @@
 import { ReactElement, FC, useMemo, Children, isValidElement, cloneElement } from 'react'
-import styled, { ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components/macro'
+import styled, { ThemeProvider as StyledComponentsThemeProvider, css, DefaultTheme } from 'styled-components/macro'
 
 import { Text, TextProps } from 'rebass'
 import { useAppColourTheme } from 'state/user/hooks'
@@ -61,9 +61,18 @@ export const TYPE = {
   }
 }
 
-const DEFAULT_THEME = {
-  components: undefined,
-
+const DEFAULT_THEME: Partial<DefaultTheme> = {
+  buttons: {
+    font: {
+      size: {
+        small: '10px',
+        normal: '12px',
+        large: '16px'
+      }
+    },
+    borderRadius: '16px',
+    border: '0.1rem solid transparent'
+  },
   // media queries
   mediaWidth,
   // css snippets

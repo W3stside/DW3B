@@ -65,7 +65,17 @@ declare module 'styled-components' {
   export interface DefaultTheme extends Colors {
     // theming
     mode: ThemeModes
-    components?: keyof JSX.IntrinsicElements | React.ComponentType<Record<any, any>>
+    buttons: {
+      font: {
+        size: {
+          small: string
+          normal: string
+          large: string
+        }
+      }
+      borderRadius: string
+      border: string
+    }
     // shadows
     shadow1: string
 

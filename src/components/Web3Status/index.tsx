@@ -15,7 +15,7 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from 'state/transactions/hooks'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { shortenAddress } from 'blockchain/utils'
-import { ButtonBase } from 'components/Button'
+import Button from 'components/Button'
 
 import Identicon from 'components/Identicon'
 import Loader from 'components/Loader'
@@ -33,7 +33,7 @@ const IconWrapper = styled.div<{ size?: number }>`
   }
 `
 
-const Web3StatusGeneric = styled(ButtonBase)`
+const Web3StatusGeneric = styled(Button)`
   ${({ theme }) => theme.flexRowNoWrap}
   width: 100%;
   align-items: center;

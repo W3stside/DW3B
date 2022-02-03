@@ -2,15 +2,12 @@ import styled, { css, FlattenInterpolation, ThemeProps, DefaultTheme } from 'sty
 import { variants } from 'styled-theming'
 import ThemeProvider from 'theme'
 
-import { BASE_STYLES } from 'theme/styles'
 import { darken } from 'polished'
 import { THEME_LIST, ThemeModes } from 'theme/styled'
 
 export type Writable<T> = {
   -readonly [K in keyof T]: T[K]
 }
-
-const { borderRadius, buttonBorder, fontSize } = BASE_STYLES
 
 export interface ButtonBaseProps extends React.ButtonHTMLAttributes<Element> {
   variant?: ButtonVariations
@@ -127,101 +124,88 @@ type ButtonVariationInterpolationObject = {
 
 type ThemeInterpolationObject = { [key in keyof typeof ThemeModes]: FlattenInterpolation<ThemeProps<DefaultTheme>> }
 
-const ButtonThemeMap = BUTTON_VARIATION_LIST.reduce((accum, [, buttonVariant]) => {
-  // buttonStyle = 'secondary' or 'primary' etc style
-  let buttonStyle: FlattenInterpolation<ThemeProps<DefaultTheme>>
+const ButtonThemeMap: Writable<ButtonVariationInterpolationObject> = BUTTON_VARIATION_LIST.reduce(
+  (accum, [, buttonVariant]) => {
+    // buttonStyle = 'secondary' or 'primary' etc style
+    let buttonStyle: FlattenInterpolation<ThemeProps<DefaultTheme>>
 
-  switch (buttonVariant) {
-    case ButtonVariations.DEFAULT:
-      buttonStyle = PRIMARY_BUTTON_STYLES
-      break
-    case ButtonVariations.PRIMARY:
-      buttonStyle = PRIMARY_BUTTON_STYLES
-      break
-    case ButtonVariations.SECONDARY:
-      buttonStyle = SECONDARY_BUTTON_STYLES
-      break
-    case ButtonVariations.DANGER:
-      buttonStyle = DANGER_BUTTON_STYLES
-      break
-    case ButtonVariations.SUCCESS:
-      buttonStyle = SUCCESS_BUTTON_STYLES
-      break
-    case ButtonVariations.WARNING:
-      buttonStyle = WARNING_BUTTON_STYLES
-      break
-    case ButtonVariations.CANCEL:
-      buttonStyle = CANCEL_BUTTON_STYLES
-      break
-    case ButtonVariations.DISABLED:
-      buttonStyle = DISABLED_BUTTON_STYLES
-      break
-    case ButtonVariations.THEME:
-      buttonStyle = THEME_BUTTON_STYLES
-      break
-  }
+    switch (buttonVariant) {
+      case ButtonVariations.DEFAULT:
+        buttonStyle = PRIMARY_BUTTON_STYLES
+        break
+      case ButtonVariations.PRIMARY:
+        buttonStyle = PRIMARY_BUTTON_STYLES
+        break
+      case ButtonVariations.SECONDARY:
+        buttonStyle = SECONDARY_BUTTON_STYLES
+        break
+      case ButtonVariations.DANGER:
+        buttonStyle = DANGER_BUTTON_STYLES
+        break
+      case ButtonVariations.SUCCESS:
+        buttonStyle = SUCCESS_BUTTON_STYLES
+        break
+      case ButtonVariations.WARNING:
+        buttonStyle = WARNING_BUTTON_STYLES
+        break
+      case ButtonVariations.CANCEL:
+        buttonStyle = CANCEL_BUTTON_STYLES
+        break
+      case ButtonVariations.DISABLED:
+        buttonStyle = DISABLED_BUTTON_STYLES
+        break
+      case ButtonVariations.THEME:
+        buttonStyle = THEME_BUTTON_STYLES
+        break
+    }
 
-  accum[buttonVariant] = THEME_LIST.reduce<Writable<ThemeInterpolationObject>>((accum2, [, themeName]) => {
-    // { 'LIGHT': css` ... `, 'DARK': css` ... `, ... }
-    accum2[themeName] = buttonStyle
-    return accum2
-  }, {} as ThemeInterpolationObject)
+    accum[buttonVariant] = THEME_LIST.reduce<Writable<ThemeInterpolationObject>>((accum2, [, themeName]) => {
+      // { 'LIGHT': css` ... `, 'DARK': css` ... `, ... }
+      accum2[themeName] = buttonStyle
+      return accum2
+    }, {} as ThemeInterpolationObject)
 
-  return accum
-}, {} as Writable<ButtonVariationInterpolationObject>)
+    return accum
+  },
+  {} as Writable<ButtonVariationInterpolationObject>
+)
 
 export const ButtonTheme = variants('mode', 'variant', ButtonThemeMap)
 
+// name of the key we will look for on our theme object
+// used to target buttons
+const BUTTON_THEME_KEY = 'button'
 // Created a 'size' prop on buttons, default | small | big
 const ButtonSizes = variants('component', 'size', {
   DEFAULT: {
-    buttons: css`
-      font-size: initial;
+    [BUTTON_THEME_KEY]: css`
+      font-size: ${({ theme }) => theme.buttons.font.size.normal};
       padding: 0.5rem 1rem;
     `
   },
   SMALL: {
-    buttons: css`
-      font-size: smaller;
+    [BUTTON_THEME_KEY]: css`
+      font-size: ${({ theme }) => theme.buttons.font.size.small};
       padding: 0.3rem 1rem;
     `
   },
   BIG: {
-    buttons: css`
-      font-size: larger;
+    [BUTTON_THEME_KEY]: css`
+      font-size: ${({ theme }) => theme.buttons.font.size.large};
       padding: 0.65rem 1.2rem;
     `
   }
 })
 
-const ColouredButtonBase = styled.button`
-  border: ${buttonBorder};
-  /* Fold in theme css above */
-  ${ButtonTheme}
-`
-
-const ColouredAndSizedButtonBase = styled(ColouredButtonBase)`
-  font-size: ${fontSize};
-  ${ButtonSizes}
-`
-
-// Wrap ColouredAndSizedButtonsBase in it's own ThemeProvider which takes the toplevel app theme
-// ThemeProvider and interpolate over it's props
-const ThemeWrappedButtonBase: React.FC<React.ButtonHTMLAttributes<Element>> = ({ children, ...restProps }) => (
-  <ThemeProvider themeExtension={{ component: 'buttons' }}>
-    <ColouredAndSizedButtonBase {...restProps}>{children}</ColouredAndSizedButtonBase>
-  </ThemeProvider>
-)
-
-export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(({ size = BSV.DEFAULT }) => ({
-  size
-}))<ButtonBaseProps>`
-  border-radius: ${borderRadius};
+const ButtonBase = styled.button`
+  border: ${({ theme }) => theme.buttons.border};
+  border-radius: ${({ theme }) => theme.buttons.borderRadius};
   cursor: pointer;
+  font-size: ${({ theme }) => theme.buttons.font.size.normal};
   font-weight: 600;
   outline: 0;
 
-  transition-duration: DEFAULT_DARKEN_AMOUNTs;
+  transition-duration: 0.2;
   transition-timing-function: ease-in-out;
   transition-property: color, background, border-color, opacity, margin;
 
@@ -230,3 +214,25 @@ export const ButtonBase = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
     pointer-events: none;
   }
 `
+
+const ColouredButtonBase = styled(ButtonBase)`
+  /* Fold in theme css above */
+  ${ButtonTheme}
+`
+
+const ColouredAndSizedButtonBase = styled(ColouredButtonBase)`
+  /* Fold in theme css above */
+  ${ButtonSizes}
+`
+
+// Wrap ColouredAndSizedButtonsBase in it's own ThemeProvider which takes the toplevel app theme
+// ThemeProvider and interpolate over it's props
+const ThemeWrappedButtonBase: React.FC<React.ButtonHTMLAttributes<Element>> = ({ children, ...restProps }) => (
+  <ThemeProvider themeExtension={{ component: BUTTON_THEME_KEY }}>
+    <ColouredAndSizedButtonBase {...restProps}>{children}</ColouredAndSizedButtonBase>
+  </ThemeProvider>
+)
+
+export default styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(({ size = BSV.DEFAULT }) => ({
+  size
+}))<ButtonBaseProps>``

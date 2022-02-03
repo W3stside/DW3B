@@ -49,7 +49,7 @@ const ThemeToggleBar: React.FC = () => {
     <Row>
       <ThemeToggle
         mode={theme.autoDetect}
-        size={BSV.BIG}
+        size={BSV.DEFAULT}
         variant={theme.autoDetect ? BV.PRIMARY : BV.DISABLED}
         margin="0.2rem"
         width="6rem"
@@ -64,7 +64,7 @@ const ThemeToggleBar: React.FC = () => {
         return (
           <ThemeToggle
             mode={isActiveMode}
-            size={isActiveMode ? BSV.BIG : BSV.BIG}
+            size={BSV.DEFAULT}
             variant={isActiveMode ? BV.PRIMARY : BV.DISABLED}
             margin="0.2rem"
             width="6rem"

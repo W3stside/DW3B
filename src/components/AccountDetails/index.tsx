@@ -15,7 +15,7 @@ import WalletConnectIcon from 'assets/images/walletConnectIcon.svg'
 import FortmaticIcon from 'assets/images/fortmaticIcon.png'
 import PortisIcon from 'assets/images/portisIcon.png'
 import Identicon from 'components/Identicon'
-import { ButtonBase } from 'components/Button'
+import Button from 'components/Button'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { ExternalLink, LinkStyledButton, TYPE } from 'theme'
 import { useClearAllTransactions } from 'state/transactions/hooks'
@@ -182,7 +182,7 @@ const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
 `
 
-const WalletAction = styled(ButtonBase)`
+const WalletAction = styled(Button)`
   width: fit-content;
   font-weight: 400;
   margin-left: 8px;

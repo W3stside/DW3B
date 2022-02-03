@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro'
-import { ButtonBaseProps, ButtonSizeVariations, ButtonVariations, ButtonBase } from '../Button'
+import Button, { ButtonBaseProps, ButtonSizeVariations, ButtonVariations } from '../Button'
 
 const ThemeButtonToggleWrapper = styled.div<{ disabled: boolean; $mode: boolean; $margin?: string; $width?: string }>`
   display: inline-flex;
@@ -42,9 +42,9 @@ export const ThemeToggle: React.FC<ButtonBaseProps & {
       $width={width}
       title={disabled ? 'Toggled' : 'Click to toggle theme'}
     >
-      <ButtonBase {...rest} disabled={disabled} size={size} variant={variant}>
+      <Button {...rest} disabled={disabled} size={size} variant={variant}>
         {children}
-      </ButtonBase>
+      </Button>
     </ThemeButtonToggleWrapper>
   )
 }

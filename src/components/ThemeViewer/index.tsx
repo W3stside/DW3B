@@ -1,5 +1,5 @@
 import ThemeProvider from 'theme'
-import { ButtonBase, BSV, BV } from '../Button'
+import Button, { BSV, BV } from '../Button'
 import { DefaultTheme } from 'styled-components/macro'
 import { LightCard } from '../Layout/Card'
 
@@ -22,17 +22,17 @@ const ThemeConsumer: TFC = ({ theme }) => {
     <div>
       <h1>Theme Manager</h1>
       <h4>
-        Your current app theme is: <h2>{theme.mode}</h2>
+        Your current app theme is: <p style={{ fontSize: 'large' }}>{theme.mode}</p>
       </h4>
       <LightCard>{JSON.stringify(theme, null, 2)}</LightCard>
       <br />
-      <ButtonBase variant={BV.PRIMARY}>Default Button Example</ButtonBase>
-      <ButtonBase size={BSV.BIG} variant={BV.SECONDARY}>
+      <Button variant={BV.PRIMARY}>Default Button Example</Button>{' '}
+      <Button size={BSV.BIG} variant={BV.SECONDARY}>
         Big Button Example
-      </ButtonBase>
-      <ButtonBase size={BSV.SMALL} variant={BV.WARNING}>
+      </Button>{' '}
+      <Button size={BSV.SMALL} variant={BV.WARNING}>
         Small Button Example
-      </ButtonBase>
+      </Button>
     </div>
   )
 }

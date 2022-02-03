@@ -8,7 +8,7 @@ import { ApplicationModal } from 'state/application/reducer'
 import { useModalOpen, useToggleModal } from 'state/application/hooks'
 
 import { ExternalLink } from 'theme'
-import { ButtonBase as ButtonPrimary } from 'components/Button'
+import Button from 'components/Button'
 import { darken } from 'polished'
 
 const StyledMenuIcon = styled(MenuIcon)`
@@ -17,7 +17,7 @@ const StyledMenuIcon = styled(MenuIcon)`
   }
 `
 
-const StyledMenuButton = styled(ButtonPrimary)`
+const StyledMenuButton = styled(Button)`
   width: 100%;
   height: 100%;
   border: none;

@@ -5,7 +5,7 @@ import { ExternalLink } from 'theme'
 import { Text } from 'rebass'
 import { CloseIcon, CustomLightSpinner } from 'theme'
 import { AlertTriangle, ArrowUpCircle } from 'react-feather'
-import { ButtonBase } from 'components/Button'
+import Button from 'components/Button'
 import { RowBetween, AutoColumn, ColumnCenter } from 'components/Layout'
 import Circle from 'assets/images/blue-loader.svg'
 
@@ -91,11 +91,11 @@ function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
-          <ButtonBase onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+          <Button onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
             <Text fontWeight={500} fontSize={20}>
               Close
             </Text>
-          </ButtonBase>
+          </Button>
         </AutoColumn>
       </Section>
     </Wrapper>
@@ -148,7 +148,7 @@ export function TransactionErrorContent({ message, onDismiss }: { message: strin
         </AutoColumn>
       </Section>
       <BottomSection gap="12px">
-        <ButtonBase onClick={onDismiss}>Dismiss</ButtonBase>
+        <Button onClick={onDismiss}>Dismiss</Button>
       </BottomSection>
     </Wrapper>
   )

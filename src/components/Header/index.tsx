@@ -3,14 +3,13 @@ import { darken } from 'polished'
 
 import styled from 'styled-components/macro'
 
-import Logo from 'assets/png/logo.png'
+import Logo from 'assets/png/logo/compressed.png'
 import { useActiveWeb3React } from 'blockchain/hooks'
 import { ExternalLink } from 'theme'
 
 import Menu from 'components/Menu'
 
 import { Row, RowFixed, YellowCard } from 'components/Layout'
-import { BASE_STYLES } from 'theme/styles'
 import { SectionFrame } from '../Layout/Section'
 import { NETWORK_LABELS } from 'blockchain/constants'
 
@@ -143,13 +142,13 @@ const StyledNavLink = styled(NavLink).attrs({
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.text2};
-  font-size: ${BASE_STYLES.fontSize};
+  font-size: ${({ theme }) => theme.buttons.font.size.normal};
   width: fit-content;
   margin: 0 12px;
   font-weight: 500;
 
   &.${activeClassName} {
-    border-radius: ${BASE_STYLES.borderRadius};
+    border-radius: ${({ theme }) => theme.buttons.borderRadius};
     font-weight: 600;
     color: ${({ theme }) => theme.text1};
   }
