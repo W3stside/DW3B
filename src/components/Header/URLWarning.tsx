@@ -21,6 +21,7 @@ export const StyledClose = styled(X)`
 `
 
 const APP_URL = 'this.app.org'
+const PHISH_ALERT_URL = 'this.app.org'
 
 export default function URLWarning(): JSX.Element | null {
   return isMobile ? (
@@ -31,7 +32,7 @@ export default function URLWarning(): JSX.Element | null {
       </div>
       <StyledClose size={12} onClick={console.log} />
     </PhishAlert>
-  ) : window.location.hostname === 'app.uniswap.org' ? (
+  ) : window.location.hostname === PHISH_ALERT_URL ? (
     <PhishAlert isActive>
       <div style={{ display: 'flex' }}>
         <AlertTriangle style={{ marginRight: 6 }} size={12} /> Always make sure the URL is
