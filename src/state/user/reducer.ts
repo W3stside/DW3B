@@ -14,8 +14,8 @@ export interface UserState {
 
 export const initialState: UserState = {
   theme: {
-    mode: ThemeModes.LIGHT,
-    autoDetect: false
+    mode: ThemeModes.DARK,
+    autoDetect: true
   },
   timestamp: currentTimestamp()
 }
