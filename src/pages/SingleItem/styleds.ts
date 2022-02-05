@@ -16,7 +16,7 @@ const saturateAnimation = css`
       filter: saturate(2);
     }
     75% {
-      filter: saturate(3.5);
+      filter: saturate(3.7);
     }
     100% {
       filter: saturate(5);
@@ -37,6 +37,9 @@ const textShadowAnimation = css<{ itemColor: string }>`
     }
     7% {
       text-shadow: 47px 2px 8px ${({ itemColor }) => itemColor};
+    }
+    10% {
+      text-shadow: 17px 2px 8px ${({ itemColor }) => itemColor};
     }
     47% {
       text-shadow: 10px 2px 2px ${({ itemColor }) => itemColor};
@@ -62,6 +65,9 @@ const textShadowAnimation = css<{ itemColor: string }>`
     60% {
       text-shadow: 20px 2px 2px ${({ itemColor }) => itemColor};
     }
+    65% {
+      text-shadow: 20px 2px 5px purple;
+    }
   }
 `
 
@@ -79,11 +85,14 @@ export const VideoContentWrapper = styled(Row)`
     animation-duration: 10.4s;
   }
 `
-
+export const Strikethrough = styled.div`
+  width: 100%;
+  background-color: ${({ theme }) => theme.white};
+  height: 5px;
+`
 export const ItemHeader = styled(TYPE.largeHeader)<{ itemColor: string }>`
   font-style: italic;
   letter-spacing: 10px;
-  font-size: 55px;
   text-shadow: 10px 2px 2px ${({ itemColor }) => itemColor};
 
   ${textShadowAnimation}

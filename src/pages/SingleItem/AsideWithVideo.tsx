@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Row } from 'components/Layout'
 import Carousel from 'components/Carousel'
-import { ItemContainer, ItemAsidePanel, ItemHeader, VideoContentWrapper } from './styleds'
+import { ItemContainer, ItemAsidePanel, ItemHeader, /* Strikethrough, */ VideoContentWrapper } from './styleds'
 
 import { TYPE } from 'theme'
 import { ApparelItem } from 'mock/apparel/types'
@@ -26,7 +26,8 @@ export default function ItemPage({ itemColor, itemHeader, itemMediaList, itemSiz
   return (
     <ItemContainer>
       <ItemAsidePanel id="#shirt-aside-panel">
-        <ItemHeader fontSize="45px" itemColor={itemColor}>
+        <ItemHeader fontSize="65px" itemColor={itemColor}>
+          {/* <Strikethrough /> */}
           {itemHeader}
         </ItemHeader>
         {/* Item carousel */}
