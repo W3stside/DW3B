@@ -7,7 +7,9 @@ import Popups from 'components/Popups'
 import Web3ReactManager from 'components/blockchain/Web3ReactManager'
 
 import Header from 'components/Header'
-import Footer from 'components/Footer'
+// import Footer from 'components/Footer'
+
+import Home from 'components/Home'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -28,18 +30,15 @@ const BodyWrapper = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: center;
-
-  width: 90%;
   margin: auto;
-  padding-top: 100px;
 
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 10;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    padding: 16px;
-    padding-top: 2rem;
+    // padding: 16px;
+    // padding-top: 2rem;
   `};
 
   z-index: 1;
@@ -60,14 +59,15 @@ export default function App() {
           <Popups />
           <Web3ReactManager>
             <Switch>
-              <Route exact path="/" component={ThemeViewer} />
+              <Route exact path="/" component={Home} />
+              <Route exact path="/theme" component={ThemeViewer} />
             </Switch>
           </Web3ReactManager>
           <Marginer />
         </BodyWrapper>
-        <SectionWrapper>
+        {/* <SectionWrapper>
           <Footer />
-        </SectionWrapper>
+        </SectionWrapper> */}
       </AppWrapper>
     </Suspense>
   )

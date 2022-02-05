@@ -54,6 +54,21 @@ export const TopGlobalStyle = createGlobalStyle`
   button {
     user-select: none;
   }
+
+  select {
+    // A reset of styles, including removing the default dropdown arrow
+    appearance: none;
+    // Additional resets for further consistency
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+  }
 `
 
 export const ThemedGlobalStyle = createGlobalStyle`

@@ -1,7 +1,8 @@
 export const DEFAULT_COLOURS = {
   // base
   black: '#000',
-  white: '#FFF',
+  // off white
+  white: '#e5e5e5',
   whiteDark: '#e9e9f0',
   red1: '#FF6871',
   red2: '#F82D3A',
