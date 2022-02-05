@@ -5,7 +5,7 @@ export const DEFAULT_COLOURS = {
   white: '#e5e5e5',
   whiteDark: '#e9e9f0',
   red1: '#FF6871',
-  red2: '#F82D3A',
+  red2: '#200202',
   green1: '#09371d',
   green2: '#a9ffcd',
   yellow1: '#FFE270',

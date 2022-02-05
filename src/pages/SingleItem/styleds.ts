@@ -28,6 +28,7 @@ const textShadowAnimation = css<{ itemColor: string }>`
   @keyframes textShadowAnimation {
     0% {
       text-shadow: 20px 2px 2px ${({ itemColor }) => itemColor};
+      letter-spacing: 20px;
     }
     3% {
       text-shadow: 55px 2px 8px ${({ itemColor }) => itemColor};
@@ -43,6 +44,7 @@ const textShadowAnimation = css<{ itemColor: string }>`
     }
     47% {
       text-shadow: 10px 2px 2px ${({ itemColor }) => itemColor};
+      letter-spacing: 7px;
     }
     48% {
       text-shadow: -20px 2px 1px pink;
@@ -90,17 +92,21 @@ export const Strikethrough = styled.div`
   background-color: ${({ theme }) => theme.white};
   height: 5px;
 `
-export const ItemHeader = styled(TYPE.largeHeader)<{ itemColor: string }>`
+export type ItemHeaderProps = { animation?: boolean; itemColor: string }
+export const ItemHeader = styled(TYPE.largeHeader)<ItemHeaderProps>`
   font-style: italic;
-  letter-spacing: 10px;
-  text-shadow: 10px 2px 2px ${({ itemColor }) => itemColor};
+  letter-spacing: 7px;
 
-  ${textShadowAnimation}
-
-  animation-name: textShadowAnimation;
-  animation-duration: 10s;
-  animation-iteration-count: 3;
-  animation-delay: 1s;
+  ${({ animation = false }) => animation && textShadowAnimation}
+  ${({ animation = false, itemColor }) =>
+    animation &&
+    `
+      text-shadow: 10px 2px 2px ${itemColor};
+      animation-name: textShadowAnimation;
+      animation-duration: 10s;
+      animation-iteration-count: 3;
+      animation-delay: 1s;
+    `}
 `
 
 export const ItemAsidePanel = styled(Column)`
@@ -126,12 +132,13 @@ export const ItemContainer = styled(Row)`
     margin-right: auto;
     height: 100%;
     width: 100%;
-    max-width: 380px;
+    max-width: 500px;
 
-    overflow: hidden;
+    overflow-x: hidden;
     z-index: 2;
 
     background: ${({ theme }) => transparentize(0.1, theme.white)};
+    // background: ${({ theme }) => transparentize(0.1, theme.red2)};
   }
 
   > ${VideoContentWrapper} {

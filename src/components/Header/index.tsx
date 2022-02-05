@@ -3,14 +3,15 @@ import { darken } from 'polished'
 
 import styled from 'styled-components/macro'
 
-import Logo from 'assets/png/logo/compressed.png'
+// import Logo from 'assets/png/logo/compressed.png'
 import { useActiveWeb3React } from 'blockchain/hooks'
-import { ExternalLink } from 'theme'
+// import { ExternalLink } from 'theme'
 
 import Menu from 'components/Menu'
-
+import DynamicHeaderLogo from 'components/Header/DynamicLogoHeader'
 import { Row, RowFixed, YellowCard } from 'components/Layout'
-import { SectionFrame } from '../Layout/Section'
+import { SectionFrame } from 'components/Layout/Section'
+
 import { NETWORK_LABELS } from 'blockchain/constants'
 
 const HeaderFrame = styled(SectionFrame)`
@@ -65,7 +66,13 @@ const HeaderRow = styled(RowFixed)`
 `
 
 const HeaderLinks = styled(Row)`
+  width: min-content;
   justify-content: center;
+  > a {
+    white-space: nowrap;
+    flex: 1 0 auto;
+  }
+
   ${({ theme }) => theme.mediaWidth.upToMedium`
     padding: 1rem 0 1rem 1rem;
     justify-content: flex-end;
@@ -123,12 +130,12 @@ const Title = styled.a`
   }
 `
 
-const Sabrecon = styled.div`
-  transition: transform 0.3s ease;
-  :hover {
-    transform: rotate(-5deg);
-  }
-`
+// const Sabrecon = styled.div`
+//   transition: transform 0.3s ease;
+//   :hover {
+//     transform: rotate(-5deg);
+//   }
+// `
 
 const activeClassName = 'ACTIVE'
 
@@ -159,36 +166,36 @@ const StyledNavLink = styled(NavLink).attrs({
   }
 `
 
-const StyledExternalLink = styled(ExternalLink).attrs({
-  activeClassName
-})<{ isActive?: boolean }>`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: left;
-  border-radius: 3rem;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.text2};
-  font-size: 1rem;
-  width: fit-content;
-  margin: 0 12px;
-  font-weight: 500;
+// const StyledExternalLink = styled(ExternalLink).attrs({
+//   activeClassName
+// })<{ isActive?: boolean }>`
+//   ${({ theme }) => theme.flexRowNoWrap}
+//   align-items: left;
+//   border-radius: 3rem;
+//   outline: none;
+//   cursor: pointer;
+//   text-decoration: none;
+//   color: ${({ theme }) => theme.text2};
+//   font-size: 1rem;
+//   width: fit-content;
+//   margin: 0 12px;
+//   font-weight: 500;
 
-  &.${activeClassName} {
-    border-radius: 12px;
-    font-weight: 600;
-    color: ${({ theme }) => theme.text1};
-  }
+//   &.${activeClassName} {
+//     border-radius: 12px;
+//     font-weight: 600;
+//     color: ${({ theme }) => theme.text1};
+//   }
 
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.text1)};
-  }
+//   :hover,
+//   :focus {
+//     color: ${({ theme }) => darken(0.1, theme.text1)};
+//   }
 
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-      display: none;
-`}
-`
+//   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+//       display: none;
+// `}
+// `
 
 export default function Header() {
   const { chainId } = useActiveWeb3React()
@@ -196,17 +203,19 @@ export default function Header() {
   return (
     <HeaderFrame>
       <HeaderRow>
-        <Title href=".">
-          <Sabrecon>
+        <Title href="/#">
+          {/* <Sabrecon>
             <img width="40px" src={Logo} alt="logo" />
-          </Sabrecon>
+          </Sabrecon> */}
         </Title>
+        <DynamicHeaderLogo itemColor="#dda0ddb3" fontSize={60} fontWeight={100} color={'ghostwhite'} />
         <HeaderLinks>
-          <StyledNavLink to="#">App</StyledNavLink>
-          <StyledNavLink to="#">Header Link</StyledNavLink>
-          <StyledExternalLink href="#">
+          <StyledNavLink to="/#">{'// SHOP'}</StyledNavLink>
+          <StyledNavLink to="/theme">{'// THEME'}</StyledNavLink>
+          {/* <StyledNavLink to="#">Header Link</StyledNavLink> */}
+          {/* <StyledExternalLink href="#">
             External Link <span style={{ fontSize: '11px' }}>↗</span>
-          </StyledExternalLink>
+          </StyledExternalLink> */}
         </HeaderLinks>
       </HeaderRow>
       <HeaderControls>

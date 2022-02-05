@@ -11,7 +11,7 @@ export const CarouselStep = styled(Row)<{ $calculatedWidth: string }>`
     box-shadow: 3px 6px 8px 0px #686868ad;
   }
 
-  transition: width 0.2s ease-in-out;
+  transition: width 0.3s ease-out;
 `
 
 export const CarouselContainer = styled.div`
@@ -20,23 +20,25 @@ export const CarouselContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-  // height: 363px;
+  // no shrink
+  flex: 1 0 auto;
   width: 100%;
+  height: 480px;
 `
-
-export const CarouselButton = styled.div`
+// #a1c3f9
+export const CarouselButton = styled.div<{ buttonColor: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 20px;
   margin: 0 4px;
-  background-color: ${transparentize(1, '#8fa4c3')};
+  background-color: ${({ buttonColor }) => transparentize(1, buttonColor)};
 
   cursor: pointer;
 
   &:hover {
-    background-color: ${transparentize(0.2, '#8fa4c3')};
+    background-color: ${({ buttonColor }) => transparentize(0.2, buttonColor)};
   }
 
   transition: background-color 0.2s ease-in-out;

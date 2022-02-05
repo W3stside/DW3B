@@ -4,12 +4,13 @@ import { CarouselContainer, CarouselStep, CarouselButtonContainer, CarouselButto
 import { ApparelItem } from 'mock/apparel/types'
 
 type CarouselProps = {
+  buttonColor: string
   mediaList: ApparelItem[]
   mediaStartIndex: number
   onCarouselChange?: (index: number) => void
 }
 
-export default function Carousel({ mediaList, mediaStartIndex, onCarouselChange }: CarouselProps) {
+export default function Carousel({ buttonColor, mediaList, mediaStartIndex, onCarouselChange }: CarouselProps) {
   const [selectedStep, setSelectedStep] = useState(mediaStartIndex)
   const [parentWidth, setParentWidth] = useState<number | undefined>()
 
@@ -58,12 +59,12 @@ export default function Carousel({ mediaList, mediaStartIndex, onCarouselChange 
         const onPrevious = () => {
           let indexToSet = undefined
           if (selectedStep === 0) {
-            indexToSet = 0
+            indexToSet = lastStepIndex
           } else {
             indexToSet = selectedStep - 1
           }
           // change carousel slide
-          setSelectedStep(lastStepIndex)
+          setSelectedStep(indexToSet)
           // side effect change item video
           onCarouselChange && onCarouselChange(indexToSet)
         }
@@ -78,10 +79,10 @@ export default function Carousel({ mediaList, mediaStartIndex, onCarouselChange 
             <img src={image} />
             {isMultipleCarousel && (
               <CarouselButtonContainer>
-                <CarouselButton onClick={onPrevious}>
+                <CarouselButton onClick={onPrevious} buttonColor={buttonColor}>
                   <ChevronLeft />
                 </CarouselButton>
-                <CarouselButton onClick={onNext}>
+                <CarouselButton onClick={onNext} buttonColor={buttonColor}>
                   <ChevronRight />
                 </CarouselButton>
               </CarouselButtonContainer>
