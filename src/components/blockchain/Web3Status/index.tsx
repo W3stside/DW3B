@@ -21,7 +21,7 @@ import Identicon from 'components/Identicon'
 import Loader from 'components/Loader'
 
 import { RowBetween } from 'components/Layout'
-import WalletModal from 'components/WalletModal'
+import WalletModal from 'components/blockchain/WalletModal'
 
 const IconWrapper = styled.div<{ size?: number }>`
   ${({ theme }) => theme.flexColumnNoWrap};

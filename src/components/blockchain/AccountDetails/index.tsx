@@ -4,7 +4,7 @@ import { useActiveWeb3React } from 'blockchain/hooks'
 import { shortenAddress } from 'blockchain/utils'
 import { AutoRow } from 'components/Layout'
 import Copy from './Copy'
-import Transaction from 'components/AccountDetails/Transaction'
+import Transaction from 'components/blockchain/AccountDetails/Transaction'
 
 import { SUPPORTED_WALLETS } from 'blockchain/constants/wallets'
 import { ReactComponent as Close } from 'assets/images/x.svg'

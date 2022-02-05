@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 
 import ThemeViewer from 'components/ThemeViewer'
 import Popups from 'components/Popups'
-import Web3ReactManager from 'components/Web3ReactManager'
+import Web3ReactManager from 'components/blockchain/Web3ReactManager'
 
 import Header from 'components/Header'
 import Footer from 'components/Footer'

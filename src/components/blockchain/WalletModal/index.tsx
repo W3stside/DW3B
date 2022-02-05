@@ -14,9 +14,9 @@ import usePrevious from 'hooks/usePrevious'
 import { ApplicationModal } from 'state/application/reducer'
 import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
 import { ExternalLink } from 'theme'
-import AccountDetails from 'components/AccountDetails'
+import AccountDetails from 'components/blockchain/AccountDetails'
 
-import Modal from '../Modal'
+import Modal from 'components/Modal'
 import Option from './Option'
 import PendingView from './PendingView'
 

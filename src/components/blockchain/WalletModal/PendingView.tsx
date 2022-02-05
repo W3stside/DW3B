@@ -1,11 +1,11 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
-
 import styled from 'styled-components/macro'
+import { darken } from 'polished'
+
 import Option from './Option'
 import { SUPPORTED_WALLETS } from 'blockchain/constants'
 import { injected } from 'blockchain/connectors'
-import { darken } from 'polished'
-import Loader from '../Loader'
+import Loader from 'components/Loader'
 
 const PendingSection = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
