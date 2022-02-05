@@ -33,25 +33,34 @@ const textShadowAnimation = css<{ itemColor: string }>`
       text-shadow: 55px 2px 8px ${({ itemColor }) => itemColor};
     }
     5% {
-      text-shadow: -12px 2px 2px pink;
+      text-shadow: -22px 2px 2px pink;
     }
     7% {
-      text-shadow: 47px 2px 12px ${({ itemColor }) => itemColor};
+      text-shadow: 47px 2px 8px ${({ itemColor }) => itemColor};
     }
     47% {
       text-shadow: 10px 2px 2px ${({ itemColor }) => itemColor};
     }
-    70% {
+    48% {
+      text-shadow: -20px 2px 1px pink;
+    }
+    49% {
       text-shadow: 20px 2px 2px ${({ itemColor }) => itemColor};
     }
-    73% {
+    53% {
       text-shadow: 55px 2px 8px ${({ itemColor }) => itemColor};
     }
-    75% {
-      text-shadow: -12px 2px 2px purple;
+    55% {
+      text-shadow: -32px 2px 2px purple;
     }
-    77% {
-      text-shadow: 47px 2px 12px lightgreen;
+    57% {
+      text-shadow: 47px 2px 7px lightgreen;
+    }
+    58% {
+      text-shadow: -47px 2px 1px ${({ itemColor }) => itemColor};
+    }
+    60% {
+      text-shadow: 20px 2px 2px ${({ itemColor }) => itemColor};
     }
   }
 `
@@ -82,6 +91,7 @@ export const ItemHeader = styled(TYPE.largeHeader)<{ itemColor: string }>`
   animation-name: textShadowAnimation;
   animation-duration: 10s;
   animation-iteration-count: 3;
+  animation-delay: 1s;
 `
 
 export const ItemAsidePanel = styled(Column)`
@@ -112,7 +122,7 @@ export const ItemContainer = styled(Row)`
     overflow: hidden;
     z-index: 2;
 
-    background: ${({ theme }) => transparentize(0.4, theme.white)};
+    background: ${({ theme }) => transparentize(0.1, theme.white)};
   }
 
   > ${VideoContentWrapper} {
