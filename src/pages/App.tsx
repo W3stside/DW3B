@@ -2,13 +2,10 @@ import { Suspense } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
-import { X } from 'react-feather'
 import ThemeViewer from 'components/ThemeViewer'
 import Popups from 'components/Popups'
 import Web3ReactManager from 'components/Web3ReactManager'
 
-import { ApplicationModal } from 'state/application/reducer'
-import { useModalOpen, useToggleModal } from 'state/application/hooks'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 
@@ -52,20 +49,6 @@ const Marginer = styled.div`
   margin-top: 5rem;
 `
 
-function TopLevelModals() {
-  const open = useModalOpen(ApplicationModal.ADDRESS_CLAIM)
-  const toggle = useToggleModal(ApplicationModal.ADDRESS_CLAIM)
-
-  if (!open) return null
-
-  return (
-    <div>
-      <X onClick={toggle} />
-      MODAL
-    </div>
-  )
-}
-
 export default function App() {
   return (
     <Suspense fallback={null}>
@@ -75,7 +58,6 @@ export default function App() {
         </SectionWrapper>
         <BodyWrapper>
           <Popups />
-          <TopLevelModals />
           <Web3ReactManager>
             <Switch>
               <Route exact path="/" component={ThemeViewer} />

@@ -5,12 +5,7 @@ export type PopupContent = React.ReactNode
 export enum ApplicationModal {
   WALLET,
   SETTINGS,
-  SELF_CLAIM,
-  ADDRESS_CLAIM,
-  CLAIM_POPUP,
-  MENU,
-  DELEGATE,
-  VOTE
+  MENU
 }
 
 type PopupList = Array<{ key: string; show: boolean; content: PopupContent; removeAfterMs: number | null }>
