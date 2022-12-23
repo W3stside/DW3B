@@ -4,7 +4,7 @@ import { ThemeModes } from 'theme/styled'
 import { ThemeToggle, ThemeToggleProps } from './ThemeToggle'
 import { BSV, ButtonProps, BV } from '../Button'
 import { useThemeManager } from 'state/user/hooks'
-import pstlLogo from 'assets/svg/pastelle-circle-pink-yellow.svg'
+import pstlLogo from 'assets/png/logo/compressed.png'
 import { Row } from 'components/Layout'
 import { GenericImageSrcSet } from 'utils/types'
 
