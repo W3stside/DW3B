@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro'
-import { useActivePopups } from 'state/application/hooks'
 import { AutoColumn } from 'components/Layout'
 import PopupItem from './PopupItem'
+import { useActivePopups } from 'state/modalsAndPopups/hooks'
 
 const MobilePopupWrapper = styled.div<{ height: string | number }>`
   position: relative;

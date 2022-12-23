@@ -1,18 +1,19 @@
 import SafeServiceClient, { SafeInfoResponse, SafeMultisigTransactionResponse } from '@gnosis.pm/safe-service-client'
 import { registerOnWindow } from 'utils'
 import { SupportedChainId } from 'blockchain/constants/chains'
+import { devLog } from 'utils/logging'
 
 const SAFE_TRANSACTION_SERVICE_URL: Partial<Record<number, string>> = {
   [SupportedChainId.MAINNET]: 'https://safe-transaction.gnosis.io',
   [SupportedChainId.RINKEBY]: 'https://safe-transaction.rinkeby.gnosis.io',
-  [SupportedChainId.XDAI]: 'https://safe-transaction.xdai.gnosis.io'
+  [SupportedChainId.GNOSIS]: 'https://safe-transaction.xdai.gnosis.io'
 }
 
 const SAFE_BASE_URL = 'https://gnosis-safe.io'
 const CHAIN_SHORT_NAME: Partial<Record<number, string>> = {
   [SupportedChainId.MAINNET]: 'eth', // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-1.json
   [SupportedChainId.RINKEBY]: 'rin', // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-4.json
-  [SupportedChainId.XDAI]: 'xdai' // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-100.json
+  [SupportedChainId.GNOSIS]: 'xdai' // https://github.com/ethereum-lists/chains/blob/master/_data/chains/eip155-100.json
 }
 
 const SAFE_TRANSACTION_SERVICE_CACHE: Partial<Record<number, SafeServiceClient | null>> = {}
@@ -24,7 +25,8 @@ function _getClient(chainId: number): SafeServiceClient | null {
     if (!url) {
       client = null
     } else {
-      client = new SafeServiceClient(url)
+      // TODO: fix
+      client = null // new SafeServiceClient({ txServiceUrl: url, ethAdapter: new EthAdapter(ethers, signers) })
     }
 
     // Add client to cache (or null if unknonw network)
@@ -54,13 +56,13 @@ export function getSafeWebUrl(chaindId: number, safeAddress: string): string | n
 }
 
 export function getSafeTransaction(chainId: number, safeTxHash: string): Promise<SafeMultisigTransactionResponse> {
-  console.log('[api/gnosisSafe] getSafeTransaction', chainId, safeTxHash)
+  devLog('[api/gnosisSafe] getSafeTransaction', chainId, safeTxHash)
   const client = _getClientOrThrow(chainId)
   return client.getTransaction(safeTxHash)
 }
 
 export function getSafeInfo(chainId: number, safeAddress: string): Promise<SafeInfoResponse> {
-  console.log('[api/gnosisSafe] getSafeInfo', chainId, safeAddress)
+  devLog('[api/gnosisSafe] getSafeInfo', chainId, safeAddress)
   const client = _getClientOrThrow(chainId)
 
   return client.getSafeInfo(safeAddress)

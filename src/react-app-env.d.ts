@@ -5,6 +5,8 @@ declare module '@metamask/jazzicon' {
 }
 
 declare module 'fortmatic'
+declare module 'lethargy'
+declare module 'imagekitio-react'
 
 interface Window {
   ethereum?: {
@@ -34,4 +36,24 @@ declare module '*.mp4' {
 declare module '*.webm' {
   const src: string;
   export default src;
+}
+
+declare module '*.ttf' {
+  const src: string;
+  export default src;
+}
+
+declare namespace React {
+  type PropsWithChildrenAndTheme<P> = P & { children?: React.ReactNode; theme?: DefaultTheme }
+  
+  interface FunctionComponentWithTheme<P = Record<any, any>> {
+    (props: PropsWithChildrenAndTheme<P>, context?: any): React.ReactElement<any, any> | null
+    propTypes?: React.WeakValidationMap<P>
+    contextTypes?: React.ValidationMap<any>
+    defaultProps?: Partial<P>
+    displayName?: string
+  }
+  
+  export type TFC<P = Record<any, any>> = FunctionComponentWithTheme<P>
+  export type FCC<P = Record<any, any>> = (props: PropsWithChildren<P>, context?: any) => React.ReactElement<any, any> | null
 }

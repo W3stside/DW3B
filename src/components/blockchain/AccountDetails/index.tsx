@@ -1,24 +1,24 @@
-import { useCallback, useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components/macro'
-import { useActiveWeb3React } from 'blockchain/hooks'
-import { shortenAddress } from 'blockchain/utils'
-import { AutoRow } from 'components/Layout'
-import Copy from './Copy'
-import Transaction from 'components/blockchain/AccountDetails/Transaction'
+// import { useCallback } from 'react'
+import { useWeb3React } from '@web3-react/core'
+import { isMobile } from 'react-device-detect'
+import { Trans } from '@lingui/macro'
 
-import { SUPPORTED_WALLETS } from 'blockchain/constants/wallets'
-import { ReactComponent as Close } from 'assets/images/x.svg'
-import { getEtherscanLink } from 'blockchain/utils'
-import { injected, walletconnect, walletlink, fortmatic, portis } from 'blockchain/connectors'
-import CoinbaseWalletIcon from 'assets/images/coinbaseWalletIcon.svg'
-import WalletConnectIcon from 'assets/images/walletConnectIcon.svg'
-import FortmaticIcon from 'assets/images/fortmaticIcon.png'
-import PortisIcon from 'assets/images/portisIcon.png'
-import Identicon from 'components/Identicon'
-import Button from 'components/Button'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import { ExternalLink, LinkStyledButton, TYPE } from 'theme'
-import { useClearAllTransactions } from 'state/transactions/hooks'
+import { shortenAddress } from 'blockchain/utils'
+
+import { useAppDispatch } from 'state'
+import { updateSelectedWallet } from 'state/blockchain/base/reducer'
+
+import { getConnection, getConnectionName, getIsMetaMask } from 'blockchain/connectors/utils'
+import { WalletName, AccountControl, WalletAction, AddressLink } from './styled'
+import { InfoCard, AccountGroupingRow } from './styled'
+// import Button from 'components/Button'
+// import Transaction from './Transaction'
+// import { clearAllTransactions } from 'state/blockchainTransactions/reducer'
+import styled from 'styled-components/macro'
+import CopyHelper from './Copy'
+import { ExternalLink } from 'react-feather'
+import { ExplorerDataType, getExplorerLink } from 'blockchain/utils/getExplorerLink'
+import StatusIcon from 'components/Identicon/StatusIcon'
 
 const HeaderRow = styled.div`
   ${({ theme }) => theme.flexRowNoWrap};
@@ -50,31 +50,7 @@ const UpperSection = styled.div`
   }
 `
 
-const InfoCard = styled.div`
-  padding: 1rem;
-  border: 1px solid ${({ theme }) => theme.bg3};
-  border-radius: 20px;
-  position: relative;
-  display: grid;
-  grid-row-gap: 12px;
-  margin-bottom: 20px;
-`
-
-const AccountGroupingRow = styled.div`
-  ${({ theme }) => theme.flexRowNoWrap};
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 400;
-  color: ${({ theme }) => theme.text1};
-
-  div {
-    ${({ theme }) => theme.flexRowNoWrap}
-    align-items: center;
-  }
-`
-
 const AccountSection = styled.div`
-  background-color: ${({ theme }) => theme.bg1};
   padding: 0rem 1rem;
   ${({ theme }) => theme.mediaWidth.upToMedium`padding: 0rem 1rem 1.5rem 1rem;`};
 `
@@ -91,7 +67,7 @@ const YourAccount = styled.div`
   }
 `
 
-const LowerSection = styled.div`
+/* const LowerSection = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap}
   padding: 1.5rem;
   flex-grow: 1;
@@ -105,40 +81,7 @@ const LowerSection = styled.div`
     font-weight: 400;
     color: ${({ theme }) => theme.text3};
   }
-`
-
-const AccountControl = styled.div`
-  display: flex;
-  justify-content: space-between;
-  min-width: 0;
-  width: 100%;
-
-  font-weight: 500;
-  font-size: 1.25rem;
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  p {
-    min-width: 0;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-`
-
-const AddressLink = styled(ExternalLink)<{ hasENS: boolean; isENS: boolean }>`
-  font-size: 0.825rem;
-  color: ${({ theme }) => theme.text3};
-  margin-left: 1rem;
-  font-size: 0.825rem;
-  display: flex;
-  :hover {
-    color: ${({ theme }) => theme.text2};
-  }
-`
+` */
 
 const CloseIcon = styled.div`
   position: absolute;
@@ -150,52 +93,14 @@ const CloseIcon = styled.div`
   }
 `
 
-const CloseColor = styled(Close)`
+const CloseColor = styled(CloseIcon)`
   path {
     stroke: ${({ theme }) => theme.text4};
   }
 `
 
-const WalletName = styled.div`
-  width: initial;
-  font-size: 0.825rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.text3};
-`
-
-const IconWrapper = styled.div<{ size?: number }>`
+/* const TransactionListWrapper = styled.div`
   ${({ theme }) => theme.flexColumnNoWrap};
-  align-items: center;
-  justify-content: center;
-  margin-right: 8px;
-  & > img,
-  span {
-    height: ${({ size }) => (size ? size + 'px' : '32px')};
-    width: ${({ size }) => (size ? size + 'px' : '32px')};
-  }
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    align-items: flex-end;
-  `};
-`
-
-const TransactionListWrapper = styled.div`
-  ${({ theme }) => theme.flexColumnNoWrap};
-`
-
-const WalletAction = styled(Button)`
-  width: fit-content;
-  font-weight: 400;
-  margin-left: 8px;
-  font-size: 0.825rem;
-  padding: 4px 6px;
-  :hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-`
-
-const MainWalletAction = styled(WalletAction)`
-  color: ${({ theme }) => theme.primary1};
 `
 
 function renderTransactions(transactions: string[]) {
@@ -206,7 +111,7 @@ function renderTransactions(transactions: string[]) {
       })}
     </TransactionListWrapper>
   )
-}
+} */
 
 interface AccountDetailsProps {
   toggleWalletModal: () => void
@@ -218,74 +123,31 @@ interface AccountDetailsProps {
 
 export default function AccountDetails({
   toggleWalletModal,
-  pendingTransactions,
-  confirmedTransactions,
+  // pendingTransactions,
+  // confirmedTransactions,
   ENSName,
   openOptions
 }: AccountDetailsProps) {
-  const { chainId, account, connector } = useActiveWeb3React()
-  const theme = useContext(ThemeContext)
-  const clearAllTransactions = useClearAllTransactions()
+  const { chainId, account, connector } = useWeb3React()
+  const connectionType = getConnection(connector).type
+
+  // const theme = useTheme()
+  const dispatch = useAppDispatch()
+
+  const isMetaMask = getIsMetaMask()
+  const isInjectedMobileBrowser = isMetaMask && isMobile
 
   function formatConnectorName() {
-    const { ethereum } = window
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
-    const name = Object.keys(SUPPORTED_WALLETS)
-      .filter(
-        k =>
-          SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
-      )
-      .map(k => SUPPORTED_WALLETS[k].name)[0]
-    return <WalletName>Connected with {name}</WalletName>
+    return (
+      <WalletName>
+        <Trans>Connected with</Trans> {getConnectionName(connectionType, isMetaMask)}
+      </WalletName>
+    )
   }
 
-  function getStatusIcon() {
-    if (connector === injected) {
-      return (
-        <IconWrapper size={16}>
-          <Identicon />
-        </IconWrapper>
-      )
-    } else if (connector === walletconnect) {
-      return (
-        <IconWrapper size={16}>
-          <img src={WalletConnectIcon} alt={'wallet connect logo'} />
-        </IconWrapper>
-      )
-    } else if (connector === walletlink) {
-      return (
-        <IconWrapper size={16}>
-          <img src={CoinbaseWalletIcon} alt={'coinbase wallet logo'} />
-        </IconWrapper>
-      )
-    } else if (connector === fortmatic) {
-      return (
-        <IconWrapper size={16}>
-          <img src={FortmaticIcon} alt={'fortmatic logo'} />
-        </IconWrapper>
-      )
-    } else if (connector === portis) {
-      return (
-        <>
-          <IconWrapper size={16}>
-            <img src={PortisIcon} alt={'portis logo'} />
-            <MainWalletAction
-              onClick={() => {
-                portis.portis.showPortis()
-              }}
-            >
-              Show Portis
-            </MainWalletAction>
-          </IconWrapper>
-        </>
-      )
-    }
-    return null
-  }
-
-  const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) clearAllTransactions(chainId)
-  }, [chainId, clearAllTransactions])
+  /* const clearAllTransactionsCallback = useCallback(() => {
+    if (chainId) dispatch(clearAllTransactions(chainId))
+  }, [dispatch, chainId]) */
 
   return (
     <>
@@ -293,50 +155,50 @@ export default function AccountDetails({
         <CloseIcon onClick={toggleWalletModal}>
           <CloseColor />
         </CloseIcon>
-        <HeaderRow>Account</HeaderRow>
+        <HeaderRow>
+          <Trans>Account</Trans>
+        </HeaderRow>
         <AccountSection>
           <YourAccount>
             <InfoCard>
               <AccountGroupingRow>
                 {formatConnectorName()}
                 <div>
-                  {connector !== injected && connector !== walletlink && (
-                    <WalletAction
-                      style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
-                      onClick={() => {
-                        ;(connector as any).close()
-                      }}
-                    >
-                      Disconnect
-                    </WalletAction>
+                  {!isInjectedMobileBrowser && (
+                    <>
+                      <WalletAction
+                        style={{ fontSize: '.825rem', fontWeight: 400, marginRight: '8px' }}
+                        onClick={() => {
+                          if (connector.deactivate) {
+                            connector.deactivate()
+                          } else {
+                            connector.resetState()
+                          }
+
+                          dispatch(updateSelectedWallet({ wallet: undefined }))
+                          openOptions()
+                        }}
+                      >
+                        <Trans>Disconnect</Trans>
+                      </WalletAction>
+                      <WalletAction
+                        style={{ fontSize: '.825rem', fontWeight: 400 }}
+                        onClick={() => {
+                          openOptions()
+                        }}
+                      >
+                        <Trans>Change</Trans>
+                      </WalletAction>
+                    </>
                   )}
-                  <WalletAction
-                    style={{ fontSize: '.825rem', fontWeight: 400 }}
-                    onClick={() => {
-                      openOptions()
-                    }}
-                  >
-                    Change
-                  </WalletAction>
                 </div>
               </AccountGroupingRow>
-              <AccountGroupingRow id="web3-account-identifier-row">
+              <AccountGroupingRow data-testid="web3-account-identifier-row">
                 <AccountControl>
-                  {ENSName ? (
-                    <>
-                      <div>
-                        {getStatusIcon()}
-                        <p> {ENSName}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        {getStatusIcon()}
-                        <p> {account && shortenAddress(account)}</p>
-                      </div>
-                    </>
-                  )}
+                  <div>
+                    <StatusIcon connectionType={connectionType} />
+                    <p>{ENSName ? ENSName : account && shortenAddress(account)}</p>
+                  </div>
                 </AccountControl>
               </AccountGroupingRow>
               <AccountGroupingRow>
@@ -345,18 +207,22 @@ export default function AccountDetails({
                     <AccountControl>
                       <div>
                         {account && (
-                          <Copy toCopy={account}>
-                            <span style={{ marginLeft: '4px' }}>Copy Address</span>
-                          </Copy>
+                          <CopyHelper toCopy={account} iconPosition="left">
+                            <span style={{ marginLeft: '4px' }}>
+                              <Trans>Copy Address</Trans>
+                            </span>
+                          </CopyHelper>
                         )}
                         {chainId && account && (
                           <AddressLink
                             hasENS={!!ENSName}
                             isENS={true}
-                            href={getEtherscanLink(chainId, ENSName, 'address')}
+                            href={getExplorerLink(chainId, ENSName, ExplorerDataType.ADDRESS)}
                           >
-                            <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>View on Etherscan</span>
+                            <ExternalLink size={16} />
+                            <span style={{ marginLeft: '4px' }}>
+                              <Trans>View on Explorer</Trans>
+                            </span>
                           </AddressLink>
                         )}
                       </div>
@@ -367,20 +233,25 @@ export default function AccountDetails({
                     <AccountControl>
                       <div>
                         {account && (
-                          <Copy toCopy={account}>
-                            <span style={{ marginLeft: '4px' }}>Copy Address</span>
-                          </Copy>
+                          <CopyHelper toCopy={account} iconPosition="left">
+                            <span style={{ marginLeft: '4px' }}>
+                              <Trans>Copy Address</Trans>
+                            </span>
+                          </CopyHelper>
                         )}
-                        {chainId && account && (
+                        {/* TODO: not active yet */}
+                        {/* {chainId && account && (
                           <AddressLink
                             hasENS={!!ENSName}
                             isENS={false}
-                            href={getEtherscanLink(chainId, account, 'address')}
+                            href={getExplorerLink(chainId, account, ExplorerDataType.ADDRESS)}
                           >
-                            <LinkIcon size={16} />
-                            <span style={{ marginLeft: '4px' }}>View on Etherscan</span>
+                            <ExternalLink size={16} />
+                            <span style={{ marginLeft: '4px' }}>
+                              <Trans>View on Explorer</Trans>
+                            </span>
                           </AddressLink>
-                        )}
+                        )} */}
                       </div>
                     </AccountControl>
                   </>
@@ -390,20 +261,27 @@ export default function AccountDetails({
           </YourAccount>
         </AccountSection>
       </UpperSection>
-      {!!pendingTransactions.length || !!confirmedTransactions.length ? (
+      {/* TODO: not active yet */}
+      {/* {!!pendingTransactions.length || !!confirmedTransactions.length ? (
         <LowerSection>
           <AutoRow mb={'1rem'} style={{ justifyContent: 'space-between' }}>
-            <TYPE.body>Recent Transactions</TYPE.body>
-            <LinkStyledButton onClick={clearAllTransactionsCallback}>(clear all)</LinkStyledButton>
+            <ThemedText.Body>
+              <Trans>Recent Transactions</Trans>
+            </ThemedText.Body>
+            <LinkStyledButton onClick={clearAllTransactionsCallback}>
+              <Trans>(clear all)</Trans>
+            </LinkStyledButton>
           </AutoRow>
           {renderTransactions(pendingTransactions)}
           {renderTransactions(confirmedTransactions)}
         </LowerSection>
       ) : (
         <LowerSection>
-          <TYPE.body color={theme.text1}>Your transactions will appear here...</TYPE.body>
+          <ThemedText.Body color={theme.text1}>
+            <Trans>Your transactions will appear here...</Trans>
+          </ThemedText.Body>
         </LowerSection>
-      )}
+      )} */}
     </>
   )
 }

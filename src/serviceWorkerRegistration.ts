@@ -1,6 +1,8 @@
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
+import { devError, devLog } from 'utils/logging'
+
 // This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities. However, it also means that developers (and users)
 // will only see deployed updates on subsequent visits to a page, after all the
@@ -9,12 +11,6 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read https://cra.link/PWA
-
-declare global {
-  interface Window {
-    swNeedUpdate: boolean
-  }
-}
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -29,32 +25,10 @@ type Config = {
   onUpdate?: (registration: ServiceWorkerRegistration) => void
 }
 
-const SWHelper = {
-  async getWaitingWorker() {
-    const registrations = (await navigator?.serviceWorker?.getRegistrations()) || []
-    const registrationWithWaiting = registrations.find(reg => reg.waiting)
-    return registrationWithWaiting?.waiting
-  },
-
-  async skipWaiting() {
-    return (await SWHelper.getWaitingWorker())?.postMessage({ type: 'SKIP_WAITING_WHEN_SOLO' })
-  },
-
-  async prepareCachesForUpdate() {
-    console.log('[worker] prepareCachesForUpdate')
-    return (await SWHelper.getWaitingWorker())?.postMessage({ type: 'PREPARE_CACHES_FOR_UPDATE' })
-  }
-}
-
 function registerValidSW(swUrl: string, config?: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
-      if (registration.waiting && registration.active) {
-        console.log('[worker] Needs update (waiting & active)')
-        window.swNeedUpdate = true
-      }
-
       registration.onupdatefound = () => {
         const installingWorker = registration.installing
         if (installingWorker == null) {
@@ -63,16 +37,12 @@ function registerValidSW(swUrl: string, config?: Config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              console.log('[worker] Needs update (installed)')
-              window.swNeedUpdate = true
-
-              SWHelper.prepareCachesForUpdate().then()
-
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              console.log(
-                '[worker] New content is available and will be used when all tabs for this page are closed. See https://cra.link/PWA.'
+              devLog(
+                '[SW] New content is available and will be used when all ' +
+                  'tabs for this page are closed. See https://cra.link/PWA.'
               )
 
               // Execute callback
@@ -83,7 +53,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              console.log('[worker] Content is cached for offline use.')
+              devLog('[SW] Content is cached for offline use.')
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -95,7 +65,7 @@ function registerValidSW(swUrl: string, config?: Config) {
       }
     })
     .catch(error => {
-      console.error('[worker] Error during service worker registration:', error)
+      devError('[SW] Error during service worker registration:', error)
     })
 }
 
@@ -108,6 +78,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get('content-type')
       if (response.status === 404 || (contentType != null && contentType.indexOf('javascript') === -1)) {
+        devLog('[SW] No service worker found. Probably a different app. Reloading the page.')
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {
@@ -120,7 +91,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       }
     })
     .catch(() => {
-      console.log('No internet connection found. App is running in offline mode.')
+      devLog('[SW] No internet connection found. App is running in offline mode.')
     })
 }
 
@@ -129,6 +100,7 @@ export function register(config?: Config) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href)
     if (publicUrl.origin !== window.location.origin) {
+      devLog('[SW] PUBLIC_URL on a different origin, bailing.')
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
       // serve assets; see https://github.com/facebook/create-react-app/issues/2374
@@ -145,8 +117,9 @@ export function register(config?: Config) {
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
-          console.log(
-            '[worker] This web app is being served cache-first by a service worker. To learn more, visit https://cra.link/PWA'
+          devLog(
+            '[SW] This web app is being served cache-first by a service ' +
+              'worker. To learn more, visit https://cra.link/PWA'
           )
         })
       } else {
@@ -154,12 +127,8 @@ export function register(config?: Config) {
         registerValidSW(swUrl, config)
       }
     })
-
-    window.addEventListener('beforeunload', async () => {
-      if (window.swNeedUpdate) {
-        await SWHelper.skipWaiting()
-      }
-    })
+  } else {
+    devLog('[SW] Service worker registration not applicable.')
   }
 }
 
@@ -170,7 +139,7 @@ export function unregister() {
         registration.unregister()
       })
       .catch(error => {
-        console.error(error.message)
+        devError(error.message)
       })
   }
 }

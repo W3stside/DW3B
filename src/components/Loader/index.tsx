@@ -1,22 +1,111 @@
-import styled, { keyframes } from 'styled-components/macro'
+import { ReactNode } from 'react'
+import styled from 'styled-components/macro'
+import { setBackgroundWithDPI } from 'theme/utils'
+import { GenericImageSrcSet } from 'utils/types'
+import { ColumnCenter } from 'components/Layout'
+import { rotateKeyframe } from 'theme/styles/animation'
+import { Subheader } from 'components/Layout/Text'
 
-const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
-
-const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
-  animation: 2s ${rotate} linear infinite;
+export const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
+  animation: 2s ${rotateKeyframe} linear infinite;
   height: ${({ size }) => size};
   width: ${({ size }) => size};
   path {
     stroke: ${({ stroke, theme }) => stroke ?? theme.primary1};
   }
 `
+
+type StyleParams = {
+  top?: string
+  right?: string
+  bottom?: string
+  left?: string
+  width?: string
+  showBg?: boolean
+}
+
+const moddedPtBgUrl = 'https://ik.imagekit.io/pastelle/portugal-bg_Rqj8jTKhFmds.jpg?tr=q-40,w-100,h-100,bl-6,'
+const MODDED_PT_URL_LIST = [
+  { defaultUrl: moddedPtBgUrl } as GenericImageSrcSet,
+  { defaultUrl: moddedPtBgUrl } as GenericImageSrcSet,
+  { defaultUrl: moddedPtBgUrl + 'w-10,h-10' } as GenericImageSrcSet
+]
+export const AnimatedContainer = styled(ColumnCenter).attrs(props => ({
+  ...props,
+  height: '100%',
+  justifyContent: 'center'
+}))<{ showBg?: boolean }>`
+  ${({ theme, showBg = true }) =>
+    showBg &&
+    setBackgroundWithDPI(theme, MODDED_PT_URL_LIST, {
+      dpiLevel: '1x',
+      // backgroundColor: '#e6e6e61c',
+      backgroundColor: '#4242421c',
+      backgroundAttributes: ['center/contain repeat', '-1px -1px/contain repeat'],
+      backgroundBlendMode: 'color-burn',
+      skipIk: true
+    })}
+
+  filter: contrast(1.5);
+
+  > * {
+    width: 60%;
+    margin: auto;
+  }
+`
+const FixedContainer = styled(AnimatedContainer)<StyleParams>`
+  position: fixed;
+  top: ${({ top = '25%' }) => top};
+  bottom: ${({ bottom = '25%' }) => bottom};
+  left: ${({ left = '25%' }) => left};
+  right: ${({ right = '25%' }) => right};
+  width: ${({ width = 'auto' }) => width};
+
+  ${({ showBg = true }) => !showBg && `background: unset;`}
+
+  z-index: 0;
+
+  > * {
+    z-index: 1;
+  }
+`
+
+interface LoadingParams {
+  loadingLabel?: string
+  loadingComponent: ReactNode
+}
+
+export const FixedAnimatedLoader = ({
+  loadingComponent,
+  loadingLabel,
+  ...styleParams
+}: LoadingParams & StyleParams) => (
+  <FixedContainer {...styleParams}>
+    <Subheader>
+      {loadingComponent}
+      <strong>{loadingLabel}</strong>
+    </Subheader>
+  </FixedContainer>
+)
+
+const topLevelLoaderProps = {
+  top: '0',
+  left: '0',
+  right: '0',
+  bottom: '0'
+}
+export const FallbackLoader = () => (
+  <FixedAnimatedLoader loadingComponent={<h1>SAMPLE LOADER</h1>} {...topLevelLoaderProps} />
+)
+
+export const AnimatedLoader = ({ loadingComponent, loadingLabel }: LoadingParams) => (
+  <AnimatedContainer>
+    {loadingComponent}
+    {loadingLabel && <strong>{loadingLabel}</strong>}
+  </AnimatedContainer>
+)
+
+export const AnimatedPastelleLoader = () => <AnimatedLoader loadingComponent={<h1>SAMPLE LOADER</h1>} />
 
 /**
  * Takes in custom size and stroke for circle color, default to primary color as fill,

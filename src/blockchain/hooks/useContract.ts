@@ -8,7 +8,7 @@ import ERC20_BYTES32_ABI from 'blockchain/abis/erc20_bytes32.json'
 import ERC20_ABI from 'blockchain/abis/erc20.json'
 import WETH_ABI from 'blockchain/abis/weth.json'
 // TODO: update from uni (no package right now)
-import { abi as MulticallABI } from 'blockchain/abis/UniswapInterfaceMulticall.json'
+import MulticallABI from 'blockchain/abis/UniswapInterfaceMulticall.json'
 
 import {
   ArgentWalletDetector,
@@ -19,7 +19,7 @@ import {
   Weth
 } from 'blockchain/abis/types'
 
-import { useActiveWeb3React } from 'blockchain/hooks'
+import { useWeb3React } from '@web3-react/core'
 import { getContract } from 'blockchain/utils'
 import {
   ARGENT_WALLET_DETECTOR_ADDRESS,
@@ -27,6 +27,7 @@ import {
   MULTICALL_ADDRESS,
   WETH9_EXTENDED
 } from 'blockchain/constants'
+import { devError } from 'utils/logging'
 
 // returns null on errors
 export function useContract<T extends Contract = Contract>(
@@ -34,21 +35,21 @@ export function useContract<T extends Contract = Contract>(
   ABI: any,
   withSignerIfPossible = true
 ): T | null {
-  const { library, account, chainId } = useActiveWeb3React()
+  const { provider, account, chainId } = useWeb3React()
 
   return useMemo(() => {
-    if (!addressOrAddressMap || !ABI || !library || !chainId) return null
+    if (!addressOrAddressMap || !ABI || !provider || !chainId) return null
     let address: string | undefined
     if (typeof addressOrAddressMap === 'string') address = addressOrAddressMap
     else address = addressOrAddressMap[chainId]
     if (!address) return null
     try {
-      return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
+      return getContract(address, ABI, provider, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
-      console.error('Failed to get contract', error)
+      devError('Failed to get contract', error)
       return null
     }
-  }, [addressOrAddressMap, ABI, library, chainId, withSignerIfPossible, account]) as T
+  }, [addressOrAddressMap, ABI, provider, chainId, withSignerIfPossible, account]) as T
 }
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean) {
@@ -56,7 +57,7 @@ export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: b
 }
 
 export function useWETHContract(withSignerIfPossible?: boolean) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   return useContract<Weth>(chainId ? WETH9_EXTENDED[chainId]?.address : undefined, WETH_ABI, withSignerIfPossible)
 }
 
@@ -77,5 +78,9 @@ export function useBytes32TokenContract(tokenAddress?: string, withSignerIfPossi
 }
 
 export function useMulticall2Contract() {
-  return useContract<UniswapInterfaceMulticall>(MULTICALL_ADDRESS, MulticallABI, false) as UniswapInterfaceMulticall
+  return useContract<UniswapInterfaceMulticall>(MULTICALL_ADDRESS, MulticallABI.abi, false) as UniswapInterfaceMulticall
+}
+
+export function useInterfaceMulticall() {
+  return useContract<UniswapInterfaceMulticall>(MULTICALL_ADDRESS, MulticallABI.abi, false) as UniswapInterfaceMulticall
 }

@@ -2,20 +2,20 @@ import { useEffect, useRef } from 'react'
 
 import styled from 'styled-components/macro'
 
-import { useActiveWeb3React } from '../../blockchain/hooks'
+import { useWeb3React } from '@web3-react/core'
 import Jazzicon from '@metamask/jazzicon'
 
-const StyledIdenticonContainer = styled.div`
-  height: 1rem;
-  width: 1rem;
+const StyledIdenticonContainer = styled.div<{ size?: number }>`
+  height: ${({ size = '1rem' }) => size};
+  width: ${({ size = '1rem' }) => size};
   border-radius: 1.125rem;
   background-color: ${({ theme }) => theme.bg4};
 `
 
-export default function Identicon() {
+export default function Identicon({ size }: { size?: number }) {
   const ref = useRef<HTMLDivElement>()
 
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
 
   useEffect(() => {
     if (account && ref.current) {
@@ -25,5 +25,5 @@ export default function Identicon() {
   }, [account])
 
   // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/30451
-  return <StyledIdenticonContainer ref={ref as any} />
+  return <StyledIdenticonContainer size={size} ref={ref as any} />
 }

@@ -1,36 +1,36 @@
-import { createReducer } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Theme, ThemeModes } from 'theme/styled'
-import { updateVersion } from 'state/global/actions'
-import { updateThemeMode, updateThemeAutoDetect } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
 
+export type ShowcaseGender = 'MALE' | 'FEMALE'
+export type ShowcaseHeight = 165 | 175 | 185 | 190
 export interface UserState {
   theme: Theme
-  timestamp: number
   // the timestamp of the last updateVersion action
   lastUpdateVersionTimestamp?: number
 }
 
 export const initialState: UserState = {
   theme: {
-    mode: ThemeModes.DARK,
-    autoDetect: true
-  },
-  timestamp: currentTimestamp()
+    mode: ThemeModes.LIGHT,
+    autoDetect: false
+  }
 }
-
-export default createReducer(initialState, builder =>
-  builder
-    .addCase(updateVersion, state => {
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    updateVersion(state) {
       state.lastUpdateVersionTimestamp = currentTimestamp()
-    })
-    .addCase(updateThemeMode, (state, action) => {
+    },
+    updateThemeMode(state, action: PayloadAction<ThemeModes>) {
       state.theme.mode = action.payload
-      state.timestamp = currentTimestamp()
-    })
-    .addCase(updateThemeAutoDetect, (state, action) => {
+    },
+    updateThemeAutoDetect(state, action: PayloadAction<boolean>) {
       state.theme.autoDetect = action.payload
-      state.timestamp = currentTimestamp()
-    })
-)
+    }
+  }
+})
+export const { updateThemeAutoDetect, updateThemeMode } = userSlice.actions
+export const user = userSlice.reducer

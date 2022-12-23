@@ -1,85 +1,73 @@
-import styled from 'styled-components/macro'
-import { THEME_LIST, ThemeModes } from 'theme/styled'
+import { ReactNode } from 'react'
+import { ThemeModes } from 'theme/styled'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faSun, faMoon, faSmileWink } from '@fortawesome/free-regular-svg-icons'
-
-import { ThemeToggle } from './ThemeToggle'
-import { BSV, BV } from '../Button'
+import { ThemeToggle, ThemeToggleProps } from './ThemeToggle'
+import { BSV, ButtonProps, BV } from '../Button'
 import { useThemeManager } from 'state/user/hooks'
+import pstlLogo from 'assets/png/logo/compressed.png'
+import { Row } from 'components/Layout'
+import { GenericImageSrcSet } from 'utils/types'
 
-import gulfLogoBlack from 'assets/png/gulfBlackPng.png'
-import gulfLogoColour from 'assets/png/gulfPng.png'
-import { Row } from '../Layout'
-import { useCallback } from 'react'
+export const getBaseButtonProps = (isDarkMode: boolean, toggleDarkMode: () => void): ButtonProps => ({
+  size: BSV.DEFAULT,
+  variant: BV.DARK_MODE_TOGGLE,
+  bgImage: { defaultUrl: pstlLogo } as GenericImageSrcSet,
+  backgroundColor: isDarkMode ? 'darkslategrey' : 'blue',
+  filter: 'invert(' + isDarkMode ? '1' : '0' + ') contrast(2) saturate(2)',
+  bgBlendMode: 'lighten',
+  bgAttributes: ['0px / 10% repeat', '0px / 100% no-repeat'],
+  onClick: toggleDarkMode
+})
 
-const LogoImg = styled.img`
-  max-width: 100%;
-`
+export const ThemeToggleButton = ({
+  children,
+  isDarkMode,
+  toggleDarkMode,
+  themeToggleProps = {
+    margin: 'auto',
+    width: '10rem'
+  },
+  buttonProps = {}
+}: {
+  children?: ReactNode
+  isDarkMode: boolean
+  toggleDarkMode: () => void
+  themeToggleProps?: ThemeToggleProps
+  buttonProps?: ButtonProps
+}) => (
+  <ThemeToggle
+    mode={isDarkMode}
+    margin={themeToggleProps.margin}
+    width={themeToggleProps.width}
+    buttonProps={{ ...getBaseButtonProps(isDarkMode, toggleDarkMode), ...buttonProps }}
+  >
+    {children}
+  </ThemeToggle>
+)
 
-function _getTogglerIcon(mode: ThemeModes): IconDefinition | null {
-  switch (mode) {
-    case ThemeModes.LIGHT:
-      return faSun
-    case ThemeModes.DARK:
-      return faMoon
-    case ThemeModes.GULF:
-      return null
-    default:
-      return faSmileWink
-  }
-}
-
-const ThemeToggleBar: React.FC = () => {
-  const { theme, setMode, setAutoDetect } = useThemeManager()
-
-  const handleModeSelect = useCallback(
-    (mode: ThemeModes) => {
-      if (theme.autoDetect) {
-        setAutoDetect(false)
-      }
-
-      setMode(mode)
-    },
-    [setAutoDetect, setMode, theme.autoDetect]
-  )
+const ThemeToggleBar = ({
+  buttonProps = {},
+  themeToggleProps = {},
+  className
+}: {
+  className?: string
+  themeToggleProps?: ThemeToggleProps
+  buttonProps?: ButtonProps
+}) => {
+  const { theme, setMode } = useThemeManager()
+  const isDarkMode = theme.mode === ThemeModes.DARK
+  const toggleDarkMode = () => setMode(isDarkMode ? ThemeModes.LIGHT : ThemeModes.DARK)
 
   return (
-    <Row>
-      <ThemeToggle
-        mode={theme.autoDetect}
-        size={BSV.DEFAULT}
-        variant={theme.autoDetect ? BV.PRIMARY : BV.DISABLED}
-        margin="0.2rem"
-        width="6rem"
-        onClick={() => setAutoDetect(!theme.autoDetect)}
+    <Row className={className} justifyContent="center" width="100%">
+      <ThemeToggleButton
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+        themeToggleProps={themeToggleProps}
+        buttonProps={buttonProps}
       >
-        Auto
-      </ThemeToggle>
-      {THEME_LIST.map(([key, name], index) => {
-        const isActiveMode = theme.mode === name
-        const icon = _getTogglerIcon(name)
-
-        return (
-          <ThemeToggle
-            mode={isActiveMode}
-            size={BSV.DEFAULT}
-            variant={isActiveMode ? BV.PRIMARY : BV.DISABLED}
-            margin="0.2rem"
-            width="6rem"
-            onClick={() => handleModeSelect(name)}
-            key={key + '_' + index}
-            disabled={isActiveMode}
-          >
-            {icon ? (
-              <FontAwesomeIcon icon={icon} size="lg" />
-            ) : (
-              <LogoImg src={isActiveMode ? gulfLogoColour : gulfLogoBlack} />
-            )}
-          </ThemeToggle>
-        )
-      })}
+        <span id="theme-toggle-label">{isDarkMode ? 'LIGHT MODE' : 'DARK MODE'}</span>
+      </ThemeToggleButton>
     </Row>
   )
 }

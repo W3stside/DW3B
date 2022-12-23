@@ -18,13 +18,13 @@ export enum SupportedChainId {
   // OPTIMISM = 10,
   // OPTIMISTIC_KOVAN = 69,
 
-  XDAI = 100
+  GNOSIS = 100
 }
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
   SupportedChainId.MAINNET,
   SupportedChainId.RINKEBY,
-  SupportedChainId.XDAI
+  SupportedChainId.GNOSIS
   // SupportedChainId.ROPSTEN,
   // SupportedChainId.GOERLI,
   // SupportedChainId.KOVAN,
@@ -37,7 +37,7 @@ export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
 export const L1_CHAIN_IDS = [
   SupportedChainId.MAINNET,
   SupportedChainId.RINKEBY,
-  SupportedChainId.XDAI
+  SupportedChainId.GNOSIS
   // SupportedChainId.ROPSTEN,
   // SupportedChainId.GOERLI,
   // SupportedChainId.KOVAN,
@@ -163,20 +163,20 @@ export const CHAIN_INFO: ChainInfo = {
     nativeCurrency: { name: 'Optimistic kovETH', symbol: 'kovOpETH', decimals: 18 },
     statusPage: 'https://optimism.io/status',
   }, */
-  [SupportedChainId.XDAI]: {
+  [SupportedChainId.GNOSIS]: {
     docs: 'https://docs.uniswap.org/',
-    explorer: 'https://blockscout.com/xdai/mainnet/  ',
+    explorer: 'https://gnosisscan.io',
     infoLink: '',
     label: 'Gnosis Chain',
     logoUrl: GnosisChainLogo, // mod
-    nativeCurrency: { name: 'xDai', symbol: 'XDAI', decimals: 18 }
+    nativeCurrency: { name: 'GNOSIS', symbol: 'GNO', decimals: 18 }
   }
 }
 
 export const NETWORK_LABELS: { [chainId in SupportedChainId | number]: string } = {
   [SupportedChainId.MAINNET]: 'Ethereum',
   [SupportedChainId.RINKEBY]: 'Rinkeby',
-  [SupportedChainId.XDAI]: 'Gnosis Chain' // mod
+  [SupportedChainId.GNOSIS]: 'Gnosis Chain' // mod
   // [SupportedChainId.ROPSTEN]: 'Ropsten',
   // [SupportedChainId.GOERLI]: 'Görli',
   // [SupportedChainId.KOVAN]: 'Kovan',

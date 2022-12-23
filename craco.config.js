@@ -5,15 +5,7 @@ const path = require('path')
 
 module.exports = {
   babel: {
-    plugins: [
-      '@babel/plugin-proposal-nullish-coalescing-operator',
-      [
-        '@simbathesailor/babel-plugin-use-what-changed',
-        {
-          active: process.env.NODE_ENV === 'development' // boolean
-        }
-      ]
-    ]
+    plugins: ['@babel/plugin-proposal-nullish-coalescing-operator']
   },
   webpack: {
     plugins: [],
@@ -25,7 +17,20 @@ module.exports = {
       ...webpackConfig,
       resolve: {
         ...webpackConfig.resolve,
-        modules: [...webpackConfig.resolve.modules]
+        modules: [...webpackConfig.resolve.modules],
+        fallback: {
+          fs: false,
+          tls: false,
+          net: false,
+          path: false,
+          zlib: false,
+          http: false,
+          https: false,
+          stream: false,
+          crypto: require.resolve('crypto-browserify'),
+          os: false,
+          assert: false
+        }
       }
     })
   }

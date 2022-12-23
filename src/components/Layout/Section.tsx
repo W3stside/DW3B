@@ -2,7 +2,7 @@ import styled from 'styled-components/macro'
 
 export const SectionFrame = styled.div`
   display: grid;
-  grid-template-columns: 1fr 12rem;
+  grid-template-columns: 1fr;
   align-items: center;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +14,7 @@ export const SectionFrame = styled.div`
   ${({ theme }) => theme.mediaWidth.upToMedium`
     grid-template-columns: 1fr;
     padding: 0 1rem;
-    width: calc(100%);
+    width: 100%;
     position: relative;
   `};
 

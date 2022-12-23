@@ -1,10 +1,10 @@
 import styled from 'styled-components/macro'
 import { CheckCircle, Triangle } from 'react-feather'
 
-import { useActiveWeb3React } from 'blockchain/hooks'
+import { useWeb3React } from '@web3-react/core'
 import { getEtherscanLink } from 'blockchain/utils'
 import { ExternalLink } from 'theme'
-import { useAllTransactions } from 'state/transactions/hooks'
+import { useAllTransactions } from 'state/blockchain/transactions/hooks'
 import { RowFixed } from 'components/Layout'
 import Loader from 'components/Loader'
 
@@ -36,7 +36,7 @@ const IconWrapper = styled.div<{ pending: boolean; success?: boolean }>`
 `
 
 const Transaction: React.FC<{ hash: string }> = ({ hash }) => {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
   const allTransactions = useAllTransactions()
 
   const tx = allTransactions?.[hash]

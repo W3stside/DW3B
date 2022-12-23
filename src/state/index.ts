@@ -2,12 +2,17 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { save, load } from 'redux-localstorage-simple'
 
-import user from 'state/user/reducer'
-import { application } from 'state/application/reducer'
-import { blockchain } from 'state/blockchain/reducer'
-import { multicall } from 'state/multicall/reducer'
-import { transactions } from 'state/transactions/reducer'
+// Normal
+import { user } from 'state/user/reducer'
+import { window } from 'state/window/reducer'
+import { modalsAndPopups } from 'state/modalsAndPopups/reducer'
 import { updateVersion } from 'state/global/actions'
+// Blockchain
+import blockchainBase from 'state/blockchain/base/reducer'
+import blockchainConnection from 'state/blockchain/connection/reducer'
+
+import blockchainTransactions from 'state/blockchain/transactions/reducer'
+import { blockchainMulticall } from 'state/blockchain/multicall/reducer'
 
 export const useAppDispatch = () => useDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector
@@ -16,11 +21,13 @@ const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
 const store = configureStore({
   reducer: {
-    application,
-    blockchain,
-    multicall,
-    transactions,
-    user
+    blockchainBase,
+    modalsAndPopups,
+    blockchainMulticall,
+    blockchainTransactions,
+    blockchainConnection,
+    user,
+    window
   },
   middleware: defaultMiddleware =>
     defaultMiddleware({

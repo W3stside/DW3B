@@ -1,14 +1,22 @@
 import styled from 'styled-components/macro'
-import { Box } from 'rebass/styled-components'
+import { Box, BoxProps } from 'rebass/styled-components'
 
-export const Row = styled(Box)<{ align?: string; padding?: string; border?: string; borderRadius?: string }>`
-  width: 100%;
+export type RowProps = {
+  align?: string
+  gap?: string
+  padding?: string
+  border?: string
+  borderRadius?: string
+} & BoxProps
+export const Row = styled(Box)<RowProps>`
+  width: ${({ width = '100%' }) => width};
   display: flex;
   padding: 0;
-  align-items: ${({ align }) => (align ? align : 'center')};
+  align-items: ${({ alignItems = 'center' }) => alignItems};
   padding: ${({ padding }) => padding};
   border: ${({ border }) => border};
   border-radius: ${({ borderRadius }) => borderRadius};
+  ${({ gap }) => `gap: ${gap};`}
 `
 
 export const RowBetween = styled(Row)`

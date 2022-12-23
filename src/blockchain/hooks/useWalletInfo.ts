@@ -1,27 +1,21 @@
-import { useEffect, useState } from 'react'
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import { useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import { SafeInfoResponse } from '@gnosis.pm/safe-service-client'
-
 import { useENSName } from 'blockchain/hooks/useENSName'
+import { getConnection } from 'blockchain/connectors/utils'
+import { SafeInfoResponse } from '@gnosis.pm/safe-service-client'
+import { ConnectionType } from 'blockchain/connectors'
+import useIsSmartContractWallet from './useIsSmartContractWallet'
+import { UNSUPPORTED_WC_WALLETS } from 'blockchain/constants'
 
-import { useActiveWeb3Instance } from 'blockchain/hooks'
-import { NetworkContextName } from 'blockchain/constants'
-import { getProviderType, WalletProvider } from 'blockchain/connectors'
-
-import { UNSUPPORTED_WC_WALLETS } from 'blockchain/constants/wallets'
-import { getSafeInfo } from 'blockchain/api/safe'
-
-const GNOSIS_SAFE_WALLET_NAMES = ['Gnosis Safe Multisig', 'Gnosis Safe']
+const GNOSIS_SAFE_APP_NAME = 'Gnosis Safe App'
+const SAFE_ICON_URL = 'https://apps.gnosis-safe.io/wallet-connect/favicon.ico'
 
 export interface ConnectedWalletInfo {
   chainId?: number
-  active: boolean
+  active?: boolean
   account?: string | null
-  activeNetwork: boolean // active default connection
-  provider?: WalletProvider
+  provider?: Web3Provider
   isSmartContractWallet: boolean
   walletName?: string
   ensName?: string
@@ -31,25 +25,12 @@ export interface ConnectedWalletInfo {
   gnosisSafeInfo?: SafeInfoResponse
 }
 
-async function checkIsSmartContractWallet(
-  address: string | undefined | null,
-  web3: Web3Provider | undefined
-): Promise<boolean> {
-  if (!address || !web3) {
-    return false
-  }
-
-  const code = await web3.getCode(address)
-  return code !== '0x'
+export interface WalletMetaData {
+  walletName?: string
+  icon?: string
 }
 
-function checkIsSupportedWallet(params: {
-  walletName?: string
-  chainId?: number
-  gnosisSafeInfo?: SafeInfoResponse
-}): boolean {
-  const { walletName } = params
-
+function checkIsSupportedWallet(walletName?: string): boolean {
   if (walletName && UNSUPPORTED_WC_WALLETS.has(walletName)) {
     // Unsupported wallet
     return false
@@ -58,83 +39,91 @@ function checkIsSupportedWallet(params: {
   return true
 }
 
-async function getWcPeerMetadata(connector: WalletConnectConnector): Promise<{ walletName?: string; icon?: string }> {
-  const provider = (await connector.getProvider()) as WalletConnectProvider
+export class WalletConnectProvider {
+  connector: { peerMeta: { name: string; icons: string[] } }
+  constructor(connector: { peerMeta: { name: string; icons: string[] } }) {
+    this.connector = connector
+  }
+}
 
-  const meta = provider.walletMeta
+function getWcPeerMetadata(provider: WalletConnectProvider): WalletMetaData {
+  // fix for this https://github.com/gnosis/cowswap/issues/1929
+  const defaultOutput = { walletName: undefined, icon: undefined }
+
+  if (!provider) {
+    return defaultOutput
+  }
+
+  const meta = provider.connector.peerMeta
+
   if (meta) {
     return {
       walletName: meta.name,
       icon: meta.icons?.length > 0 ? meta.icons[0] : undefined
     }
-  } else {
-    return { walletName: undefined, icon: undefined }
   }
+
+  return defaultOutput
+}
+
+export function useWalletMetaData(): WalletMetaData {
+  const { connector, provider } = useWeb3React()
+  const connectionType = getConnection(connector).type
+
+  return useMemo<WalletMetaData>(() => {
+    if (connectionType === ConnectionType.WALLET_CONNECT) {
+      const wc = provider?.provider
+
+      if (wc instanceof WalletConnectProvider) {
+        return getWcPeerMetadata(wc)
+      }
+    }
+
+    if (connectionType === ConnectionType.GNOSIS_SAFE) {
+      return {
+        walletName: GNOSIS_SAFE_APP_NAME,
+        icon: SAFE_ICON_URL
+      }
+    }
+
+    return { walletName: '', icon: '' }
+  }, [connectionType, provider])
 }
 
 export function useWalletInfo(): ConnectedWalletInfo {
-  const { active, account, connector, chainId } = useWeb3React()
-  const web3Instance = useActiveWeb3Instance()
-  const [walletName, setWalletName] = useState<string>()
-  const [icon, setIcon] = useState<string>()
-  const [provider, setProvider] = useState<WalletProvider>()
-  const [isSmartContractWallet, setIsSmartContractWallet] = useState(false)
-  const contextNetwork = useWeb3React(NetworkContextName)
+  const { account, provider, chainId, isActive: active } = useWeb3React()
   const { ENSName } = useENSName(account ?? undefined)
-  const [gnosisSafeInfo, setGnosisSafeInfo] = useState<SafeInfoResponse>()
-
-  useEffect(() => {
-    // Set the current provider
-    setProvider(getProviderType(connector))
-
-    // Reset name and icon when provider changes
-    // These values are only set for WC wallets
-    // When connect is not WC, leave them empty
-    setWalletName('')
-    setIcon('')
-
-    // If the connector is wallet connect, try to get the wallet name and icon
-    if (connector instanceof WalletConnectConnector) {
-      getWcPeerMetadata(connector).then(({ walletName, icon }) => {
-        setWalletName(walletName)
-        setIcon(icon)
-      })
-    }
-  }, [connector])
-
-  useEffect(() => {
-    if (account && web3Instance) {
-      checkIsSmartContractWallet(account, web3Instance).then(setIsSmartContractWallet)
-    }
-  }, [account, web3Instance])
-
-  useEffect(() => {
-    if (!chainId || !account || !walletName || !GNOSIS_SAFE_WALLET_NAMES.includes(walletName)) {
-      setGnosisSafeInfo(undefined)
-    } else {
-      getSafeInfo(chainId, account)
-        .then(setGnosisSafeInfo)
-        .catch(error => {
-          console.error('[api/gnosisSafe] Error fetching GnosisSafe info', error)
-        })
-    }
-  }, [chainId, account, walletName])
+  // TODO: setup if we need
+  const gnosisSafeInfo = undefined // useAtomValue(gnosisSafeAtom)
+  const isSmartContractWallet = useIsSmartContractWallet()
+  const { walletName, icon } = useWalletMetaData()
 
   return {
     chainId,
     active,
     account,
-    activeNetwork: contextNetwork.active,
     provider,
     isSmartContractWallet,
     walletName,
     icon,
     ensName: ENSName || undefined,
-    isSupportedWallet: checkIsSupportedWallet({ walletName, chainId, gnosisSafeInfo }),
+    isSupportedWallet: checkIsSupportedWallet(walletName),
 
     // TODO: For now, all SC wallets use pre-sign instead of offchain signing
     // In the future, once the API adds EIP-1271 support, we can allow some SC wallets to use offchain signing
     allowsOffchainSigning: !isSmartContractWallet,
     gnosisSafeInfo
   }
+}
+
+export function useIsGnosisSafeApp(): boolean {
+  const { walletName } = useWalletMetaData()
+
+  return walletName === GNOSIS_SAFE_APP_NAME
+}
+
+export function useIsGnosisSafeWallet(): boolean {
+  const { walletName } = useWalletMetaData()
+
+  return !!walletName?.startsWith('Gnosis Safe')
 }
