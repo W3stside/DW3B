@@ -82,8 +82,9 @@ root.render(
 )
 
 // SERVICE WORKER (e.g USER OFFLINE USE)
-// README: change to unregister to remove SW
-serviceWorkerRegistration.register()
+// DISABLED BY DEFAULT
+// .register() enables
+serviceWorkerRegistration.unregister()
 
 // WEB VITALS REPORTING
 // README: change to unregister to remove web vitals reporting
