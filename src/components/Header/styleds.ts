@@ -242,7 +242,7 @@ export const NetworkCard = styled(YellowCard)`
   `};
 `
 
-export const Pastellecon = styled.div`
+export const Headercon = styled.div`
   height: 100%;
   width: 100%;
   transition: transform 0.3s ease;

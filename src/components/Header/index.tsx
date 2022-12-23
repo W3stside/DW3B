@@ -10,7 +10,7 @@ import {
   HeaderRow,
   HideSmall,
   NetworkCard,
-  Pastellecon,
+  Headercon,
   StyledThemeToggleBar,
   Title,
   HeaderDrawerButton
@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <HeaderFrame
       as="header"
-      color={'black'}
+      color={'white'}
       // SET LOGOSETS HERE
       logoSet={undefined}
       open={open}
@@ -50,7 +50,7 @@ export default function Header() {
       <HeaderRow>
         {/* ICON and HOME BUTTON */}
         <Title to="/#">
-          <Pastellecon />
+          <Headercon />
         </Title>
 
         {/* WEB3 */}
