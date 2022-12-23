@@ -153,11 +153,12 @@ export const HeaderFrame = styled(SectionFrame)<{ open: boolean; color?: string;
   z-index: ${Z_INDEXES.HEADER};
 
   ${({ theme, color = BLACK, logoSet }) =>
-    logoSet &&
-    setBackgroundWithDPI(theme, logoSet, {
-      preset: 'header',
-      modeColours: [color, BLACK]
-    })}
+    logoSet
+      ? setBackgroundWithDPI(theme, logoSet, {
+          preset: 'header',
+          modeColours: [color, BLACK]
+        })
+      : `background-color: ${transparentize(0.5, theme.purple2)};`}
 
   // HIDE HEADER ON SMALL HEIGHT LANDSCAPE BOIS
   ${({ open }) => upToSmallHeight`

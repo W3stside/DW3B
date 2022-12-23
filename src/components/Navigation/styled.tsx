@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro'
+import { transparentize } from 'polished'
 import Button from 'components/Button'
 import { MobileNavProps } from '.'
 import { Z_INDEXES } from 'constants/config'
@@ -25,11 +26,12 @@ export const NavigationStepsWrapper = styled.nav<{
   gap: 0px;
 
   ${({ theme, currentMedia }) =>
-    currentMedia &&
-    setBackgroundWithDPI(theme, currentMedia.navLogoSet, {
-      preset: 'navbar',
-      modeColours: [currentMedia.color || BLACK, BLACK]
-    })}
+    currentMedia
+      ? setBackgroundWithDPI(theme, currentMedia.navLogoSet, {
+          preset: 'navbar',
+          modeColours: [currentMedia.color || BLACK, BLACK]
+        })
+      : `background-color: ${transparentize(0.5, theme.purple2)};`}
 
   z-index: 1;
 
