@@ -1,25 +1,42 @@
+import { transparentize } from 'polished'
+import { ThemeModes } from 'theme/styled'
+
 export const DEFAULT_COLOURS = {
   // base
   black: '#000',
-  // off white
+  blackOpaque1: transparentize(0.15, '#000'),
+  blackOpaque2: transparentize(0.3, '#000'),
+  blackOpaque3: transparentize(0.5, '#000'),
+  // whites
   white: '#e5e5e5',
   whiteDark: '#e9e9f0',
+  offWhite: 'ghostwhite',
+  offWhiteOpaque1: transparentize(0.15, 'ghostwhite'),
+  offWhiteOpaque2: transparentize(0.3, 'ghostwhite'),
+  offWhiteOpaque3: transparentize(0.5, 'ghostwhite'),
+  // reds
   red1: '#FF6871',
   red2: '#200202',
+  red3: '#620c0c',
+  // greens
   green1: '#09371d',
   green2: '#a9ffcd',
   yellow1: '#FFE270',
   yellow2: '#F3841E',
+  yellow3: 'lightgoldenrodyellow',
   blue1: '#2172E5',
   blue: '#3F77FF',
   blueDark: '#185afb',
   purple: '#8958FF',
+  purple1: '#200d36eb',
+  purple2: '#5e3f83eb',
+  purple3: '#4a002f',
   bgLight: '#edf2f7',
   bgDark: 'linear-gradient(0deg, #21222E 0.05%, #2C2D3F 100%)',
   blackLight: '#181a1b',
   successLight: '#5ca95c',
   successDark: '#00BE2E',
-  dangerLight: '#e55353',
+  dangerLight: '#e55353', // #ff9d9d,
   dangerDark: '#eb4025',
   warningLight: '#f1851d',
   warningDark: '#f1851d',
@@ -65,7 +82,7 @@ export const LIGHT_COLOURS = {
   secondary3: '#FDEAF1'
 }
 
-export const DARK_COLOURS = {
+export const MODE_COLOURS = (mode: ThemeModes) => ({
   // text
   text1: '#FFFFFF',
   text2: '#C3C5CB',
@@ -97,12 +114,32 @@ export const DARK_COLOURS = {
   // secondary colors
   secondary1: '#2172E5',
   secondary2: '#17000b26',
-  secondary3: '#17000b26'
-}
+  secondary3: '#17000b26',
 
-export const GULF_COLOURS = {
-  ...LIGHT_COLOURS,
-  bg1: '#b0e0e6',
-  bg2: '#7dbbcd',
-  bg3: '#d4946f'
-}
+  darkModeToggle: mode === ThemeModes.DARK ? DEFAULT_COLOURS.yellow3 : DEFAULT_COLOURS.purple1,
+  darkModeSvg: mode === ThemeModes.DARK ? DEFAULT_COLOURS.purple3 : DEFAULT_COLOURS.yellow3,
+  darkModeFilter: mode === ThemeModes.DARK ? 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)' : '',
+  darkModeLogoFilter:
+    mode === ThemeModes.DARK
+      ? 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))'
+      : 'drop-shadow(0px 0px 12px rgba(0,0,0,1))',
+
+  // misc
+  inputHoverColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.purple3 : DEFAULT_COLOURS.purple,
+
+  // elems
+  products: {
+    aside: {
+      itemContainer: mode === ThemeModes.DARK ? DEFAULT_COLOURS.blackOpaque1 : DEFAULT_COLOURS.offWhiteOpaque1,
+      textColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.offWhite : DEFAULT_COLOURS.black,
+      subItemDescription: mode === ThemeModes.DARK ? DEFAULT_COLOURS.blackOpaque2 : DEFAULT_COLOURS.offWhiteOpaque3,
+      inputs: mode === ThemeModes.DARK ? DEFAULT_COLOURS.black : DEFAULT_COLOURS.offWhite,
+      inputsBorderColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.purple3 : 'transparent'
+    }
+  }
+})
+
+export const THEME_COLOURS = (mode: ThemeModes) => ({
+  ...DEFAULT_COLOURS,
+  ...MODE_COLOURS(mode)
+})

@@ -4,9 +4,13 @@ build
 .github
 src/**/*.d.ts
 src/abis
+src/**/*.md
 
 # public
 public/index.html
+
+# readme
+README.md
 
 # Every commit this is changed. NO MORE!
 .prettier.rc

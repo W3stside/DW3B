@@ -2,7 +2,14 @@ export type Color = string
 export interface Colors {
   // base
   white: Color
+  offWhite: Color
+  offWhiteOpaque1: Color
+  offWhiteOpaque2: Color
+  offWhiteOpaque3: Color
   black: Color
+  blackOpaque1: Color
+  blackOpaque2: Color
+  blackOpaque3: Color
 
   // text
   text1: Color
@@ -40,18 +47,41 @@ export interface Colors {
   // other
   red1: Color
   red2: Color
+  red3: Color
   green1: Color
   green2: Color
   yellow1: Color
   yellow2: Color
   blue1: Color
+  purple: Color
+  purple1: Color
+  purple2: Color
+  purple3: Color
+
+  // states
+  dangerLight: Color
+  warningLight: Color
+  inputHoverColor: Color
+
+  // elems
+  products: {
+    aside: {
+      itemContainer: Color
+      textColor: Color
+      subItemDescription: Color
+      inputs: Color
+      inputsBorderColor: Color
+    }
+  }
+  darkModeFilter: string
+  darkModeLogoFilter: string
+  darkModeToggle: Color
+  darkModeSvg: Color
 }
 
 export enum ThemeModes {
-  DARK = 'DARK',
   LIGHT = 'LIGHT',
-  // add whatever themes u want here...
-  GULF = 'GULF'
+  DARK = 'DARK'
 }
 
 export type Theme = {
@@ -76,6 +106,9 @@ declare module 'styled-components' {
       borderRadius: string
       border: string
     }
+    // gradient
+    whiteGradient1: FlattenSimpleInterpolation
+
     // shadows
     shadow1: string
 
@@ -85,6 +118,35 @@ declare module 'styled-components' {
       upToSmall: ThemedCssFunction<DefaultTheme>
       upToMedium: ThemedCssFunction<DefaultTheme>
       upToLarge: ThemedCssFunction<DefaultTheme>
+      upToExtraLarge: ThemedCssFunction<DefaultTheme>
+    }
+
+    // from media size
+    fromMediaWidth: {
+      fromExtraSmall: ThemedCssFunction<DefaultTheme>
+      fromSmall: ThemedCssFunction<DefaultTheme>
+      fromMedium: ThemedCssFunction<DefaultTheme>
+      fromLarge: ThemedCssFunction<DefaultTheme>
+      fromExtraLarge: ThemedCssFunction<DefaultTheme>
+    }
+
+    // between media size
+    betweenMediaWidth: {
+      betweenExtraSmallAndSmall: ThemedCssFunction<DefaultTheme>
+      betweenSmallAndMedium: ThemedCssFunction<DefaultTheme>
+      betweenMediumAndLarge: ThemedCssFunction<DefaultTheme>
+      betweenLargeAndExtraLarge: ThemedCssFunction<DefaultTheme>
+      // random but useful
+      betweenSmallAndLarge: ThemedCssFunction<DefaultTheme>
+    }
+
+    // height
+    mediaHeight: {
+      upToExtraSmallHeight: ThemedCssFunction<DefaultTheme>
+      upToSmallHeight: ThemedCssFunction<DefaultTheme>
+      upToMediumHeight: ThemedCssFunction<DefaultTheme>
+      upToLargeHeight: ThemedCssFunction<DefaultTheme>
+      upToExtraLargeHeight: ThemedCssFunction<DefaultTheme>
     }
 
     // css snippets

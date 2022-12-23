@@ -1,17 +1,27 @@
 name: CI
 
 on:
-  # build on PR creation/updates, also when pushing to master/develop, or create a release
+  # build on PR creation/updates, also when pushing to main/develop, or create a release
   pull_request:
     types: [opened, synchronize]
   push:
-    branches: [master, develop]
+    branches: [main]
     tags: [v*]
 
 
 env:
   REPO_NAME_SLUG: dw3b
   PR_NUMBER: ${{ github.event.number }}
+  # INFURA
+  REACT_APP_INFURA_KEY: ${{ secrets.REACT_APP_INFURA_KEY }}
+  # IMAGEKIT CDN
+  REACT_APP_IMAGEKIT_PUBLIC_KEY: ${{ secrets.REACT_APP_IMAGEKIT_PUBLIC_KEY }}
+  REACT_APP_IMAGEKIT_PRIVATE_KEY: ${{ secrets.REACT_APP_IMAGEKIT_PRIVATE_KEY }}
+  REACT_APP_IMAGEKIT_URL_ENDPOINT: ${{ secrets.REACT_APP_IMAGEKIT_URL_ENDPOINT }}
+  # SHOPIFY
+  REACT_APP_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.REACT_APP_SHOPIFY_STOREFRONT_TOKEN }}
+  REACT_APP_SHOPIFY_STORE_DOMAIN: ${{ secrets.REACT_APP_SHOPIFY_STORE_DOMAIN }}
+  REACT_APP_SHOPIFY_API_VERSION: ${{ secrets.REACT_APP_SHOPIFY_API_VERSION }}
 
 jobs:
   setup:
@@ -25,7 +35,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
+          node-version: 16.17.1
 
       - name: Set output of cache
         id: yarn-cache
@@ -73,7 +83,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
+          node-version: 16.17.1
 
       - name: Load dependencies
         id: cache-node-modules
@@ -108,7 +118,7 @@ jobs:
       - name: Set up node
         uses: actions/setup-node@v2
         with:
-          node-version: lts/*
+          node-version: 16.17.1
 
       - name: Load dependencies
         id: cache-node-modules
@@ -132,49 +142,5 @@ jobs:
         with:
           eslint: true
           prettier: true
-          github_token: ${{ secrets.github_token }}
-          auto_fix: ${{ github.event_name == 'pull_request' }}
-
-  deploy:
-    name: Deploy to GH Pages
-    needs: setup
-    runs-on: ubuntu-20.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up node
-        uses: actions/setup-node@v2
-        with:
-          node-version: lts/*
-
-      - name: Load dependencies
-        id: cache-node-modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-
-      - name: Load generated files
-        id: cache-generated-files
-        uses: actions/cache@v2
-        with:
-          path: |
-            src/abis/types
-            src/locales
-          key: ${{ runner.os }}-generatedFiles-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Build Web Apps
-        run: yarn build
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        # if: ${{ github.ref == 'refs/heads/master' }}
-        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build
+          auto_fix: ${{ github.event_name == 'pull_request' }}
