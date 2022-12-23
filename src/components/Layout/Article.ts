@@ -1,9 +1,9 @@
-import { BoxProps } from 'rebass'
 import styled from 'styled-components/macro'
 import { setBackgroundWithDPI } from 'theme/utils'
 import { ThemeModes } from 'theme/styled'
 // import { GenericImageSrcSet } from 'utils/types'
 import { setFadeInAnimation } from 'theme/styles/animation'
+import { ColumnCenter } from 'components/Layout/Column'
 
 const LOGO_SET = undefined /* [
   { defaultUrl: portugalBg } as GenericImageSrcSet,
@@ -11,7 +11,7 @@ const LOGO_SET = undefined /* [
   { defaultUrl: portugalBg } as GenericImageSrcSet
 ] */
 
-export const ArticleFadeInContainer = styled.article<{ display?: BoxProps['display'] }>`
+export const ArticleFadeInContainer = styled(ColumnCenter).attrs({ as: 'article' })`
   ${({ display }) => display && `display: ${display};`}
   position: relative;
   overflow: hidden;
