@@ -14,15 +14,20 @@ import { HashRouter } from 'react-router-dom'
 import App from './pages/App'
 
 import store from 'state'
-// BC UPDATERS
-import BlockchainUpdater from 'state/blockchain/updater'
-import TransactionUpdater from 'state/blockchainTransactions/updater'
+// REG UPDATERS
+import WindowSizeUpdater from 'state/window/updater'
 
-import { TopGlobalStyle, ThemedGlobalStyle, FontStyles } from 'theme/styles/global'
+// BC UPDATERS
+import BlockchainUpdater from 'state/blockchain/base/updater'
+import TransactionUpdater from 'state/blockchain/transactions/updater'
+
+import { TopGlobalStyle, ThemedGlobalStyle } from 'theme/styles/global'
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { nodeRemoveChildFix } from 'utils/node'
 import reportWebVitals from 'reportWebVitals'
+import FontStyles from 'theme/styles/fonts'
+import { isWeb3Enabled } from 'blockchain/connectors'
 
 // Node removeChild hackaround
 // based on: https://github.com/facebook/react/issues/11538#issuecomment-417504600
@@ -32,10 +37,20 @@ if (!!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
 
-function Updaters() {
+function NormalUpdaters() {
   return (
     <>
-      <UserUpdater />
+      <WindowSizeUpdater />
+    </>
+  )
+}
+
+function BlockchainUpdaters() {
+  const isEnabled = isWeb3Enabled()
+
+  if (!isEnabled) return null
+  return (
+    <>
       <BlockchainUpdater />
       <TransactionUpdater />
     </>
@@ -50,21 +65,19 @@ root.render(
     {/* Provides all top level CSS NOT dynamically adjustable by the ThemeProvider */}
     <FontStyles />
     <TopGlobalStyle />
-    <ApolloProvider>
-      <Provider store={store}>
-        <HashRouter>
-          <Web3ReactProvider>
-            <PastelleStoreUpdaters />
-            <BlockchainUpdaters />
-            <ThemeProvider>
-              {/* Provides all top level CSS dynamically adjustable by the ThemeProvider */}
-              <ThemedGlobalStyle />
-              <App />
-            </ThemeProvider>
-          </Web3ReactProvider>
-        </HashRouter>
-      </Provider>
-    </ApolloProvider>
+    <Provider store={store}>
+      <HashRouter>
+        <Web3ReactProvider>
+          <NormalUpdaters />
+          <BlockchainUpdaters />
+          <ThemeProvider>
+            {/* Provides all top level CSS dynamically adjustable by the ThemeProvider */}
+            <ThemedGlobalStyle />
+            <App />
+          </ThemeProvider>
+        </Web3ReactProvider>
+      </HashRouter>
+    </Provider>
   </StrictMode>
 )
 

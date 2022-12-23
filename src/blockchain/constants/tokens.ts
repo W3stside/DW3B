@@ -1,4 +1,4 @@
-import { Token, WETH9 } from '@uniswap/sdk-core'
+import { Ether, NativeCurrency, Token, WETH9 } from '@uniswap/sdk-core'
 import { SupportedChainId } from './chains'
 
 export const WETH_LOGO_URI =
@@ -10,7 +10,7 @@ export const XDAI_LOGO_URI =
 export const XDAI_SYMBOL = 'XDAI'
 export const XDAI_NAME = 'xDai'
 export const WXDAI = new Token(
-  SupportedChainId.XDAI,
+  SupportedChainId.GNOSIS,
   '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
   18,
   'WXDAI',
@@ -19,5 +19,32 @@ export const WXDAI = new Token(
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
   ...WETH9,
-  [SupportedChainId.XDAI]: WXDAI
+  [SupportedChainId.GNOSIS]: WXDAI
+}
+
+export const WRAPPED_NATIVE_CURRENCY: { [chainId: number]: Token | undefined } = {
+  ...(WETH9 as Record<SupportedChainId, Token>)
+}
+
+export class ExtendedEther extends Ether {
+  public get wrapped(): Token {
+    const wrapped = WRAPPED_NATIVE_CURRENCY[this.chainId]
+    if (wrapped) return wrapped
+    throw new Error('Unsupported chain ID')
+  }
+
+  private static _cachedExtendedEther: { [chainId: number]: NativeCurrency } = {}
+
+  public static onChain(chainId: number): ExtendedEther {
+    return this._cachedExtendedEther[chainId] ?? (this._cachedExtendedEther[chainId] = new ExtendedEther(chainId))
+  }
+}
+
+const cachedNativeCurrency: { [chainId: number]: NativeCurrency | Token } = {}
+export function nativeOnChain(chainId: number): NativeCurrency | Token {
+  if (cachedNativeCurrency[chainId]) return cachedNativeCurrency[chainId]
+
+  const nativeCurrency: NativeCurrency | Token = ExtendedEther.onChain(chainId)
+
+  return (cachedNativeCurrency[chainId] = nativeCurrency)
 }

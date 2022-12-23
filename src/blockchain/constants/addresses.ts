@@ -14,5 +14,5 @@ export const ENS_REGISTRAR_ADDRESSES: AddressMap = {
 
 export const MULTICALL_ADDRESS: AddressMap = {
   ...constructSameAddressMap('0x1F98415757620B543A52E61c46B32eB19261F984'),
-  [SupportedChainId.XDAI]: '0x0f41c16b8ad27c11f181eca85f0941868c1297af'
+  [SupportedChainId.GNOSIS]: '0x0f41c16b8ad27c11f181eca85f0941868c1297af'
 }

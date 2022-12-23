@@ -1,12 +1,10 @@
-import { AsideWithVideo } from 'pages/SingleItem'
-import HOME_ITEMS_LIST from 'mock/apparel'
+import { ColumnCenter } from 'components/Layout'
 
 export default function Home() {
   return (
-    <>
-      {HOME_ITEMS_LIST.map(({ key, ...restItemData }) => (
-        <AsideWithVideo key={key} {...restItemData} />
-      ))}
-    </>
+    <ColumnCenter>
+      <h1>WELCOME TO DW3B!</h1>
+      <p>You can use this to do all sorts of shit. Nice work.</p>
+    </ColumnCenter>
   )
 }

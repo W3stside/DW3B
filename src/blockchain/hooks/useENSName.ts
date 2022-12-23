@@ -1,7 +1,7 @@
 import { namehash } from '@ethersproject/hash'
 import { useMemo } from 'react'
 
-import { useSingleCallResult } from 'state/multicall/hooks'
+import { useSingleCallResult } from 'state/blockchain/multicall/hooks'
 import { isAddress } from 'blockchain/utils'
 import { isZero } from 'utils'
 import { useENSRegistrarContract, useENSResolverContract } from 'blockchain/hooks/useContract'

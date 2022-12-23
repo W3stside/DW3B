@@ -1,4 +1,4 @@
-import { SupportedChainId } from 'blockchain/constants/chains'
+import { CHAIN_INFO, SupportedChainId } from 'blockchain/constants/chains'
 
 /**
  * Returns the input chain ID if chain is supported. If not, return undefined
@@ -7,6 +7,13 @@ import { SupportedChainId } from 'blockchain/constants/chains'
 export function supportedChainId(chainId: number): number | undefined {
   if (chainId in SupportedChainId) {
     return chainId
+  }
+  return undefined
+}
+
+export function getChainInfo(chainId: any): any {
+  if (chainId) {
+    return CHAIN_INFO[chainId] ?? undefined
   }
   return undefined
 }

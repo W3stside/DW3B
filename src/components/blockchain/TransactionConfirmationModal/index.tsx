@@ -1,5 +1,4 @@
-import { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components/macro'
+import styled, { useTheme } from 'styled-components/macro'
 import Modal from 'components/Modal'
 import { ExternalLink } from 'theme'
 import { Text } from 'rebass'
@@ -10,7 +9,7 @@ import { RowBetween, AutoColumn, ColumnCenter } from 'components/Layout'
 import Circle from 'assets/images/blue-loader.svg'
 
 import { getEtherscanLink } from 'blockchain/utils'
-import { useActiveWeb3React } from 'blockchain/hooks'
+import { useWeb3React } from '@web3-react/core'
 import { SupportedChainId as ChainId } from 'blockchain/constants/chains'
 
 const Wrapper = styled.div`
@@ -68,7 +67,7 @@ function TransactionSubmittedContent({
   hash: string | undefined
   chainId: ChainId
 }) {
-  const theme = useContext(ThemeContext)
+  const theme = useTheme()
 
   return (
     <Wrapper>
@@ -91,7 +90,7 @@ function TransactionSubmittedContent({
               </Text>
             </ExternalLink>
           )}
-          <Button onClick={onDismiss} style={{ margin: '20px 0 0 0' }}>
+          <Button onClick={onDismiss} margin="20px 0 0 0">
             <Text fontWeight={500} fontSize={20}>
               Close
             </Text>
@@ -110,8 +109,8 @@ export function ConfirmationModalContent({
 }: {
   title: string
   onDismiss: () => void
-  topContent: () => React.ReactNode
-  bottomContent: () => React.ReactNode
+  topContent: () => JSX.Element
+  bottomContent: () => JSX.Element
 }) {
   return (
     <Wrapper>
@@ -130,7 +129,7 @@ export function ConfirmationModalContent({
 }
 
 export function TransactionErrorContent({ message, onDismiss }: { message: string; onDismiss: () => void }) {
-  const theme = useContext(ThemeContext)
+  const theme = useTheme()
   return (
     <Wrapper>
       <Section>
@@ -171,7 +170,7 @@ export default function TransactionConfirmationModal({
   pendingText,
   content
 }: ConfirmationModalProps) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useWeb3React()
 
   if (!chainId) return null
 

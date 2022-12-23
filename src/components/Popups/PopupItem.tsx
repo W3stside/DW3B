@@ -1,15 +1,15 @@
 import { useCallback, useContext, useEffect } from 'react'
 import { X } from 'react-feather'
-import { useSpring } from 'react-spring/web'
+import { useSpring } from 'react-spring'
 import styled, { ThemeContext } from 'styled-components/macro'
 import { animated } from 'react-spring'
-import { PopupContent } from 'state/application/reducer'
-import { useRemovePopup } from 'state/application/hooks'
+import { PopupContent, TxPopupContent } from 'state/modalsAndPopups/reducer'
+import { useRemovePopup } from 'state/modalsAndPopups/hooks'
 
 export const StyledClose = styled(X)`
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 1rem;
+  top: 1rem;
 
   :hover {
     cursor: pointer;
@@ -21,15 +21,15 @@ export const Popup = styled.div`
   padding: 1em;
   background-color: ${({ theme }) => theme.bg1};
   position: relative;
-  border-radius: 10px;
-  padding: 20px;
-  padding-right: 35px;
+  border-radius: ${({ theme }) => theme.buttons.borderRadius};
+  padding: 2rem;
+  padding-right: 3.5rem;
   overflow: hidden;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    min-width: 290px;
+    min-width: 29rem;
     &:not(:last-of-type) {
-      margin-right: 20px;
+      margin-right: 2rem;
     }
   `}
 `
@@ -38,7 +38,7 @@ const Fader = styled.div`
   bottom: 0px;
   left: 0px;
   width: 100%;
-  height: 2px;
+  height: 0.2rem;
   background-color: ${({ theme }) => theme.bg3};
 `
 
@@ -50,7 +50,7 @@ export default function PopupItem({
   popKey
 }: {
   removeAfterMs: number | null
-  content: PopupContent
+  content: PopupContent | TxPopupContent
   popKey: string
 }) {
   const removePopup = useRemovePopup()

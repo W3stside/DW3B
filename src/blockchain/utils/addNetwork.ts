@@ -2,6 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { hexStripZeros } from '@ethersproject/bytes'
 import { Web3Provider } from '@ethersproject/providers'
 import { L1ChainInfo, L2ChainInfo, SupportedChainId } from 'blockchain/constants/chains'
+import { devError } from 'utils/logging'
 
 interface AddNetworkArguments {
   library: Web3Provider
@@ -30,6 +31,6 @@ export async function addNetwork({ library, chainId, info }: AddNetworkArguments
       ]
     })
   } catch (error) {
-    console.error('error adding eth network: ', chainId, info, error)
+    devError('error adding eth network: ', chainId, info, error)
   }
 }

@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { AppDispatch, AppState } from 'state'
+import { useAppDispatch, useAppSelector } from 'state'
 import { Theme, ThemeModes } from 'theme/styled'
-import { updateThemeAutoDetect, updateThemeMode } from './actions'
+import { updateThemeAutoDetect, updateThemeMode } from './reducer'
+import { initialState } from './reducer'
 
-export const useAppColourTheme = (): Theme => useSelector<AppState, Theme>(({ user }) => user.theme)
+export const useAppColourTheme = () => useAppSelector(({ user }) => user.theme || initialState.theme)
 
 interface ThemeManager {
   theme: Theme
@@ -14,7 +14,7 @@ interface ThemeManager {
 }
 
 export function useThemeManager(): ThemeManager {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const theme = useAppColourTheme()
 
   const setMode = useCallback(
